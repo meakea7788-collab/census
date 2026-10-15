@@ -68,3 +68,27 @@ Route::post('/users/store', function (Request $request) {
 
 Route::get('/group-school/create', [GroupSchoolController::class, 'create'])->name('group-school.create');
 Route::post('/group-school', [GroupSchoolController::class, 'store'])->name('group-school.store');
+Route::get('/group-school', [GroupSchoolController::class, 'index'])->name('group-school.index');
+Route::get('/group-school/{groupSchool}/edit', [GroupSchoolController::class, 'edit'])->name('group-school.edit');
+Route::put('/group-school/{groupSchool}', [GroupSchoolController::class, 'update'])->name('group-school.update');
+Route::delete('/group-school/{groupSchool}', [GroupSchoolController::class, 'destroy'])->name('group-school.destroy');
+
+//address routes
+Route::get('/provinces', [\App\Http\Controllers\ProvinceController::class, 'index'])->name('provinces.index');
+Route::get('/provinces/create', [\App\Http\Controllers\ProvinceController::class, 'create'])->name('provinces.create');
+Route::post('/provinces', [\App\Http\Controllers\ProvinceController::class, 'store'])->name('provinces.store');
+Route::get('/provinces/{province}/districts/create', [\App\Http\Controllers\ProvinceController::class, 'createDistrict'])->name('provinces.districts.create');
+Route::post('/provinces/{province}/districts', [\App\Http\Controllers\ProvinceController::class, 'storeDistrict'])->name('provinces.districts.store');
+Route::get('/provinces/{id}', [\App\Http\Controllers\ProvinceController::class, 'show'])->name('provinces.show');
+Route::get('/provinces/{id}/edit', [\App\Http\Controllers\ProvinceController::class, 'edit'])->name('provinces.edit');
+Route::put('/provinces/{id}', [\App\Http\Controllers\ProvinceController::class, 'update'])->name('provinces.update');
+Route::delete('/provinces/{id}', [\App\Http\Controllers\ProvinceController::class, 'destroy'])->name('provinces.destroy');
+Route::get('/districts/{district}/communes', [\App\Http\Controllers\ComController::class, 'showDistrict'])->name('districts.communes.show');
+Route::get('/districts/{district}/communes/create', [\App\Http\Controllers\ComController::class, 'createForDistrict'])->name('districts.communes.create');
+Route::post('/districts/{district}/communes', [\App\Http\Controllers\ComController::class, 'storeForDistrict'])->name('districts.communes.store');
+Route::get('/communes/{commune}', [\App\Http\Controllers\ComController::class, 'showCommune'])->name('communes.show');
+Route::get('/communes/{commune}/edit', [\App\Http\Controllers\ComController::class, 'editCommune'])->name('communes.edit');
+Route::put('/communes/{commune}', [\App\Http\Controllers\ComController::class, 'updateCommune'])->name('communes.update');
+Route::delete('/communes/{commune}', [\App\Http\Controllers\ComController::class, 'destroyCommune'])->name('communes.destroy');
+Route::get('/communes/{commune}/villages/create', [\App\Http\Controllers\villController::class, 'createForCommune'])->name('communes.villages.create');
+Route::post('/communes/{commune}/villages', [\App\Http\Controllers\villController::class, 'storeForCommune'])->name('communes.villages.store');
