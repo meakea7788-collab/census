@@ -29,10 +29,15 @@
                     @if (request()->routeIs('schools.index', 'schools.edit')) aria-current="page" @endif
                 >Schools</a>
                 <a
+                    href="{{ route('teachers.index') }}"
+                    class="nav-link {{ request()->routeIs('teachers.index', 'teachers.edit') ? 'active' : '' }}"
+                    @if (request()->routeIs('teachers.index', 'teachers.edit')) aria-current="page" @endif  
+                >Teachers</a>
+                <a
                     href="{{ route('group-school.create') }}"
                     class="nav-link {{ request()->routeIs('group-school.create') ? 'active' : '' }}"
                     @if (request()->routeIs('group-school.create')) aria-current="page" @endif
-                >Add Group School</a>
+                >Group Schools</a>
                 <a
                     href="{{ route('provinces.index') }}"
                     class="nav-link {{ request()->routeIs('provinces.index', 'provinces.show') ? 'active' : '' }}"

@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\DB;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -20,5 +20,11 @@ class DatabaseSeeder extends Seeder
                 'role' => \App\Models\User::ROLE_SUPERADMIN,
             ]
         );
+          DB::table('address')->insert([
+            'province' => 'សៀមរាប',
+            'district' => 'ពួក',
+            'commune'  => 'ត្រីញ័រ',
+            'village'  => 'អធិបតី',
+        ]);
     }
 }

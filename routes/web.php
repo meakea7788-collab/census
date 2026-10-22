@@ -101,3 +101,12 @@ Route::get('/schools/{school}', [\App\Http\Controllers\SchoolController::class, 
 Route::get('/schools/{school}/edit', [\App\Http\Controllers\SchoolController::class, 'edit'])->name('schools.edit');
 Route::put('/schools/{school}', [\App\Http\Controllers\SchoolController::class, 'update'])->name('schools.update');
 Route::delete('/schools/{school}', [\App\Http\Controllers\SchoolController::class, 'destroy'])->name('schools.destroy');        
+
+//teacher routes
+Route::get('/teachers', [\App\Http\Controllers\TeacherController::class, 'index'])->name('teachers.index');
+Route::get('/teachers/create', [\App\Http\Controllers\TeacherController::class, 'create'])->name('teachers.create');
+Route::post('/teachers', [\App\Http\Controllers\TeacherController::class, 'store'])->name('teachers.store');
+Route::get('/teachers/{teacher}', [\App\Http\Controllers\TeacherController::class, 'show'])->name('teachers.show');
+Route::get('/teachers/{teacher}/edit', [\App\Http\Controllers\TeacherController::class, 'edit'])->name('teachers.edit');
+Route::put('/teachers/{teacher}', [\App\Http\Controllers\TeacherController::class, 'update'])->name('teachers.update');
+Route::delete('/teachers/{teacher}', [\App\Http\Controllers\TeacherController::class, 'destroy'])->name('teachers.destroy');        
