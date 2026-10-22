@@ -11,6 +11,38 @@ use Illuminate\Support\Facades\DB;
 
 class ProvinceController extends Controller
 {
+    private function findOrCreateByName(string $table, string $name, array $extra = []): mixed
+    {
+        $normalized = trim($name);
+
+        $query = DB::table($table)->whereRaw('LOWER(TRIM(name)) = ?', [strtolower($normalized)]);
+        $existingRows = $query->orderBy('id')->get();
+
+        if ($existingRows->isNotEmpty()) {
+            $primaryId = (int) $existingRows->first()->id;
+            $duplicateIds = $existingRows->pluck('id')->reject(fn ($id) => (int) $id === $primaryId)->all();
+
+            if (! empty($duplicateIds)) {
+                DB::table($table)->whereIn('id', $duplicateIds)->delete();
+            }
+
+            foreach ($extra as $column => $value) {
+                $existingValue = DB::table($table)->where('id', $primaryId)->value($column);
+                if ($existingValue !== $value) {
+                    DB::table($table)->where('id', $primaryId)->update($extra);
+                }
+            }
+
+            return $primaryId;
+        }
+
+        return (int) DB::table($table)->insertGetId(array_merge([
+            'name' => $normalized,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ], $extra));
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -43,20 +75,17 @@ class ProvinceController extends Controller
         ]);
 
         DB::transaction(function () use ($data): void {
-            $province = Province::firstOrCreate(['name' => $data['province_name']]);
-            $district = District::firstOrCreate([
-                'name' => $data['district_name'],
-                'province_id' => $province->id,
-            ]);
-            $commune = commune::firstOrCreate([
-                'name' => $data['commune_name'],
-                'district_id' => $district->id,
-            ]);
+            $provinceId = $this->findOrCreateByName('province', $data['province_name']);
+            $province = Province::findOrFail($provinceId);
 
-            village::firstOrCreate([
-                'name' => $data['village_name'],
-                'commune_id' => $commune->id,
-            ]);
+            $districtId = $this->findOrCreateByName('district', $data['district_name'], ['province_id' => $province->id]);
+            $district = District::findOrFail($districtId);
+
+            $communeId = $this->findOrCreateByName('commune', $data['commune_name'], ['district_id' => $district->id]);
+            $commune = commune::findOrFail($communeId);
+
+            $villageId = $this->findOrCreateByName('village', $data['village_name'], ['commune_id' => $commune->id]);
+            village::findOrFail($villageId);
         });
 
         return redirect()

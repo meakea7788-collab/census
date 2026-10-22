@@ -157,6 +157,24 @@ class UserCreateTest extends TestCase
             ->assertSee(route('group-school.create'), false);
     }
 
+    public function test_school_create_form_renders_group_school_options(): void
+    {
+        GroupSchool::create([
+            'name' => 'Northside School Group',
+            'director_name' => 'Jordan Lee',
+            'phone' => '555-0100',
+            'address' => 'River Commune, North District, Central Province',
+        ]);
+
+        $this->get(route('schools.create'))
+            ->assertOk()
+            ->assertSee('Select a province')
+            ->assertSee('Select a district')
+            ->assertSee('Select a commune')
+            ->assertSee('Select a village')
+            ->assertSee('Northside School Group');
+    }
+
     public function test_location_hierarchy_can_be_created(): void
     {
         $this->get(route('provinces.create'))
