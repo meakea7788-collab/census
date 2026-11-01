@@ -102,7 +102,7 @@ class SchoolController extends Controller
     public function show(string $id)
     {
         //
-        $school = \App\Models\School::with('groupSchool')->findOrFail($id);
+        $school = \App\Models\School::with(['groupSchool', 'teachers'])->findOrFail($id);
         return view('schools.show', compact('school'));
     }
 
@@ -111,10 +111,12 @@ class SchoolController extends Controller
      */
     public function edit(string $id)
     {
-        //
         $school = \App\Models\School::findOrFail($id);
-        $groupSchools = \App\Models\GroupSchool::all();
-        return view('schools.update', compact('school', 'groupSchools')); 
+        $groupSchools = \App\Models\GroupSchool::orderBy('name')->get();
+        $locations = Province::with('districts.communes.villages')->orderBy('name')->get();
+        $selectedLocation = $this->findLocationFromAddress($school->address);
+
+        return view('schools.update', compact('school', 'groupSchools', 'locations', 'selectedLocation'));
     }
 
     /**
@@ -122,18 +124,52 @@ class SchoolController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
         $school = \App\Models\School::findOrFail($id);
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'address' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
             'email' => ['nullable', 'email', 'max:255'],
             'director_name' => ['nullable', 'string', 'max:255'],
+            'province_id' => ['required', 'exists:province,id'],
+            'district_id' => ['required', 'exists:district,id'],
+            'commune_id' => ['required', 'exists:commune,id'],
+            'village_id' => ['required', 'exists:village,id'],
             'group_school_id' => ['required', 'exists:group_schools,id'],
         ]);
+
+        $data['address'] = $this->buildLocationAddress($request->village_id);
+        unset($data['province_id'], $data['district_id'], $data['commune_id'], $data['village_id']);
+
         $school->update($data);
         return redirect()->route('schools.index');
+    }
+
+    private function findLocationFromAddress(?string $address): array
+    {
+        $parts = array_map('trim', explode(',', $address ?? ''));
+
+        if (count($parts) !== 4) {
+            return [];
+        }
+
+        [$villageName, $communeName, $districtName, $provinceName] = $parts;
+        $village = village::with('commune.district.province')->get()->first(fn ($item) =>
+            $item->name === $villageName
+            && $item->commune?->name === $communeName
+            && $item->commune?->district?->name === $districtName
+            && $item->commune?->district?->province?->name === $provinceName
+        );
+
+        if (! $village) {
+            return [];
+        }
+
+        return [
+            'province' => $village->commune->district->province->id,
+            'district' => $village->commune->district->id,
+            'commune' => $village->commune->id,
+            'village' => $village->id,
+        ];
     }
 
     /**

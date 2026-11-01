@@ -19,11 +19,21 @@
                     @if (request()->routeIs('home')) aria-current="page" @endif
                 >Dashboard</a>
                 <a
+                    href="{{ route('census.index') }}"
+                    class="nav-link {{ request()->routeIs('census.index', 'census.create') ? 'active' : '' }}"
+                    @if (request()->routeIs('census.index', 'census.create')) aria-current="page" @endif
+                >Census</a>
+                <a
                     href="{{ route('group-school.index') }}"
                     class="nav-link {{ request()->routeIs('group-school.index', 'group-school.edit') ? 'active' : '' }}"
                     @if (request()->routeIs('group-school.index', 'group-school.edit')) aria-current="page" @endif
                 >Group Schools</a>
-                 <a
+                <a
+                    href="{{ route('years.index') }}"
+                    class="nav-link {{ request()->routeIs('years.index', 'years.edit') ? 'active' : '' }}"
+                    @if (request()->routeIs('years.index', 'years.edit')) aria-current="page" @endif
+                >Years</a>
+                <a
                     href="{{ route('schools.index') }}"
                     class="nav-link {{ request()->routeIs('schools.index', 'schools.edit') ? 'active' : '' }}"
                     @if (request()->routeIs('schools.index', 'schools.edit')) aria-current="page" @endif

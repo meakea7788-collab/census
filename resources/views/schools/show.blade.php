@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <div class="card shadow-sm">
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
             <dl class="row mb-0">
                 <dt class="col-sm-3">Name</dt>
@@ -34,6 +34,21 @@
                 <dt class="col-sm-3">Created At</dt>
                 <dd class="col-sm-9">{{ $school->created_at?->format('M j, Y H:i') ?? '—' }}</dd>
             </dl>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-white"><strong>Teachers</strong></div>
+        <div class="card-body">
+            @if ($school->teachers->isEmpty())
+                <p class="text-secondary mb-0">No teachers assigned to this school.</p>
+            @else
+                <ul class="list-group list-group-flush">
+                    @foreach ($school->teachers as $teacher)
+                        <li class="list-group-item px-0">{{ $teacher->name }}</li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
     </div>
 </div>

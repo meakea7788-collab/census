@@ -69,6 +69,7 @@ Route::post('/users/store', function (Request $request) {
 Route::get('/group-school/create', [GroupSchoolController::class, 'create'])->name('group-school.create');
 Route::post('/group-school', [GroupSchoolController::class, 'store'])->name('group-school.store');
 Route::get('/group-school', [GroupSchoolController::class, 'index'])->name('group-school.index');
+Route::get('/group-school/{groupSchool}', [GroupSchoolController::class, 'show'])->name('group-school.show');
 Route::get('/group-school/{groupSchool}/edit', [GroupSchoolController::class, 'edit'])->name('group-school.edit');
 Route::put('/group-school/{groupSchool}', [GroupSchoolController::class, 'update'])->name('group-school.update');
 Route::delete('/group-school/{groupSchool}', [GroupSchoolController::class, 'destroy'])->name('group-school.destroy');
@@ -110,3 +111,21 @@ Route::get('/teachers/{teacher}', [\App\Http\Controllers\TeacherController::clas
 Route::get('/teachers/{teacher}/edit', [\App\Http\Controllers\TeacherController::class, 'edit'])->name('teachers.edit');
 Route::put('/teachers/{teacher}', [\App\Http\Controllers\TeacherController::class, 'update'])->name('teachers.update');
 Route::delete('/teachers/{teacher}', [\App\Http\Controllers\TeacherController::class, 'destroy'])->name('teachers.destroy');        
+
+//year routes
+Route::get('/years', [\App\Http\Controllers\YearController::class, 'index'])->name('years.index');
+Route::get('/years/create', [\App\Http\Controllers\YearController::class, 'create'])->name('years.create');
+Route::post('/years', [\App\Http\Controllers\YearController::class, 'store'])->name('years.store');
+Route::get('/years/{year}', [\App\Http\Controllers\YearController::class, 'show'])->name('years.show');
+Route::get('/years/{year}/edit', [\App\Http\Controllers\YearController::class, 'edit'])->name('years.edit');
+Route::put('/years/{year}', [\App\Http\Controllers\YearController::class, 'update'])->name('years.update'); 
+
+
+//census routes
+Route::get('/census', [\App\Http\Controllers\CensusController::class, 'index'])->name('census.index');
+Route::get('/census/create', [\App\Http\Controllers\CensusController::class, 'create'])->name('census.create');
+Route::post('/census', [\App\Http\Controllers\CensusController::class, 'store'])->name('census.store');
+Route::get('/census/{census}', [\App\Http\Controllers\CensusController::class, 'show'])->name('census.show');
+Route::get('/census/{census}/edit', [\App\Http\Controllers\CensusController::class, 'edit'])->name('census.edit');
+Route::put('/census/{census}', [\App\Http\Controllers\CensusController::class, 'update'])->name('census.update');
+Route::delete('/census/{census}', [\App\Http\Controllers\CensusController::class, 'destroy'])->name('census.destroy');  

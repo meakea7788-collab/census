@@ -38,6 +38,7 @@
                                         <td>{{ $school->phone }}</td>
                                         <td>{{ $school->address }}</td>
                                         <td class="text-end text-nowrap">
+                                            <a href="{{ route('group-school.show', $school) }}" class="btn btn-sm btn-outline-secondary">View</a>
                                             <a href="{{ route('group-school.edit', $school) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                             <form action="{{ route('group-school.destroy', $school) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this group school?');">
                                                 @csrf
