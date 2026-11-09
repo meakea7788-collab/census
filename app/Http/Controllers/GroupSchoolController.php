@@ -69,7 +69,7 @@ class GroupSchoolController extends Controller
 
         return redirect()
             ->route('group-school.create')
-            ->with('status', 'Group school created successfully.');
+            ->with('status', __('Group school created successfully.'));
     }
     public function index()
     {
@@ -89,7 +89,7 @@ class GroupSchoolController extends Controller
 
         return redirect()
             ->route('group-school.index')
-            ->with('status', 'Group school deleted successfully.');
+            ->with('status', __('Group school deleted successfully.'));
     }
     public function edit(GroupSchool $groupSchool)
     {
@@ -135,7 +135,7 @@ class GroupSchoolController extends Controller
 
         return redirect()
             ->route('group-school.index')
-            ->with('status', 'Group school updated successfully.');
+            ->with('status', __('Group school updated successfully.'));
     }
 
     private function getLocations()

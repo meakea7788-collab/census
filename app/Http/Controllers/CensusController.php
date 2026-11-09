@@ -123,7 +123,7 @@ class CensusController extends Controller
         //
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'year_id' => 'required|exists:table_tbl_year,id',
+            'year_id' => 'required|exists:year,id',
             'group_school_id' => 'required|exists:group_schools,id',
             'school_id' => 'required|exists:schools,id',
             'province_id' => 'required|exists:province,id',
@@ -151,7 +151,7 @@ class CensusController extends Controller
                 'updated_at' => now(),
             ], array_unique($teacherIds)));
         });
-        return redirect()->route('census.index')->with('status', 'Census created successfully!');
+        return redirect()->route('census.index')->with('status', __('Census created successfully!'));
 
     }
 
@@ -163,7 +163,7 @@ class CensusController extends Controller
         //
         $census = DB::table('census')->where('id', $id)->first();
         if (!$census) {
-            return redirect()->route('census.index')->with('error', 'Census not found.');
+            return redirect()->route('census.index')->with('error', __('Census not found.'));
         }
         $year = Year::find($census->year_id);
         $groupSchool = GroupSchool::find($census->group_school_id);
@@ -196,7 +196,74 @@ class CensusController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $census = DB::table('census')->where('id', $id)->first();
+
+        if (! $census) {
+            return redirect()->route('census.index')->with('error', __('Census not found.'));
+        }
+
+        $years = Year::orderBy('year')->get();
+        $groupSchools = GroupSchool::orderBy('name')->get();
+        $schools = School::orderBy('name')->get();
+        $provinces = Province::with('districts.communes.villages')->orderBy('name')->get();
+        $districts = District::orderBy('name')->get();
+        $communes = commune::orderBy('name')->get();
+        $villages = village::orderBy('name')->get();
+        $teachers = Teacher::orderBy('name')->get();
+        $teacherIds = DB::table('census_teacher')->where('census_id', $id)->pluck('teacher_id')->all();
+
+        $locationTree = $provinces->map(fn ($province) => [
+            'id' => $province->id,
+            'name' => $province->name,
+            'districts' => $province->districts->map(fn ($district) => [
+                'id' => $district->id,
+                'name' => $district->name,
+                'communes' => $district->communes->map(fn ($commune) => [
+                    'id' => $commune->id,
+                    'name' => $commune->name,
+                    'villages' => $commune->villages->map(fn ($village) => [
+                        'id' => $village->id,
+                        'name' => $village->name,
+                    ])->values(),
+                ])->values(),
+            ])->values(),
+        ])->values();
+
+        $schoolOptions = $schools->map(fn ($school) => [
+            'id' => $school->id,
+            'name' => $school->name,
+            'address' => $school->address ?? '',
+            'group_school_id' => $school->group_school_id,
+        ])->values();
+
+        $groupSchoolOptions = $groupSchools->map(fn ($groupSchool) => [
+            'id' => $groupSchool->id,
+            'name' => $groupSchool->name,
+            'address' => $groupSchool->address ?? '',
+        ])->values();
+
+        $teacherOptions = $teachers->map(fn ($teacher) => [
+            'id' => $teacher->id,
+            'name' => $teacher->name,
+            'school_id' => $teacher->school_id,
+        ])->values();
+
+        return view('census.edit', compact(
+            'census',
+            'years',
+            'groupSchools',
+            'schools',
+            'provinces',
+            'districts',
+            'communes',
+            'villages',
+            'teachers',
+            'teacherIds',
+            'locationTree',
+            'schoolOptions',
+            'groupSchoolOptions',
+            'teacherOptions'
+        ));
     }
 
     /**
@@ -204,7 +271,41 @@ class CensusController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'year_id' => 'required|exists:year,id',
+            'group_school_id' => 'required|exists:group_schools,id',
+            'school_id' => 'required|exists:schools,id',
+            'province_id' => 'required|exists:province,id',
+            'district_id' => 'required|exists:district,id',
+            'commune_id' => 'required|exists:commune,id',
+            'village_id' => 'required|exists:village,id',
+            'teacher_id' => 'required|array|min:1',
+            'teacher_id.*' => 'required|exists:teacher,id',
+            'note' => 'nullable|string|max:255',
+        ]);
+
+        $teacherIds = $data['teacher_id'];
+        unset($data['teacher_id']);
+
+        DB::transaction(function () use ($id, $data, $teacherIds) {
+            DB::table('census')
+                ->where('id', $id)
+                ->update(array_merge($data, [
+                    'updated_at' => now(),
+                ]));
+
+            DB::table('census_teacher')->where('census_id', $id)->delete();
+
+            DB::table('census_teacher')->insert(array_map(fn ($teacherId) => [
+                'census_id' => $id,
+                'teacher_id' => $teacherId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ], array_unique($teacherIds)));
+        });
+
+        return redirect()->route('census.index')->with('status', __('Census updated successfully!'));
     }
 
     /**
@@ -212,6 +313,11 @@ class CensusController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        DB::transaction(function () use ($id) {
+            DB::table('census_teacher')->where('census_id', $id)->delete();
+            DB::table('census')->where('id', $id)->delete();
+        });
+
+        return redirect()->route('census.index')->with('status', __('Census deleted successfully!'));
     }
 }

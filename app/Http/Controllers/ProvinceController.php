@@ -90,7 +90,7 @@ class ProvinceController extends Controller
 
         return redirect()
             ->route('provinces.create')
-            ->with('success', 'Address saved. Existing province, district, commune, or village records were reused.');
+            ->with('success', __('Address saved. Existing province, district, commune, or village records were reused.'));
     }
 
     /**
@@ -118,7 +118,7 @@ class ProvinceController extends Controller
 
         return redirect()
             ->route('provinces.show', $province)
-            ->with('success', 'District saved. An existing district with this name was reused if present.');
+            ->with('success', __('District saved. An existing district with this name was reused if present.'));
     }
 
     /**
@@ -145,7 +145,7 @@ class ProvinceController extends Controller
 
         return redirect()
             ->route('provinces.index')
-            ->with('success', 'Province updated successfully.');
+            ->with('success', __('Province updated successfully.'));
     }
 
     /**
@@ -158,6 +158,6 @@ class ProvinceController extends Controller
 
         return redirect()
             ->route('provinces.index')
-            ->with('success', 'Province and its districts deleted successfully.');
+            ->with('success', __('Province and its districts deleted successfully.'));
     }
 }

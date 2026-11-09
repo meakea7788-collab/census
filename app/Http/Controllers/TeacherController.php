@@ -15,15 +15,18 @@ class TeacherController extends Controller
 
         return view('teachers.index', compact('teachers'));
     }
-    public function create()
+    public function create(Request $request)
     {
         $schools = School::orderBy('name')->get();
+        $selectedSchoolId = $request->filled('school_id')
+            ? School::findOrFail($request->input('school_id'))->id
+            : null;
 
-        return view('teachers.create', compact('schools'));
+        return view('teachers.create', compact('schools', 'selectedSchoolId'));
     }
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'sex' => 'required|string|max:10',
             'position' => 'required|string|max:255',
@@ -31,9 +34,11 @@ class TeacherController extends Controller
             'school_id' => 'required|exists:schools,id',
         ]);
 
-        Teacher::create($request->all());
+        $teacher = Teacher::create($data);
 
-        return redirect()->route('teachers.index')->with('success', 'Teacher created successfully.');
+        return redirect()
+            ->route('schools.show', $teacher->school_id)
+            ->with('success', __('Teacher created successfully.'));
     }
     public function show(Teacher $teacher)
     {
@@ -55,12 +60,12 @@ class TeacherController extends Controller
 
         $teacher->update($request->all());
 
-        return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
+        return redirect()->route('teachers.index')->with('success', __('Teacher updated successfully.'));
     }
     public function destroy(Teacher $teacher)
     {
         $teacher->delete();
 
-        return redirect()->route('teachers.index')->with('success', 'Teacher deleted successfully.');
+        return redirect()->route('teachers.index')->with('success', __('Teacher deleted successfully.'));
     }   
 }

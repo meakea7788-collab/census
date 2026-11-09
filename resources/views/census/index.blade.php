@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Census Records')
+@section('title', __('Census Records'))
 
 @section('content')
 <div class="container-fluid p-0">
     <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
         <div>
-            <h1 class="h3 mb-1">Census Records</h1>
-            <p class="text-secondary mb-0">View and manage census information</p>
+            <h1 class="h3 mb-1">{{ __('Census Records') }}</h1>
+            <p class="text-secondary mb-0">{{ __('View and manage census information') }}</p>
         </div>
-        <a href="{{ route('census.create') }}" class="btn btn-primary">+ Create Census</a>
+        <a href="{{ route('census.create') }}" class="btn btn-primary">{{ __('+ Create Census') }}</a>
     </div>
 
     @if (session('status'))
@@ -20,13 +20,13 @@
 
     @if (! $hasRecords)
         <div class="card border-0 shadow-sm">
-            <div class="card-body text-center text-secondary py-5">No census records found.</div>
+            <div class="card-body text-center text-secondary py-5">{{ __('No census records found.') }}</div>
         </div>
     @else
-        <div class="d-flex justify-content-end mb-3" role="group" aria-label="Choose record view">
+        <div class="d-flex justify-content-end mb-3" role="group" aria-label="{{ __('Choose record view') }}">
             <div class="btn-group">
-                <button class="btn btn-outline-primary active" type="button" data-view="cards">Cards</button>
-                <button class="btn btn-outline-primary" type="button" data-view="list">List</button>
+                <button class="btn btn-outline-primary active" type="button" data-view="cards">{{ __('Cards') }}</button>
+                <button class="btn btn-outline-primary" type="button" data-view="list">{{ __('List') }}</button>
             </div>
         </div>
 
@@ -34,19 +34,29 @@
             @foreach ($censusRecords as $record)
                 <div class="col-12 col-md-6 col-xl-4">
                     <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body">
+                        <div class="card-body d-flex flex-column">
                             <div class="d-flex justify-content-between gap-2 mb-3">
                                 <strong class="fs-5">{{ $record->name }}</strong>
                                 <span class="badge text-bg-primary align-self-start">{{ $record->year }}</span>
                             </div>
-                            <dl class="row mb-0 small">
-                                <dt class="col-4 text-secondary">School</dt>
+                            <dl class="row mb-3 small">
+                                <dt class="col-4 text-secondary">{{ __('School') }}</dt>
                                 <dd class="col-8 text-end">{{ $record->school_name }}</dd>
-                                <dt class="col-4 text-secondary">Teacher</dt>
+                                <dt class="col-4 text-secondary">{{ __('Teacher') }}</dt>
                                 <dd class="col-8 text-end">{{ $record->teacher_name }}</dd>
-                                <dt class="col-4 text-secondary">Village</dt>
+                                <dt class="col-4 text-secondary">{{ __('Village') }}</dt>
                                 <dd class="col-8 text-end">{{ $record->village_name }}</dd>
                             </dl>
+
+                            <div class="mt-auto d-flex gap-2">
+                                <a href="{{ route('census.show', $record->id) }}" class="btn btn-sm btn-outline-info">{{ __('Detail') }}</a>
+                                <a href="{{ route('census.edit', $record->id) }}" class="btn btn-sm btn-outline-warning">{{ __('Edit') }}</a>
+                                <form action="{{ route('census.destroy', $record->id) }}" method="POST" class="d-inline" onsubmit="return confirm(@js(__('Delete this census record?')));">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -59,11 +69,12 @@
                     <table class="table table-striped table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Year</th>
-                                <th>Name</th>
-                                <th>School</th>
-                                <th>Teacher</th>
-                                <th>Village</th>
+                                <th>{{ __('Year') }}</th>
+                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('School') }}</th>
+                                <th>{{ __('Teacher') }}</th>
+                                <th>{{ __('Village') }}</th>
+                                <th class="text-end">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,6 +85,17 @@
                                     <td>{{ $record->school_name }}</td>
                                     <td>{{ $record->teacher_name }}</td>
                                     <td>{{ $record->village_name }}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a href="{{ route('census.show', $record->id) }}" class="btn btn-sm btn-outline-info">{{ __('Detail') }}</a>
+                                            <a href="{{ route('census.edit', $record->id) }}" class="btn btn-sm btn-outline-warning">{{ __('Edit') }}</a>
+                                            <form action="{{ route('census.destroy', $record->id) }}" method="POST" onsubmit="return confirm(@js(__('Delete this census record?')));">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -3,23 +3,23 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Delete Province</title>
+	<title>{{ __('Delete Province') }}</title>
 </head>
 <body>
 	<main>
-		<h1>Delete Province</h1>
-		<p>Are you sure you want to delete this province?</p>
+		<h1>{{ __('Delete Province') }}</h1>
+		<p>{{ __('Are you sure you want to delete this province?') }}</p>
 
 		<dl>
-			<dt>Name</dt>
+			<dt>{{ __('Name') }}</dt>
 			<dd>{{ $province->name }}</dd>
 		</dl>
 
 		<form action="{{ route('address.province.destroy', $province->id) }}" method="POST">
 			@csrf
 			@method('DELETE')
-			<button type="submit">Delete Province</button>
-			<a href="{{ route('address.province.index') }}">Cancel</a>
+			<button type="submit">{{ __('Delete Province') }}</button>
+			<a href="{{ route('address.province.index') }}">{{ __('Cancel') }}</a>
 		</form>
 	</main>
 </body>

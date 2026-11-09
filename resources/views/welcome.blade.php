@@ -9,6 +9,9 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        @if (app()->getLocale() === 'km')
+            <style>html { font-family: "Noto Sans Khmer", "Khmer OS System", sans-serif; }</style>
+        @endif
 
         <!-- Styles -->
         <style>

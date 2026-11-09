@@ -1,0 +1,3036 @@
+{
+  "_source": "https://github.com/thesocheadev/cambodia-administrative-data/tree/9b112093c58101d70b46947e2ce63d45474aae95/data",
+  "districts": [
+    {
+      "code": "0102",
+      "nameKm": "មង្គលបូរី"
+    },
+    {
+      "code": "0103",
+      "nameKm": "ភ្នំស្រុក"
+    },
+    {
+      "code": "0104",
+      "nameKm": "ព្រះនេត្រព្រះ"
+    },
+    {
+      "code": "0105",
+      "nameKm": "អូរជ្រៅ"
+    },
+    {
+      "code": "0106",
+      "nameKm": "សិរីសោភ័ណ"
+    },
+    {
+      "code": "0107",
+      "nameKm": "ថ្មពួក"
+    },
+    {
+      "code": "0108",
+      "nameKm": "ស្វាយចេក"
+    },
+    {
+      "code": "0109",
+      "nameKm": "ម៉ាឡៃ"
+    },
+    {
+      "code": "0110",
+      "nameKm": "ប៉ោយប៉ែត"
+    }
+  ],
+  "communes": [
+    {
+      "code": "010201",
+      "districtCode": "0102",
+      "nameKm": "បន្ទាយនាង"
+    },
+    {
+      "code": "010202",
+      "districtCode": "0102",
+      "nameKm": "បត់ត្រង់"
+    },
+    {
+      "code": "010203",
+      "districtCode": "0102",
+      "nameKm": "ចំណោម"
+    },
+    {
+      "code": "010204",
+      "districtCode": "0102",
+      "nameKm": "គោកបល្ល័ង្គ"
+    },
+    {
+      "code": "010205",
+      "districtCode": "0102",
+      "nameKm": "គយម៉ែង"
+    },
+    {
+      "code": "010206",
+      "districtCode": "0102",
+      "nameKm": "អូរប្រាសាទ"
+    },
+    {
+      "code": "010207",
+      "districtCode": "0102",
+      "nameKm": "ភ្នំតូច"
+    },
+    {
+      "code": "010208",
+      "districtCode": "0102",
+      "nameKm": "រហាត់ទឹក"
+    },
+    {
+      "code": "010209",
+      "districtCode": "0102",
+      "nameKm": "ឫស្សីក្រោក"
+    },
+    {
+      "code": "010210",
+      "districtCode": "0102",
+      "nameKm": "សំបួរ"
+    },
+    {
+      "code": "010211",
+      "districtCode": "0102",
+      "nameKm": "សឿ"
+    },
+    {
+      "code": "010212",
+      "districtCode": "0102",
+      "nameKm": "ស្រះរាំង"
+    },
+    {
+      "code": "010213",
+      "districtCode": "0102",
+      "nameKm": "តាឡំ"
+    },
+    {
+      "code": "010301",
+      "districtCode": "0103",
+      "nameKm": "ណាំតៅ"
+    },
+    {
+      "code": "010302",
+      "districtCode": "0103",
+      "nameKm": "ប៉ោយចារ"
+    },
+    {
+      "code": "010303",
+      "districtCode": "0103",
+      "nameKm": "ពន្លៃ"
+    },
+    {
+      "code": "010304",
+      "districtCode": "0103",
+      "nameKm": "ស្ពានស្រែង"
+    },
+    {
+      "code": "010305",
+      "districtCode": "0103",
+      "nameKm": "ស្រះជីក"
+    },
+    {
+      "code": "010306",
+      "districtCode": "0103",
+      "nameKm": "ភ្នំដី"
+    },
+    {
+      "code": "010401",
+      "districtCode": "0104",
+      "nameKm": "ឈ្នួរមានជ័យ"
+    },
+    {
+      "code": "010402",
+      "districtCode": "0104",
+      "nameKm": "ជប់វារី"
+    },
+    {
+      "code": "010403",
+      "districtCode": "0104",
+      "nameKm": "ភ្នំលៀប"
+    },
+    {
+      "code": "010404",
+      "districtCode": "0104",
+      "nameKm": "ប្រាសាទ"
+    },
+    {
+      "code": "010405",
+      "districtCode": "0104",
+      "nameKm": "ព្រះនេត្រព្រះ"
+    },
+    {
+      "code": "010406",
+      "districtCode": "0104",
+      "nameKm": "រហាល"
+    },
+    {
+      "code": "010407",
+      "districtCode": "0104",
+      "nameKm": "ទានកាំ"
+    },
+    {
+      "code": "010408",
+      "districtCode": "0104",
+      "nameKm": "ទឹកជោរ"
+    },
+    {
+      "code": "010409",
+      "districtCode": "0104",
+      "nameKm": "បុស្បូវ"
+    },
+    {
+      "code": "010501",
+      "districtCode": "0105",
+      "nameKm": "ចង្ហា"
+    },
+    {
+      "code": "010502",
+      "districtCode": "0105",
+      "nameKm": "កូប"
+    },
+    {
+      "code": "010503",
+      "districtCode": "0105",
+      "nameKm": "គុត្ដសត"
+    },
+    {
+      "code": "010505",
+      "districtCode": "0105",
+      "nameKm": "សំរោង"
+    },
+    {
+      "code": "010506",
+      "districtCode": "0105",
+      "nameKm": "សូភី"
+    },
+    {
+      "code": "010507",
+      "districtCode": "0105",
+      "nameKm": "សឹង្ហ"
+    },
+    {
+      "code": "010509",
+      "districtCode": "0105",
+      "nameKm": "អូរបីជាន់"
+    },
+    {
+      "code": "010602",
+      "districtCode": "0106",
+      "nameKm": "កំពង់ស្វាយ"
+    },
+    {
+      "code": "010603",
+      "districtCode": "0106",
+      "nameKm": "កោះពងសត្វ"
+    },
+    {
+      "code": "010604",
+      "districtCode": "0106",
+      "nameKm": "ម្កាក់"
+    },
+    {
+      "code": "010605",
+      "districtCode": "0106",
+      "nameKm": "អូរអំបិល"
+    },
+    {
+      "code": "010606",
+      "districtCode": "0106",
+      "nameKm": "ភ្នៀត"
+    },
+    {
+      "code": "010607",
+      "districtCode": "0106",
+      "nameKm": "ព្រះពន្លា"
+    },
+    {
+      "code": "010608",
+      "districtCode": "0106",
+      "nameKm": "ទឹកថ្លា"
+    },
+    {
+      "code": "010701",
+      "districtCode": "0107",
+      "nameKm": "បន្ទាយឆ្មារ"
+    },
+    {
+      "code": "010702",
+      "districtCode": "0107",
+      "nameKm": "គោករមៀត"
+    },
+    {
+      "code": "010703",
+      "districtCode": "0107",
+      "nameKm": "ភូមិថ្មី"
+    },
+    {
+      "code": "010704",
+      "districtCode": "0107",
+      "nameKm": "ថ្មពួក"
+    },
+    {
+      "code": "010705",
+      "districtCode": "0107",
+      "nameKm": "គោកកឋិន"
+    },
+    {
+      "code": "010706",
+      "districtCode": "0107",
+      "nameKm": "គំរូ"
+    },
+    {
+      "code": "010801",
+      "districtCode": "0108",
+      "nameKm": "ផ្គាំ"
+    },
+    {
+      "code": "010802",
+      "districtCode": "0108",
+      "nameKm": "សារង្គ"
+    },
+    {
+      "code": "010803",
+      "districtCode": "0108",
+      "nameKm": "ស្លក្រាម"
+    },
+    {
+      "code": "010804",
+      "districtCode": "0108",
+      "nameKm": "ស្វាយចេក"
+    },
+    {
+      "code": "010805",
+      "districtCode": "0108",
+      "nameKm": "តាបែន"
+    },
+    {
+      "code": "010806",
+      "districtCode": "0108",
+      "nameKm": "តាផូ"
+    },
+    {
+      "code": "010807",
+      "districtCode": "0108",
+      "nameKm": "ទ្រាស"
+    },
+    {
+      "code": "010808",
+      "districtCode": "0108",
+      "nameKm": "រលួស"
+    },
+    {
+      "code": "010901",
+      "districtCode": "0109",
+      "nameKm": "បឹងបេង"
+    },
+    {
+      "code": "010902",
+      "districtCode": "0109",
+      "nameKm": "ម៉ាឡៃ"
+    },
+    {
+      "code": "010903",
+      "districtCode": "0109",
+      "nameKm": "អូរសំព័រ"
+    },
+    {
+      "code": "010904",
+      "districtCode": "0109",
+      "nameKm": "អូរស្រឡៅ"
+    },
+    {
+      "code": "010905",
+      "districtCode": "0109",
+      "nameKm": "ទួលពង្រ"
+    },
+    {
+      "code": "010906",
+      "districtCode": "0109",
+      "nameKm": "តាគង់"
+    },
+    {
+      "code": "011001",
+      "districtCode": "0110",
+      "nameKm": "និមិត្ដ"
+    },
+    {
+      "code": "011002",
+      "districtCode": "0110",
+      "nameKm": "ប៉ោយប៉ែត"
+    },
+    {
+      "code": "011003",
+      "districtCode": "0110",
+      "nameKm": "ផ្សារកណ្តាល"
+    },
+    {
+      "code": "011004",
+      "districtCode": "0110",
+      "nameKm": "អូរជ្រៅ"
+    },
+    {
+      "code": "011005",
+      "districtCode": "0110",
+      "nameKm": "អូរឫស្សី"
+    }
+  ],
+  "villages": [
+    {
+      "communeCode": "010201",
+      "nameKm": "អូរធំ"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "ភ្នំ"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "បន្ទាយនាង"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "គោកព្នៅ"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "ត្រាង"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "ពង្រ"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "គោកទន្លាប់"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "ត្របែក"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "ឃីឡិក"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "សំរោងពេន"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "ដងរុនលិច"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "ដងរុនកើត"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "អូរស្ងួត"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "ព្រៃចង្ហាលិច"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "ព្រៃចង្ហាកើត"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "អូរអណ្ដូងលិច"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "អូរអណ្ដូងកណ្ដាល"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "អូរអណ្ដូងកើត"
+    },
+    {
+      "communeCode": "010201",
+      "nameKm": "គោកក្ដួច"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "ខ្ទុម្ពរាយលិច"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "ខ្ទុម្ពរាយកើត"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "អន្លង់ថ្ងាន់កើត"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "អន្លង់ថ្ងាន់លិច"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "បង់បត់លិច"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "បង់បត់កើត"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "បត់ត្រង់"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "បត់ត្រង់ធំលិច"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "បត់ត្រង់ធំកើត"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "បត់ត្រង់តូច"
+    },
+    {
+      "communeCode": "010202",
+      "nameKm": "ព្រែកជីក"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "ប្រឡាយចារ៍"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "រង្វានលិច"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "រង្វានកើត"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "ចំណោមលិច"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "ចំណោមកើត"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "រោងគោដើម"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "រោងគោកណ្ដាល"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "រោងគោចុង"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "ពាមរោងគោ"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "តាសល់"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "ជួរខ្ចាស់"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "បឹងត្រស់"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "ដងត្រាង"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "ស្រែព្រៃ"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "បុស្បទន្លាប់"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "តាប៊ុន"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "គោកពន្លៃ"
+    },
+    {
+      "communeCode": "010203",
+      "nameKm": "សាយសាម៉ន"
+    },
+    {
+      "communeCode": "010204",
+      "nameKm": "គោកបល្ល័ង្ក"
+    },
+    {
+      "communeCode": "010204",
+      "nameKm": "តាអន"
+    },
+    {
+      "communeCode": "010204",
+      "nameKm": "ប្រឡាយជ្រៃ"
+    },
+    {
+      "communeCode": "010204",
+      "nameKm": "ជើងចាប"
+    },
+    {
+      "communeCode": "010204",
+      "nameKm": "ផាត់សណ្ដោង"
+    },
+    {
+      "communeCode": "010204",
+      "nameKm": "ចារថ្មី"
+    },
+    {
+      "communeCode": "010204",
+      "nameKm": "ផ្អាវថ្មី"
+    },
+    {
+      "communeCode": "010204",
+      "nameKm": "តាសល់"
+    },
+    {
+      "communeCode": "010205",
+      "nameKm": "គយម៉ែង"
+    },
+    {
+      "communeCode": "010205",
+      "nameKm": "ស្ដីលើ"
+    },
+    {
+      "communeCode": "010205",
+      "nameKm": "ផ្លូវសៀម"
+    },
+    {
+      "communeCode": "010205",
+      "nameKm": "តានង"
+    },
+    {
+      "communeCode": "010205",
+      "nameKm": "អង្ករខ្មៅ"
+    },
+    {
+      "communeCode": "010205",
+      "nameKm": "កសាងថ្មី"
+    },
+    {
+      "communeCode": "010205",
+      "nameKm": "ស្ទឹងចាស់"
+    },
+    {
+      "communeCode": "010205",
+      "nameKm": "ស្ដីក្រោម"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "ភ្នំធំត្បូង"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "ភ្នំប្រាសាទ"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "ភ្នំធំជើង"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "ចំការលោក"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "ភ្នំធំថ្មី"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "អន្លង់ស្ដី"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "គោកធ្លង់កើត"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "គោកធ្លង់កណ្ដាល"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "អូរស្ងួត"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "អូរប្រាសាទ"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "គោកអំពិល"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "រ៉ាចំការចេក"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "ពោធិ៍រៀង"
+    },
+    {
+      "communeCode": "010206",
+      "nameKm": "រូងក្របៅ"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "ភ្នំតូចត្បូង"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "ភ្នំតូចជើង"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "ថ្នល់បត់"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "អូរញរ"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "បឹងត្រស់"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "មនោរម្យ"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "ប៉ោយតាសេក"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "ព្រៃទទឹង"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "បឹងរាំង"
+    },
+    {
+      "communeCode": "010207",
+      "nameKm": "វត្ដថ្មី"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "ពោធិ៍ពីរដើម"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "រហាត់ទឹក"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "ថ្នល់បត់"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "ក្រមល់"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "ខ្ទុំជ្រុំ"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "ចកលិច"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "ដូនមូល"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "ព្រែកសំរោង"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "អូរដង្កោ"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "ចំការចេក"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "អូរជួប"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "កស្វាយ"
+    },
+    {
+      "communeCode": "010208",
+      "nameKm": "ចកកើត"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "អញ្ចាញ"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "នាងកេត"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "ព្រែករពៅ"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "សាលាដែង"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "សំរោង"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "អន្លង់មានទ្រព្យ"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "ចំការតាដោក"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "ប្រទ្បាយហ្លួងក្រោម"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "ហ្លួង"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "អូរតាគល់"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "ប្រទ្បាយហ្លួងលើ"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "គោកស្វាយ"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "អូរតាម៉ា"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "កោះកែវ"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "ផាស៊ីស្រា"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "ឫស្សីក្រោក"
+    },
+    {
+      "communeCode": "010209",
+      "nameKm": "ជំទាវ"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "ឆ្នើមមាស"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "ស្រណាល"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "ឡ"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "តាមែងពក"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "សំបួរ"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "ដូនឡឹក"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "ក្បាលក្របី"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "ស្រះឈូក"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "ស្រែព្រៃ"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "ចែកអង្ករ"
+    },
+    {
+      "communeCode": "010210",
+      "nameKm": "ថ្មដប់"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "តាម៉ៅ"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "អន្សមចេក"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "ត្នោត"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "បួរ"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "បុស្សឡោក"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "សឿ"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "បឹងតូច"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "ផ្លូវដំរីលើ"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "ផ្លូវដំរីក្រោម"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "អូរសឿ"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "គោកសំរោង"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "បល្ល័ង្គជ្រៃ"
+    },
+    {
+      "communeCode": "010211",
+      "nameKm": "អូរជួបថ្មី"
+    },
+    {
+      "communeCode": "010212",
+      "nameKm": "តាអ៊ិន១"
+    },
+    {
+      "communeCode": "010212",
+      "nameKm": "តាអ៊ិន២"
+    },
+    {
+      "communeCode": "010212",
+      "nameKm": "ក្រូច"
+    },
+    {
+      "communeCode": "010212",
+      "nameKm": "ចំការចេក"
+    },
+    {
+      "communeCode": "010212",
+      "nameKm": "ស្រះរាំង"
+    },
+    {
+      "communeCode": "010212",
+      "nameKm": "តាចាន់"
+    },
+    {
+      "communeCode": "010212",
+      "nameKm": "គោកស្រុក"
+    },
+    {
+      "communeCode": "010212",
+      "nameKm": "គោកច្រាប"
+    },
+    {
+      "communeCode": "010212",
+      "nameKm": "គោកក្រសាំង"
+    },
+    {
+      "communeCode": "010213",
+      "nameKm": "ព្រះស្រែ"
+    },
+    {
+      "communeCode": "010213",
+      "nameKm": "តាឡំកណ្ដាល"
+    },
+    {
+      "communeCode": "010213",
+      "nameKm": "តាឡំចុង"
+    },
+    {
+      "communeCode": "010213",
+      "nameKm": "បឹងឃ្លាំងលិច"
+    },
+    {
+      "communeCode": "010213",
+      "nameKm": "ចុងគោក"
+    },
+    {
+      "communeCode": "010213",
+      "nameKm": "បឹងឃ្លាំងកើត"
+    },
+    {
+      "communeCode": "010213",
+      "nameKm": "ខ្លាខាំឆ្កែ"
+    },
+    {
+      "communeCode": "010213",
+      "nameKm": "បឹងវែង"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "រង្វាន"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "ថ្មីខាងត្បូង"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "ថ្មីខាងជើង"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "គោកយាង"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "គោកចាស់"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "ច្រាប"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "កន្ទួត"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "ណាំតៅ"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "ពង្រ"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "សំរោង"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "ក្នាំងតាគង់"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "ធ្នង់ខាងត្បូង"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "ធ្នង់ខាងជើង"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "ស្លែង"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "យាងឧត្ដម"
+    },
+    {
+      "communeCode": "010301",
+      "nameKm": "អំពិលកោង"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "ប៉ោយស្នួល"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "ប៉ោយចារ"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "ត្រពាំងថ្មត្បូង"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "ត្រពាំងថ្មជើង"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "ត្រពាំងថ្មកណ្ដាល"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "ប៉ោយតាអុង"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "សំបួរ"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "ពង្រ"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "កូនខ្លែង"
+    },
+    {
+      "communeCode": "010302",
+      "nameKm": "ព្រះអណ្ដូង"
+    },
+    {
+      "communeCode": "010303",
+      "nameKm": "តាវង"
+    },
+    {
+      "communeCode": "010303",
+      "nameKm": "ពន្លៃ"
+    },
+    {
+      "communeCode": "010303",
+      "nameKm": "ស្វាយ ស"
+    },
+    {
+      "communeCode": "010303",
+      "nameKm": "ស្វាយខ្មៅ"
+    },
+    {
+      "communeCode": "010303",
+      "nameKm": "គោគតាសុខ"
+    },
+    {
+      "communeCode": "010303",
+      "nameKm": "ពោធិ៍រាំបុណ្យ"
+    },
+    {
+      "communeCode": "010304",
+      "nameKm": "រោគ"
+    },
+    {
+      "communeCode": "010304",
+      "nameKm": "មុខឈ្នាង"
+    },
+    {
+      "communeCode": "010304",
+      "nameKm": "ស្ពាន"
+    },
+    {
+      "communeCode": "010304",
+      "nameKm": "គោកចារ"
+    },
+    {
+      "communeCode": "010304",
+      "nameKm": "កណ្ដាល"
+    },
+    {
+      "communeCode": "010304",
+      "nameKm": "ពង្រ"
+    },
+    {
+      "communeCode": "010305",
+      "nameKm": "មាត់ស្រះ"
+    },
+    {
+      "communeCode": "010305",
+      "nameKm": "ស្រះឈូកខាងលិច"
+    },
+    {
+      "communeCode": "010305",
+      "nameKm": "ស្រះជីក"
+    },
+    {
+      "communeCode": "010305",
+      "nameKm": "គោកក្រោល"
+    },
+    {
+      "communeCode": "010305",
+      "nameKm": "គោករំចេក"
+    },
+    {
+      "communeCode": "010305",
+      "nameKm": "គោកតារាជ្យ"
+    },
+    {
+      "communeCode": "010305",
+      "nameKm": "កណ្ដាលខាងលិច"
+    },
+    {
+      "communeCode": "010305",
+      "nameKm": "កណ្ដាលខាងកើត"
+    },
+    {
+      "communeCode": "010305",
+      "nameKm": "ស្រះឈូកខាងកើត"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "ភ្នំដី"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "ពន្លៃ"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "គោកសេះ"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "ថ្នល់ដាច់"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "បុស្បូវ"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "ត្រពាំងប្រីយ៍"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "កំពីងពួយ"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "ស្ពានក្មេង"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "ត្រាង"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "កំពីងពួយមួយ"
+    },
+    {
+      "communeCode": "010306",
+      "nameKm": "ពន្លៃត្បូង"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "សំរោងតូច"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "គោកពង្រ"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "ថ្មគោល"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "ប្រពុត"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "បន្ទាត់បោះ"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "គោកទ្រាស"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "ឈ្នួរ"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "សំរោងធំ"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "ឫស្សីខាង"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "ឫស្សីកណ្ដាល"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "រពាត់"
+    },
+    {
+      "communeCode": "010401",
+      "nameKm": "គោកត្រាច"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "ជប់"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "រោលជ្រូក"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "ប្រាសាទ"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "ក្រសាំងថ្មី"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "ប្រដាក"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "ជ្រាប់ថ្មី"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "ជ្រាប់ចាស់"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "កក់"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "គោកលុន"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "ភ្នំជញ្ជាំង"
+    },
+    {
+      "communeCode": "010402",
+      "nameKm": "ចក្រី"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "ភ្នំលៀបកើត"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "ភ្នំលៀបលិច"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "ទ្រយោង"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "ទ្រលោកជើង"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "ទ្រលោកលិច"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "ទ្រលោកត្បូង"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "ឡោទេ"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "រំដួល"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "ព្រីងជួរ"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "កន្ដ្រប់"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "ត្នោត"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "អន្លង់សា"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "កណ្ដោល"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "កំបោរ"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "កាបៅ"
+    },
+    {
+      "communeCode": "010403",
+      "nameKm": "កំពង់ក្រសាំង"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "ចារ"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "បត់ត្រង់"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "សំពៅលូន"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "ផ្លូវលាវ"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "តាអំ"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "អំពិល"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "កណ្ដាល"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "ថ្មី"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "ឱម៉ាល់"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "ទម្លាប់"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "កៀនបន្ទាយ"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "ប្រាសាទ"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "អន្លង់សា"
+    },
+    {
+      "communeCode": "010404",
+      "nameKm": "កំព្រាម"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ប៉ោយក្ដឿង"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ជើងវត្ដ"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "កណ្ដាល"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ប៉ុស្ដិចាស់"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ប៉ោយសំរោង"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ប៉ោយព្រីង"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ប៉ោយតាប៉ែន"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ស្រេះកើត"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ស្រេះលិច"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "គោកស្រុក"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ស្រមោច"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ពាមស្រេះ"
+    },
+    {
+      "communeCode": "010405",
+      "nameKm": "ដូនច្រែង"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "រហាល"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "សាលាឆេះ"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "ចក"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "ទេពកោសា"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "ស្នាយ"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "អន្លង់ថ្ម"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "ពពេល"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "ប៉ោយស្វាយ"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "ឫស្សី"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "ព្រៃមាន់"
+    },
+    {
+      "communeCode": "010406",
+      "nameKm": "ស្ទឹងកំបុត"
+    },
+    {
+      "communeCode": "010407",
+      "nameKm": "បន្ទាត់បោះ"
+    },
+    {
+      "communeCode": "010407",
+      "nameKm": "ទានកាំលិច"
+    },
+    {
+      "communeCode": "010407",
+      "nameKm": "ទានកាំជើង"
+    },
+    {
+      "communeCode": "010407",
+      "nameKm": "ទានកាំត្បូង"
+    },
+    {
+      "communeCode": "010407",
+      "nameKm": "អូរ"
+    },
+    {
+      "communeCode": "010407",
+      "nameKm": "តាអ៊ុន"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "ស្មាច់"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "ប៉ោយចារ"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "តាខែក"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "គោកកី"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "ទន្លាប់"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "គោកទៀម"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "ចារលើ"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "កន្ទួត"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "ថ្មី"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "កណ្ដាល"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "ទឹកជោរ"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "តាសៀវ"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "កំពង់ថ្កូវ"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "តាប៉ុន"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "ស្នាយល្អ"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "តាដែក"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "សំរោង"
+    },
+    {
+      "communeCode": "010408",
+      "nameKm": "អន្លង់វិល"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ត្របែក"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "កណ្ដាល"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "គោកធំ"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "បុស្បូវ"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "សូត្រមន្ដ"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ស្រះខ្ទំ"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "តាបៅ"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ក្បាលខ្ទីង"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ស្មាច់"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "បឹងវែង"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "បន្ទាត់បោះ"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ព្រីងកោង"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ខ្ចាស់"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ខ្ញែរ"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ឃូស្វាយ"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ខ្វាវ"
+    },
+    {
+      "communeCode": "010409",
+      "nameKm": "ត្បែង"
+    },
+    {
+      "communeCode": "010501",
+      "nameKm": "បឹងសិលា"
+    },
+    {
+      "communeCode": "010501",
+      "nameKm": "តាជ្រឹង"
+    },
+    {
+      "communeCode": "010501",
+      "nameKm": "តាផោក"
+    },
+    {
+      "communeCode": "010501",
+      "nameKm": "ប៉ោយវត្ដ"
+    },
+    {
+      "communeCode": "010501",
+      "nameKm": "ឈូក"
+    },
+    {
+      "communeCode": "010501",
+      "nameKm": "ជ្រៃ"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "យាងថ្មី"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "ម៉ក់ហឺន"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "វាំងមួង"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "កូបកើត"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "ខៃដន"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "ណាកាឆាយ"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "កូបលិច"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "កូបជើង"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "អូរជ្រៅ"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "សូរិយាថ្មី"
+    },
+    {
+      "communeCode": "010502",
+      "nameKm": "កូនត្រី"
+    },
+    {
+      "communeCode": "010503",
+      "nameKm": "កូបតូច"
+    },
+    {
+      "communeCode": "010503",
+      "nameKm": "កោះចារ"
+    },
+    {
+      "communeCode": "010503",
+      "nameKm": "គុត្ដសត"
+    },
+    {
+      "communeCode": "010503",
+      "nameKm": "យាយអត"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "បន្លិច"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "អ្នកតាឈរ"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "សំរោង"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "កំពង់រាប"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "ថ្មី"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "ធ្មេញត្រី"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "បត់ត្រង់"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "អញ្ចាញ"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "វត្ដ"
+    },
+    {
+      "communeCode": "010505",
+      "nameKm": "កណ្ដាល"
+    },
+    {
+      "communeCode": "010506",
+      "nameKm": "សូភីជើង"
+    },
+    {
+      "communeCode": "010506",
+      "nameKm": "សូភីកណ្ដាល"
+    },
+    {
+      "communeCode": "010506",
+      "nameKm": "សូភីត្បូង"
+    },
+    {
+      "communeCode": "010506",
+      "nameKm": "គោកចក"
+    },
+    {
+      "communeCode": "010506",
+      "nameKm": "គោកព្រិច"
+    },
+    {
+      "communeCode": "010507",
+      "nameKm": "សឹង្ហលិច"
+    },
+    {
+      "communeCode": "010507",
+      "nameKm": "រកា"
+    },
+    {
+      "communeCode": "010507",
+      "nameKm": "អន្លង់ស្វាយ"
+    },
+    {
+      "communeCode": "010507",
+      "nameKm": "សឹង្ហត្បូង"
+    },
+    {
+      "communeCode": "010507",
+      "nameKm": "ផ្គាំ"
+    },
+    {
+      "communeCode": "010507",
+      "nameKm": "ពង្រ"
+    },
+    {
+      "communeCode": "010507",
+      "nameKm": "ត្នោត"
+    },
+    {
+      "communeCode": "010507",
+      "nameKm": "កណ្ដាល"
+    },
+    {
+      "communeCode": "010507",
+      "nameKm": "រុន"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "បន្ទាយថ្មី"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "ជោគជ័យ"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "អូរបីជាន់"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "ប្រាសាទ"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "ព្រៃចាន់"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "ព្រាវចាស់"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "សិលាខ្មែរ"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "ស្នួលទ្រេត"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "ថ្នល់បត់"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "ទំនប់ដាច់"
+    },
+    {
+      "communeCode": "010509",
+      "nameKm": "យាងដង្គំ"
+    },
+    {
+      "communeCode": "010602",
+      "nameKm": "កំពង់ស្វាយ"
+    },
+    {
+      "communeCode": "010602",
+      "nameKm": "កងវ៉ា"
+    },
+    {
+      "communeCode": "010602",
+      "nameKm": "ភូមិ ២"
+    },
+    {
+      "communeCode": "010602",
+      "nameKm": "ពង្រ"
+    },
+    {
+      "communeCode": "010602",
+      "nameKm": "សូភី"
+    },
+    {
+      "communeCode": "010602",
+      "nameKm": "តារាងបាល់"
+    },
+    {
+      "communeCode": "010602",
+      "nameKm": "កន្ទួត"
+    },
+    {
+      "communeCode": "010602",
+      "nameKm": "ខ្លាកូនចាស់"
+    },
+    {
+      "communeCode": "010602",
+      "nameKm": "ខ្លាកូនថ្មី"
+    },
+    {
+      "communeCode": "010603",
+      "nameKm": "កោះពងសត្វ"
+    },
+    {
+      "communeCode": "010603",
+      "nameKm": "តាសុខ"
+    },
+    {
+      "communeCode": "010603",
+      "nameKm": "ព្រះអង្គ"
+    },
+    {
+      "communeCode": "010603",
+      "nameKm": "ស្នាយដង្គត់"
+    },
+    {
+      "communeCode": "010603",
+      "nameKm": "អង្គាបុស្ប"
+    },
+    {
+      "communeCode": "010604",
+      "nameKm": "ម្កាក់"
+    },
+    {
+      "communeCode": "010604",
+      "nameKm": "ក្បាលស្ពាន"
+    },
+    {
+      "communeCode": "010604",
+      "nameKm": "តាម៉ា"
+    },
+    {
+      "communeCode": "010604",
+      "nameKm": "គោកលៀប"
+    },
+    {
+      "communeCode": "010604",
+      "nameKm": "ឈូក"
+    },
+    {
+      "communeCode": "010604",
+      "nameKm": "ដូនឡី"
+    },
+    {
+      "communeCode": "010604",
+      "nameKm": "បែកចាន"
+    },
+    {
+      "communeCode": "010605",
+      "nameKm": "សែសិន"
+    },
+    {
+      "communeCode": "010605",
+      "nameKm": "គោរដ្ឋាន"
+    },
+    {
+      "communeCode": "010605",
+      "nameKm": "រោងម៉ាស៊ីន"
+    },
+    {
+      "communeCode": "010605",
+      "nameKm": "ព្រហូត"
+    },
+    {
+      "communeCode": "010605",
+      "nameKm": "អូរអំបិល"
+    },
+    {
+      "communeCode": "010606",
+      "nameKm": "កន្ទួត"
+    },
+    {
+      "communeCode": "010606",
+      "nameKm": "កំព្រីង"
+    },
+    {
+      "communeCode": "010606",
+      "nameKm": "ភ្នៀត"
+    },
+    {
+      "communeCode": "010606",
+      "nameKm": "អ្នកតា"
+    },
+    {
+      "communeCode": "010606",
+      "nameKm": "ថ្មី"
+    },
+    {
+      "communeCode": "010606",
+      "nameKm": "បង្រុះ"
+    },
+    {
+      "communeCode": "010606",
+      "nameKm": "សាលាក្រៅ"
+    },
+    {
+      "communeCode": "010607",
+      "nameKm": "ចក"
+    },
+    {
+      "communeCode": "010607",
+      "nameKm": "ភូមិ ១"
+    },
+    {
+      "communeCode": "010607",
+      "nameKm": "ភូមិ ៣"
+    },
+    {
+      "communeCode": "010607",
+      "nameKm": "ភូមិ ៤"
+    },
+    {
+      "communeCode": "010607",
+      "nameKm": "ព្រៃឫស្សី"
+    },
+    {
+      "communeCode": "010607",
+      "nameKm": "ព្រះពន្លា"
+    },
+    {
+      "communeCode": "010607",
+      "nameKm": "ក្បាលស្ពាន"
+    },
+    {
+      "communeCode": "010608",
+      "nameKm": "គាប"
+    },
+    {
+      "communeCode": "010608",
+      "nameKm": "ទំនប់ជ្រៃ"
+    },
+    {
+      "communeCode": "010608",
+      "nameKm": "ទឹកថ្លា"
+    },
+    {
+      "communeCode": "010608",
+      "nameKm": "ភ្នំបាក់"
+    },
+    {
+      "communeCode": "010608",
+      "nameKm": "ដីឡូតិ៍"
+    },
+    {
+      "communeCode": "010608",
+      "nameKm": "បាណយ"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "គោកសំរោង"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ក្បាលទន្សោង"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "បន្ទាយឆ្មារជើង"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ក្បាលក្របី"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "បន្ទាយឆ្មារត្បូង"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "បន្ទាយឆ្មារលិច"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ថ្មដែកកេះ"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ធ្លក"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "គោកសំរោងកើត"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ស្រះជ្រៃ"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ដងរ៉ែក"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ប្រាសាទត្បែង"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ព្រៃសង្ហា"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ត្រពាំងធ្លក"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ថ្មរមៀលកើត"
+    },
+    {
+      "communeCode": "010701",
+      "nameKm": "ថ្មរមៀលលិច"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "គោកព្រេច"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "ស្រែល្អ"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "គោករមៀត"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "ស្ដៅ"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "ថ្មី"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "តាឡី"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "សេរីកា"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "តាសុង"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "ត្រពាំងសំរោង"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "ថ្នល់បំបែក"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "ថ្មឆ័ត្រ"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "វល្លិប្រេង"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "ប្រាំមីនា"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "សាមគ្គី"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "បន្ទាយមានឬទ្ធិ"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "ស្ពាន"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "កណ្ដោល"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "បឹងតាស្រី"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "បឹងសុក្រម"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "តាម៉ាំង"
+    },
+    {
+      "communeCode": "010702",
+      "nameKm": "ក្ដិបថ្ម"
+    },
+    {
+      "communeCode": "010703",
+      "nameKm": "កាប់ចោរ"
+    },
+    {
+      "communeCode": "010703",
+      "nameKm": "គោកស្វាយ"
+    },
+    {
+      "communeCode": "010703",
+      "nameKm": "រលំជ្រៃ"
+    },
+    {
+      "communeCode": "010703",
+      "nameKm": "ថ្មីខាងលិច"
+    },
+    {
+      "communeCode": "010703",
+      "nameKm": "ថ្មីកណ្ដាល"
+    },
+    {
+      "communeCode": "010703",
+      "nameKm": "ថ្មីខាងត្បូង"
+    },
+    {
+      "communeCode": "010703",
+      "nameKm": "ទទា"
+    },
+    {
+      "communeCode": "010704",
+      "nameKm": "ថ្មពួក"
+    },
+    {
+      "communeCode": "010704",
+      "nameKm": "អ្នកតា"
+    },
+    {
+      "communeCode": "010704",
+      "nameKm": "វត្ដចាស់"
+    },
+    {
+      "communeCode": "010704",
+      "nameKm": "កសិណ"
+    },
+    {
+      "communeCode": "010704",
+      "nameKm": "ស្វាយ"
+    },
+    {
+      "communeCode": "010704",
+      "nameKm": "ថ្នល់ដាច់"
+    },
+    {
+      "communeCode": "010704",
+      "nameKm": "អន្លង់ត្រាច"
+    },
+    {
+      "communeCode": "010705",
+      "nameKm": "ដឺ"
+    },
+    {
+      "communeCode": "010705",
+      "nameKm": "ស្ដៅ"
+    },
+    {
+      "communeCode": "010705",
+      "nameKm": "ទ្រាស"
+    },
+    {
+      "communeCode": "010705",
+      "nameKm": "គោកកឋិន"
+    },
+    {
+      "communeCode": "010705",
+      "nameKm": "តាសៀវ"
+    },
+    {
+      "communeCode": "010705",
+      "nameKm": "ជន្លាសដៃ"
+    },
+    {
+      "communeCode": "010705",
+      "nameKm": "តាត្រៃ"
+    },
+    {
+      "communeCode": "010705",
+      "nameKm": "ព្រះឈរ"
+    },
+    {
+      "communeCode": "010705",
+      "nameKm": "គោកខ្ពស់"
+    },
+    {
+      "communeCode": "010706",
+      "nameKm": "អណ្ដូងខ្លុង"
+    },
+    {
+      "communeCode": "010706",
+      "nameKm": "គំរូ"
+    },
+    {
+      "communeCode": "010706",
+      "nameKm": "តាយឹង"
+    },
+    {
+      "communeCode": "010706",
+      "nameKm": "ឯកភាព"
+    },
+    {
+      "communeCode": "010706",
+      "nameKm": "ផ្សារថ្មី"
+    },
+    {
+      "communeCode": "010706",
+      "nameKm": "ស្វាយជ្រុំ"
+    },
+    {
+      "communeCode": "010706",
+      "nameKm": "ព្រៃវែង"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "ផ្គាំ"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "យាងវៀន"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "យាង"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "អំពិល"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "អូរ"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "ប្រាសាទវៀន"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "តាដួល"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "ស្វាយស"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "ម៉ៅ"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "ថ្មគោល"
+    },
+    {
+      "communeCode": "010801",
+      "nameKm": "តាគល់"
+    },
+    {
+      "communeCode": "010802",
+      "nameKm": "ភាសត្បូង"
+    },
+    {
+      "communeCode": "010802",
+      "nameKm": "ភាសជើង"
+    },
+    {
+      "communeCode": "010802",
+      "nameKm": "ជ្រុង"
+    },
+    {
+      "communeCode": "010802",
+      "nameKm": "ផ្លាស់កង់"
+    },
+    {
+      "communeCode": "010802",
+      "nameKm": "គោកភ្លូ"
+    },
+    {
+      "communeCode": "010802",
+      "nameKm": "កន្ទ្រង់"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "ស្លក្រាម"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "កកោះ"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "កំណប់"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "ទ័ពសៀម"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "ខ្លែងពណ៌ជើង"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "ប្រាសាទ"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "គោកអំពិល"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "ខ្លែងពណ៌ត្បូង"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "បឹងស្នោ"
+    },
+    {
+      "communeCode": "010803",
+      "nameKm": "ចក់ ពួក"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "គោកខ្វាវ"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "ពន្សាយជើង"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "ក្លឹង"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "បែកចានចាស់"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "ពន្សាយត្បូង"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "រកាថ្មី"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "តាអុងលិច"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "ស្លែង"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "ថ្មី"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "ខ្វាវលិច"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "សំរោង"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "ចំការគ"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "ល្បើកស្វាយ"
+    },
+    {
+      "communeCode": "010804",
+      "nameKm": "តេជោភ្នំឆ័ត្រ"
+    },
+    {
+      "communeCode": "010805",
+      "nameKm": "គោកតាឯក"
+    },
+    {
+      "communeCode": "010805",
+      "nameKm": "អូរវែងជើង"
+    },
+    {
+      "communeCode": "010805",
+      "nameKm": "តាបែន"
+    },
+    {
+      "communeCode": "010805",
+      "nameKm": "គោករកា"
+    },
+    {
+      "communeCode": "010805",
+      "nameKm": "អូរវែងត្បូង"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "តាផូ"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "ពង្រ"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "តាស្រី"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "ព្រេចកី"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "គោកកី"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "ឃ្មាស់"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "ថ្មី"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "បារាយណ៍"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "ផ្ចឹក"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "ព្រេចត្បូង"
+    },
+    {
+      "communeCode": "010806",
+      "nameKm": "បន្ទាត់បោះ"
+    },
+    {
+      "communeCode": "010807",
+      "nameKm": "ពន្លៃថ្មី"
+    },
+    {
+      "communeCode": "010807",
+      "nameKm": "ចែង"
+    },
+    {
+      "communeCode": "010807",
+      "nameKm": "ដូនណូយ"
+    },
+    {
+      "communeCode": "010807",
+      "nameKm": "ប្រីយ៍"
+    },
+    {
+      "communeCode": "010807",
+      "nameKm": "ពន្លៃចាស់"
+    },
+    {
+      "communeCode": "010807",
+      "nameKm": "ទ្រាស"
+    },
+    {
+      "communeCode": "010807",
+      "nameKm": "អំពិលព្រង់"
+    },
+    {
+      "communeCode": "010807",
+      "nameKm": "អូរកកោះ"
+    },
+    {
+      "communeCode": "010807",
+      "nameKm": "តាវឹក"
+    },
+    {
+      "communeCode": "010808",
+      "nameKm": "បែកចានថ្មី"
+    },
+    {
+      "communeCode": "010808",
+      "nameKm": "ខ្វាវកើត"
+    },
+    {
+      "communeCode": "010808",
+      "nameKm": "ស្ទឹង"
+    },
+    {
+      "communeCode": "010808",
+      "nameKm": "តាអុងកើត"
+    },
+    {
+      "communeCode": "010808",
+      "nameKm": "ស្លែង"
+    },
+    {
+      "communeCode": "010808",
+      "nameKm": "រលួស"
+    },
+    {
+      "communeCode": "010808",
+      "nameKm": "តាស្មន់"
+    },
+    {
+      "communeCode": "010901",
+      "nameKm": "សង្កែ"
+    },
+    {
+      "communeCode": "010901",
+      "nameKm": "ភ្នំរូង"
+    },
+    {
+      "communeCode": "010901",
+      "nameKm": "ជ្រៃ"
+    },
+    {
+      "communeCode": "010901",
+      "nameKm": "ល្វា"
+    },
+    {
+      "communeCode": "010901",
+      "nameKm": "ចំបក់"
+    },
+    {
+      "communeCode": "010901",
+      "nameKm": "ថ្មបាំង"
+    },
+    {
+      "communeCode": "010901",
+      "nameKm": "អូរកាច់"
+    },
+    {
+      "communeCode": "010902",
+      "nameKm": "ដូង"
+    },
+    {
+      "communeCode": "010902",
+      "nameKm": "វាលហាត់"
+    },
+    {
+      "communeCode": "010902",
+      "nameKm": "កណ្ដាល"
+    },
+    {
+      "communeCode": "010902",
+      "nameKm": "ក្បាលស្ពាន"
+    },
+    {
+      "communeCode": "010902",
+      "nameKm": "ត្រសេកជ្រុំ"
+    },
+    {
+      "communeCode": "010902",
+      "nameKm": "ដំបូកវិល"
+    },
+    {
+      "communeCode": "010902",
+      "nameKm": "វត្ដចាស់"
+    },
+    {
+      "communeCode": "010902",
+      "nameKm": "ថ្មី"
+    },
+    {
+      "communeCode": "010903",
+      "nameKm": "អូរសំព័រ"
+    },
+    {
+      "communeCode": "010903",
+      "nameKm": "អូរស្អំ"
+    },
+    {
+      "communeCode": "010903",
+      "nameKm": "ក្បាលទំនប់"
+    },
+    {
+      "communeCode": "010903",
+      "nameKm": "បន្ទាយទី២"
+    },
+    {
+      "communeCode": "010904",
+      "nameKm": "អូរស្រឡៅ"
+    },
+    {
+      "communeCode": "010904",
+      "nameKm": "ភ្នំកៅបី"
+    },
+    {
+      "communeCode": "010904",
+      "nameKm": "កណ្ដោល"
+    },
+    {
+      "communeCode": "010904",
+      "nameKm": "ឈើទាល"
+    },
+    {
+      "communeCode": "010904",
+      "nameKm": "បឹងរាំង"
+    },
+    {
+      "communeCode": "010904",
+      "nameKm": "ស្វាយព្រៃ"
+    },
+    {
+      "communeCode": "010904",
+      "nameKm": "ចាន់គីរី"
+    },
+    {
+      "communeCode": "010904",
+      "nameKm": "ថ្មី"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "ទួលពង្រ"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "កោះស្នួល"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "ខ្លាងាប់"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "បន្ទាយទី១"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "សន្ដិភាព"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "អូរអំពិល"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "រស្មីមានជ័យ"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "អភិវឌ្ឍន៌"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "ទួលប្រាសាទ"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "ស្រឡៅជ្រុំ"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "បឹងឈូក"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "អូរកេស"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "បឹងជង្រុកតេជោឈ្នះឈ្នះ"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "បឹង៧៥តេជោឈ្នះឈ្នះ"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "ម៉ក់ហឺន"
+    },
+    {
+      "communeCode": "010905",
+      "nameKm": "ភ្នំដូនសម"
+    },
+    {
+      "communeCode": "010906",
+      "nameKm": "ចែងម៉ែង"
+    },
+    {
+      "communeCode": "010906",
+      "nameKm": "បល្ល័ង្គ"
+    },
+    {
+      "communeCode": "010906",
+      "nameKm": "ប៉ោយអង្គរ"
+    },
+    {
+      "communeCode": "010906",
+      "nameKm": "ស្រះភ្លោះ"
+    },
+    {
+      "communeCode": "010906",
+      "nameKm": "ខ្ជាយ"
+    },
+    {
+      "communeCode": "010906",
+      "nameKm": "តាគង់"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "និមិត្ដ ១"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "និមិត្ដ ២"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "និមិត្ដ ៣"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "និមិត្ដ ៤"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "អូរជ្រៅ"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "ដុងអារញ្ញ"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "សូរិយា"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "និមិត្ដថ្មី"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "ថ្មសិន"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "អន្លង់ស្វាយ"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "កូនដំរី"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "កូបធំ"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "រស្មីសាមគ្គី"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "រស្មីសេរីភាព"
+    },
+    {
+      "communeCode": "011001",
+      "nameKm": "សុខសាន្ត"
+    },
+    {
+      "communeCode": "011002",
+      "nameKm": "បាលិលេយ្យ១"
+    },
+    {
+      "communeCode": "011002",
+      "nameKm": "ទួលប្រាសាទ"
+    },
+    {
+      "communeCode": "011002",
+      "nameKm": "មិត្តភាព"
+    },
+    {
+      "communeCode": "011002",
+      "nameKm": "ចាន់គីរី"
+    },
+    {
+      "communeCode": "011002",
+      "nameKm": "ទំនប់ក៥"
+    },
+    {
+      "communeCode": "011002",
+      "nameKm": "បាលិលេយ្យ២"
+    },
+    {
+      "communeCode": "011003",
+      "nameKm": "អណ្ដូងថ្មមាស"
+    },
+    {
+      "communeCode": "011003",
+      "nameKm": "គីឡូលេខបួន"
+    },
+    {
+      "communeCode": "011003",
+      "nameKm": "ផ្សារកណ្តាល"
+    },
+    {
+      "communeCode": "011003",
+      "nameKm": "ប្រជាធម្មលិច"
+    },
+    {
+      "communeCode": "011003",
+      "nameKm": "ស្ទឹងបត់"
+    },
+    {
+      "communeCode": "011004",
+      "nameKm": "អូរជ្រៅ"
+    },
+    {
+      "communeCode": "011004",
+      "nameKm": "ក្បាលកោះ"
+    },
+    {
+      "communeCode": "011004",
+      "nameKm": "ក្បាលស្ពាន១"
+    },
+    {
+      "communeCode": "011004",
+      "nameKm": "ក្បាលស្ពាន ២"
+    },
+    {
+      "communeCode": "011004",
+      "nameKm": "សាមគ្គីមានជ័យ"
+    },
+    {
+      "communeCode": "011004",
+      "nameKm": "ព្រៃព្រិច"
+    },
+    {
+      "communeCode": "011004",
+      "nameKm": "ប៉ោយប៉ែត"
+    },
+    {
+      "communeCode": "011005",
+      "nameKm": "អូរឫស្សី"
+    },
+    {
+      "communeCode": "011005",
+      "nameKm": "ប្រជាធម្មកើត"
+    },
+    {
+      "communeCode": "011005",
+      "nameKm": "ទូលពង្រ"
+    },
+    {
+      "communeCode": "011005",
+      "nameKm": "អូរនាង"
+    },
+    {
+      "communeCode": "011005",
+      "nameKm": "ព្រៃគុប"
+    }
+  ]
+}

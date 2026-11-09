@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1>Add Census</h1>
+    <h1>{{ __('Add Census') }}</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -18,15 +18,15 @@
         @csrf
 
         <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
+            <label for="name" class="form-label">{{ __('Name') }}</label>
             <input type="text" id="name" name="name" value="{{ old('name') }}"
                    class="form-control" required>
         </div>
 
         <div class="mb-3">
-            <label for="year_id" class="form-label">Year</label>
+            <label for="year_id" class="form-label">{{ __('Year') }}</label>
             <select id="year_id" name="year_id" class="form-control" required>
-                <option value="">Select year</option>
+                <option value="">{{ __('Select year') }}</option>
                 @foreach ($years as $year)
                     <option value="{{ $year->id }}" @selected(old('year_id') == $year->id)>
                         {{ $year->name ?? $year->year }}
@@ -35,9 +35,9 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="province_id" class="form-label">Province</label>
+            <label for="province_id" class="form-label">{{ __('Province') }}</label>
             <select id="province_id" name="province_id" class="form-control" required>
-                <option value="">Select province</option>
+                <option value="">{{ __('Select province') }}</option>
                 @foreach ($provinces as $province)
                     <option value="{{ $province->id }}" @selected(old('province_id') == $province->id)>
                         {{ $province->name }}
@@ -46,9 +46,9 @@
             </select>
         </div>
          <div class="mb-3">
-            <label for="district_id" class="form-label">District</label>
+            <label for="district_id" class="form-label">{{ __('District') }}</label>
             <select id="district_id" name="district_id" class="form-control" required>
-                <option value="">Select district</option>
+                <option value="">{{ __('Select district') }}</option>
                 @foreach ($districts as $district)
                     <option value="{{ $district->id }}" @selected(old('district_id') == $district->id)>
                         {{ $district->name }}
@@ -57,9 +57,9 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="commune_id" class="form-label">Commune</label>
+            <label for="commune_id" class="form-label">{{ __('Commune') }}</label>
             <select id="commune_id" name="commune_id" class="form-control" required>
-                <option value="">Select commune</option>
+                <option value="">{{ __('Select commune') }}</option>
                 @foreach ($communes as $commune)
                     <option value="{{ $commune->id }}" @selected(old('commune_id') == $commune->id)>
                         {{ $commune->name }}
@@ -68,9 +68,9 @@
             </select>
         </div>
          <div class="mb-3">
-            <label for="village_id" class="form-label">Village</label>
+            <label for="village_id" class="form-label">{{ __('Village') }}</label>
             <select id="village_id" name="village_id" class="form-control" required>
-                <option value="">Select village</option>
+                <option value="">{{ __('Select village') }}</option>
                 @foreach ($villages as $village)
                     <option value="{{ $village->id }}" @selected(old('village_id') == $village->id)>
                         {{ $village->name }}
@@ -79,25 +79,25 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="group_school_id" class="form-label">School Group</label>
+            <label for="group_school_id" class="form-label">{{ __('School Group') }}</label>
             <select id="group_school_id" name="group_school_id" class="form-control" required>
-                <option value="">Select school group</option>
+                <option value="">{{ __('Select school group') }}</option>
                 {{-- Options are filtered with JavaScript from the selected commune. --}}
             </select>
         </div>
 
         <div class="mb-3">
-            <label for="school_id" class="form-label">School</label>
+            <label for="school_id" class="form-label">{{ __('School') }}</label>
             <select id="school_id" name="school_id" class="form-control" required>
-                <option value="">Select school</option>
+                <option value="">{{ __('Select school') }}</option>
                 {{-- Options are filtered with JavaScript from the selected group school. --}}
             </select>
         </div>
 
         <fieldset class="mb-3">
-            <legend class="form-label">Teachers</legend>
+            <legend class="form-label">{{ __('Teachers') }}</legend>
             <div id="teacher_list" class="border rounded p-3" style="max-height: 240px; overflow-y: auto;">
-                <span class="text-muted">Select a school to show its teachers.</span>
+                <span class="text-muted">{{ __('Select a school to show its teachers.') }}</span>
             </div>
             @error('teacher_id')
                 <div class="text-danger small mt-1">{{ $message }}</div>
@@ -105,13 +105,13 @@
         </fieldset>
 
         <div class="mb-3">
-            <label for="note" class="form-label">Note</label>
+            <label for="note" class="form-label">{{ __('Note') }}</label>
             <textarea id="note" name="note" class="form-control"
                       rows="4">{{ old('note') }}</textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a href="{{ route('census.index') }}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+        <a href="{{ route('census.index') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
     </form>
 </div>
 
@@ -144,13 +144,13 @@
             teacherList.replaceChildren();
 
             if (!schoolId) {
-                teacherList.innerHTML = '<span class="text-muted">Select a school to show its teachers.</span>';
+                teacherList.innerHTML = '<span class="text-muted">{{ __("Select a school to show its teachers.") }}</span>';
                 return;
             }
 
             const teachers = teacherOptions.filter(teacher => String(teacher.school_id) === String(schoolId));
             if (teachers.length === 0) {
-                teacherList.innerHTML = '<span class="text-muted">No teachers in this school.</span>';
+                teacherList.innerHTML = '<span class="text-muted">{{ __("No teachers in this school.") }}</span>';
                 return;
             }
 
@@ -202,7 +202,7 @@
                 ? groupSchoolOptions.filter(group => (group.address || '').toLowerCase().includes(communeName))
                 : [];
 
-            setOptions(groupSchoolSelect, groups, commune ? 'Select school group' : 'Select commune first', oldSelection.groupSchool);
+            setOptions(groupSchoolSelect, groups, commune ? @json(__('Select school group')) : @json(__('Select commune first')), oldSelection.groupSchool);
             filterSchools();
         }
 
@@ -211,36 +211,36 @@
             const schools = groupId
                 ? schoolOptions.filter(school => String(school.group_school_id) === String(groupId))
                 : [];
-            setOptions(schoolSelect, schools, groupId ? 'Select school' : 'Select school group first', oldSelection.school);
+            setOptions(schoolSelect, schools, groupId ? @json(__('Select school')) : @json(__('Select school group first')), oldSelection.school);
             filterTeachers();
         }
 
         provinceSelect.addEventListener('change', () => {
-            setOptions(districtSelect, selectedProvince()?.districts ?? [], 'Select district');
-            setOptions(communeSelect, [], 'Select commune');
-            setOptions(villageSelect, [], 'Select village');
-            setOptions(groupSchoolSelect, [], 'Select commune first');
-            setOptions(schoolSelect, [], 'Select school group first');
+            setOptions(districtSelect, selectedProvince()?.districts ?? [], @json(__('Select district')));
+            setOptions(communeSelect, [], @json(__('Select commune')));
+            setOptions(villageSelect, [], @json(__('Select village')));
+            setOptions(groupSchoolSelect, [], @json(__('Select commune first')));
+            setOptions(schoolSelect, [], @json(__('Select school group first')));
         });
 
         districtSelect.addEventListener('change', () => {
-            setOptions(communeSelect, selectedDistrict()?.communes ?? [], 'Select commune');
-            setOptions(villageSelect, [], 'Select village');
-            setOptions(groupSchoolSelect, [], 'Select commune first');
-            setOptions(schoolSelect, [], 'Select school group first');
+            setOptions(communeSelect, selectedDistrict()?.communes ?? [], @json(__('Select commune')));
+            setOptions(villageSelect, [], @json(__('Select village')));
+            setOptions(groupSchoolSelect, [], @json(__('Select commune first')));
+            setOptions(schoolSelect, [], @json(__('Select school group first')));
         });
 
         communeSelect.addEventListener('change', () => {
-            setOptions(villageSelect, selectedCommune()?.villages ?? [], 'Select village');
+            setOptions(villageSelect, selectedCommune()?.villages ?? [], @json(__('Select village')));
             filterGroupSchools();
         });
 
         groupSchoolSelect.addEventListener('change', filterSchools);
         schoolSelect.addEventListener('change', filterTeachers);
 
-        setOptions(districtSelect, selectedProvince()?.districts ?? [], 'Select district', oldSelection.district);
-        setOptions(communeSelect, selectedDistrict()?.communes ?? [], 'Select commune', oldSelection.commune);
-        setOptions(villageSelect, selectedCommune()?.villages ?? [], 'Select village', oldSelection.village);
+        setOptions(districtSelect, selectedProvince()?.districts ?? [], @json(__('Select district')), oldSelection.district);
+        setOptions(communeSelect, selectedDistrict()?.communes ?? [], @json(__('Select commune')), oldSelection.commune);
+        setOptions(villageSelect, selectedCommune()?.villages ?? [], @json(__('Select village')), oldSelection.village);
         filterGroupSchools();
 </script>
 @endsection

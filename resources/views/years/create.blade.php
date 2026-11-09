@@ -5,9 +5,9 @@
         @csrf
 
         <div>
-            <label for="year">Year</label>
+            <label for="year">{{ __('Year') }}</label>
             <select id="year" name="year" required>
-                <option value="">Select year</option>
+                <option value="">{{ __('Select year') }}</option>
                 @for ($year = 2000; $year <= 2050; $year++)
                     <option value="{{ $year }}" {{ old('year') == $year ? 'selected' : '' }}>
                         {{ $year }}
@@ -19,6 +19,6 @@
             @enderror
         </div>
 
-        <button type="submit">Create Year</button>
+        <button type="submit">{{ __('Create Year') }}</button>
     </form>
 @endsection

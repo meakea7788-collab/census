@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-    <a href="{{ route('years.create') }}" class="btn btn-primary">Create Year</a>
+    <a href="{{ route('years.create') }}" class="btn btn-primary">{{ __('Create Year') }}</a>
 
     <table>
         <thead>
             <tr>
-                <th>Year</th>
+                <th>{{ __('Year') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -16,7 +16,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td>No years found.</td>
+                    <td>{{ __('No years found.') }}</td>
                 </tr>
             @endforelse
         </tbody>

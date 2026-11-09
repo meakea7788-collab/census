@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class School extends Model
@@ -16,6 +17,7 @@ class School extends Model
     protected $fillable = [
         'name',
         'address',
+        'village',
         'phone',
         'email',
         'director_name',
@@ -30,5 +32,11 @@ class School extends Model
     public function teachers(): HasMany
     {
         return $this->hasMany(Teacher::class, 'school_id');
+    }
+
+    public function villages(): BelongsToMany
+    {
+        return $this->belongsToMany(village::class, 'school_village', 'school_id', 'village_id')
+            ->withTimestamps();
     }
 }

@@ -16,4 +16,18 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_the_home_dashboard_returns_a_successful_response(): void
+    {
+        $response = $this->get('/home');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_khmer_is_the_default_application_language(): void
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('<html lang="km">', false);
+    }
 }

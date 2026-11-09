@@ -34,7 +34,7 @@ class villController extends Controller
 
         return redirect()
             ->route('communes.show', $commune)
-            ->with('success', 'Village saved. An existing village with this name was reused if present.');
+            ->with('success', __('Village saved. An existing village with this name was reused if present.'));
     }
 
     function store(Request $request)
@@ -51,7 +51,7 @@ class villController extends Controller
 
         return redirect()
             ->route('communes.show', $data['commune_id'])
-            ->with('success', 'Village saved.');
+            ->with('success', __('Village saved.'));
     }
       function edit($id)
     {
@@ -66,6 +66,6 @@ class villController extends Controller
     {
         $village = village::findOrFail($id);
         $village->delete();
-        return redirect()->route('address.village.index')->with('success', 'Village deleted successfully.');
+        return redirect()->route('address.village.index')->with('success', __('Village deleted successfully.'));
     }
 }

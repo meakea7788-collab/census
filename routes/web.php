@@ -26,6 +26,16 @@ Route::post('/logout', function (Request $request) {
     return redirect()->route('welcome');
 })->name('logout');
 
+Route::post('/language', function (Request $request) {
+    $data = $request->validate([
+        'locale' => ['required', 'in:en,km'],
+    ]);
+
+    $request->session()->put('locale', $data['locale']);
+
+    return redirect()->back();
+})->name('language.switch');
+
 Route::post('/login', function (Request $request) {
     $request->validate([
         'email' => ['required', 'email'],
@@ -35,11 +45,11 @@ Route::post('/login', function (Request $request) {
     if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
         $request->session()->regenerate();
 
-        return redirect()->intended(route('home'))->with('status', 'Login successful!');
+        return redirect()->intended(route('home'))->with('status', __('Login successful!'));
     }
 
     return back()->withErrors([
-        'email' => 'The provided credentials do not match our records.',
+        'email' => __('The provided credentials do not match our records.'),
     ])->onlyInput('email');
 })->name('login.submit');
 
@@ -63,8 +73,16 @@ Route::post('/users/store', function (Request $request) {
 
     User::create($data);
 
-    return redirect()->route('users.create')->with('status', 'User created successfully.');
+    return redirect()->route('users.create')->with('status', __('User created successfully.'));
 })->name('users.store');
+
+Route::get('/hole_houses', [\App\Http\Controllers\hole_houseController::class, 'index'])->name('hole_houses.index');
+Route::get('/hole_houses/create', [\App\Http\Controllers\hole_houseController::class, 'create'])->name('hole_houses.create');
+Route::post('/hole_houses', [\App\Http\Controllers\hole_houseController::class, 'store'])->name('hole_houses.store');
+Route::get('/hole_houses/{id}/edit', [\App\Http\Controllers\hole_houseController::class, 'edit'])->name('hole_houses.edit');
+Route::put('/hole_houses/{id}', [\App\Http\Controllers\hole_houseController::class, 'update'])->name('hole_houses.update');
+Route::delete('/hole_houses/{id}', [\App\Http\Controllers\hole_houseController::class, 'destroy'])->name('hole_houses.destroy');
+Route::get('/hole_houses/{id}', [\App\Http\Controllers\hole_houseController::class, 'show'])->name('hole_houses.show');
 
 Route::get('/group-school/create', [GroupSchoolController::class, 'create'])->name('group-school.create');
 Route::post('/group-school', [GroupSchoolController::class, 'store'])->name('group-school.store');
@@ -129,3 +147,15 @@ Route::get('/census/{census}', [\App\Http\Controllers\CensusController::class, '
 Route::get('/census/{census}/edit', [\App\Http\Controllers\CensusController::class, 'edit'])->name('census.edit');
 Route::put('/census/{census}', [\App\Http\Controllers\CensusController::class, 'update'])->name('census.update');
 Route::delete('/census/{census}', [\App\Http\Controllers\CensusController::class, 'destroy'])->name('census.destroy');  
+
+//family routes
+Route::get('/family', [\App\Http\Controllers\FamilyController::class, 'index'])->name('family.index');
+Route::get('/family/create', [\App\Http\Controllers\FamilyController::class, 'create'])->name('family.create');
+Route::post('/family', [\App\Http\Controllers\FamilyController::class, 'store'])->name('family.store');
+Route::get('/family/{family}', [\App\Http\Controllers\FamilyController::class, 'show'])->name('family.show');
+Route::get('/family/{family}/edit', [\App\Http\Controllers\FamilyController::class, 'edit'])->name('family.edit');
+Route::put('/family/{family}', [\App\Http\Controllers\FamilyController::class, 'update'])->name('family.update');
+Route::delete('/family/{family}', [\App\Http\Controllers\FamilyController::class, 'destroy'])->name('family.destroy');
+Route::get('/family/{family}/move', [\App\Http\Controllers\FamilyController::class, 'editMoveAddress'])->name('family.move.edit');
+Route::put('/family/{family}/move', [\App\Http\Controllers\FamilyController::class, 'updateMoveAddress'])->name('family.move.update');
+Route::post('/family/{family}/mark-deceased', [\App\Http\Controllers\FamilyController::class, 'markDeceased'])->name('family.mark-deceased');

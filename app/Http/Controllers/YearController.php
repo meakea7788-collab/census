@@ -25,14 +25,14 @@ class YearController extends Controller
 
         \App\Models\Year::create($data);
 
-        return redirect()->route('years.index')->with('status', 'Year created successfully!');
+        return redirect()->route('years.index')->with('status', __('Year created successfully!'));
     }
     function destroy($id)
     {
         $year = \App\Models\Year::findOrFail($id);
         $year->delete();
 
-        return redirect()->route('years.index')->with('status', 'Year deleted successfully!');
+        return redirect()->route('years.index')->with('status', __('Year deleted successfully!'));
     }
     function edit($id)
     {
@@ -46,6 +46,6 @@ class YearController extends Controller
             'year' => ['required', 'integer', 'min:1900', 'max:2100', Rule::unique('year', 'year')->ignore($year->id)],
         ]);
         $year->update($data);
-        return redirect()->route('years.index')->with('status', 'Year updated successfully!');
+        return redirect()->route('years.index')->with('status', __('Year updated successfully!'));
     }
 }

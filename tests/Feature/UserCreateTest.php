@@ -171,7 +171,8 @@ class UserCreateTest extends TestCase
             ->assertSee('Select a province')
             ->assertSee('Select a district')
             ->assertSee('Select a commune')
-            ->assertSee('Select a village')
+            ->assertSee('name="village_ids[]"', false)
+            ->assertSee('Villages')
             ->assertSee('Northside School Group');
     }
 
