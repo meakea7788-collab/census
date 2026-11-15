@@ -15,7 +15,9 @@
                 <p class="card-text text-secondary">{{ __('Manage group schools or add a new group school.') }}</p>
                 <div class="d-flex flex-wrap gap-2">
                     <a href="{{ route('group-school.index') }}" class="btn btn-primary">{{ __('View Group Schools') }}</a>
-                    <a href="{{ route('group-school.create') }}" class="btn btn-outline-primary">{{ __('Add Group School') }}</a>
+                    @if (auth()->user()?->role !== \App\Models\User::ROLE_ADMIN)
+                        <a href="{{ route('group-school.create') }}" class="btn btn-outline-primary">{{ __('Add Group School') }}</a>
+                    @endif
                 </div>
             </div>
         </div>

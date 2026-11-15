@@ -36,8 +36,13 @@
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex justify-content-between gap-2 mb-3">
-                                <strong class="fs-5">{{ $record->name }}</strong>
-                                <span class="badge text-bg-primary align-self-start">{{ $record->year }}</span>
+                                <div>
+                                    <strong class="fs-5">{{ $record->year }}</strong>
+                                    @if ($record->year_description)
+                                        <div class="small text-secondary">{{ $record->year_description }}</div>
+                                    @endif
+                                </div>
+                                <span class="badge text-bg-primary align-self-start">{{ __('Year') }}</span>
                             </div>
                             <dl class="row mb-3 small">
                                 <dt class="col-4 text-secondary">{{ __('School') }}</dt>
@@ -70,7 +75,7 @@
                         <thead class="table-light">
                             <tr>
                                 <th>{{ __('Year') }}</th>
-                                <th>{{ __('Name') }}</th>
+                                <th>{{ __('Description') }}</th>
                                 <th>{{ __('School') }}</th>
                                 <th>{{ __('Teacher') }}</th>
                                 <th>{{ __('Village') }}</th>
@@ -81,7 +86,7 @@
                             @foreach ($censusRecords as $record)
                                 <tr>
                                     <td>{{ $record->year }}</td>
-                                    <td><strong>{{ $record->name }}</strong></td>
+                                    <td>{{ $record->year_description ?: '—' }}</td>
                                     <td>{{ $record->school_name }}</td>
                                     <td>{{ $record->teacher_name }}</td>
                                     <td>{{ $record->village_name }}</td>

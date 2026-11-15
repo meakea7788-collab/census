@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('census', function (Blueprint $table) {
             $table->dropForeign(['year_id']);
-            $table->foreign('year_id')->references('id')->on('table_tbl_year')->cascadeOnDelete();
+            $table->foreign('year_id')->references('id')->on('year')->cascadeOnDelete();
         });
     }
 };

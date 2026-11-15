@@ -13,7 +13,9 @@
 <body>
     <div class="app-shell d-flex">
         <aside class="app-sidebar d-flex flex-column flex-shrink-0 p-3" aria-label="Main navigation">
-            <a href="{{ route('home') }}" class="app-brand mb-4">{{ __('Census Admin') }}</a>
+            <a href="{{ route('home') }}" class="app-brand mb-4">
+                {{ auth()->user()?->name ?? __('Census Admin') }}
+            </a>
 
             <nav class="nav nav-pills flex-column gap-1">
                 <a
@@ -58,11 +60,13 @@
                     class="nav-link {{ request()->routeIs('teachers.index', 'teachers.edit') ? 'active' : '' }}"
                     @if (request()->routeIs('teachers.index', 'teachers.edit')) aria-current="page" @endif  
                 >{{ __('Teachers') }}</a>
-                <a
-                    href="{{ route('group-school.create') }}"
-                    class="nav-link {{ request()->routeIs('group-school.create') ? 'active' : '' }}"
-                    @if (request()->routeIs('group-school.create')) aria-current="page" @endif
-                >{{ __('Group Schools') }}</a>
+                @if (auth()->user()?->role !== \App\Models\User::ROLE_ADMIN)
+                    <a
+                        href="{{ route('group-school.create') }}"
+                        class="nav-link {{ request()->routeIs('group-school.create') ? 'active' : '' }}"
+                        @if (request()->routeIs('group-school.create')) aria-current="page" @endif
+                    >{{ __('Create Group School') }}</a>
+                @endif
                 <a
                     href="{{ route('provinces.index') }}"
                     class="nav-link {{ request()->routeIs('provinces.index', 'provinces.show') ? 'active' : '' }}"
@@ -70,10 +74,22 @@
                 >{{ __('Address') }}</a>
                 
                 <a
-                    href="{{ route('users.create') }}"
-                    class="nav-link {{ request()->routeIs('users.create') ? 'active' : '' }}"
-                    @if (request()->routeIs('users.create')) aria-current="page" @endif
-                >{{ __('Create User') }}</a>
+                    href="{{ route('users.index') }}"
+                    class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}"
+                    @if (request()->routeIs('users.index')) aria-current="page" @endif
+                >{{ __('Users') }}</a>
+                <a
+                    href="{{ route('profile') }}"
+                    class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}"
+                    @if (request()->routeIs('profile')) aria-current="page" @endif
+                >{{ __('My Profile') }}</a>
+                @if (in_array(auth()->user()?->role, [\App\Models\User::ROLE_SUPERADMIN, \App\Models\User::ROLE_ADMIN], true))
+                    <a
+                        href="{{ route('users.create') }}"
+                        class="nav-link {{ request()->routeIs('users.create') ? 'active' : '' }}"
+                        @if (request()->routeIs('users.create')) aria-current="page" @endif
+                    >{{ __('Create User') }}</a>
+                @endif
             </nav>
 
             <form method="POST" action="{{ route('language.switch') }}" class="mt-3">

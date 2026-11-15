@@ -1,92 +1,164 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{{ __('Create User') }}</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="bg-slate-100 min-h-screen flex items-center justify-center">
-        <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-            <form method="POST" action="{{ route('language.switch') }}" class="mb-4 text-end">
-                @csrf
-                <select name="locale" class="rounded-lg border border-slate-300 px-3 py-2" onchange="this.form.submit()" aria-label="{{ __('Language') }}">
-                    <option value="km" @selected(app()->getLocale() === 'km')>ភាសាខ្មែរ</option>
-                    <option value="en" @selected(app()->getLocale() === 'en')>English</option>
-                </select>
-            </form>
-            <h1 class="text-2xl font-bold text-slate-800 mb-6">{{ __('Create User') }}</h1>
+@extends('layouts.app')
 
-            @if (session('status'))
-                <div class="mb-4 rounded border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-                    {{ session('status') }}
-                </div>
-            @endif
+@section('title', __('Create User'))
 
-            @if ($errors->any())
-                <div class="mb-4 rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                    <ul class="list-disc pl-5">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('users.store') }}" class="space-y-5">
-                @csrf
-
-                <div>
-                    <label for="name" class="mb-2 block text-sm font-medium text-slate-700">{{ __('Name') }}</label>
-                    <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        required
-                        class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                        placeholder="{{ __('Enter full name') }}"
-                    >
-                </div>
-
-                <div>
-                    <label for="email" class="mb-2 block text-sm font-medium text-slate-700">{{ __('Email (optional)') }}</label>
-                    <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                        placeholder="{{ __('Optional email') }}"
-                    >
-                </div>
-
-                <div>
-                    <label for="password" class="mb-2 block text-sm font-medium text-slate-700">{{ __('Password (optional)') }}</label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"
-                        class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                        placeholder="{{ __('Optional password') }}"
-                    >
-                </div>
-
-                <div>
-                    <label for="role" class="mb-2 block text-sm font-medium text-slate-700">{{ __('Role') }}</label>
-                    <select
-                        id="role"
-                        name="role"
-                        class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-slate-800 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200"
-                    >
-                        <option value="superadmin">{{ __('Superadmin') }}</option>
-                        <option value="admin">{{ __('Admin') }}</option>
-                        <option value="user" selected>{{ __('Normal User') }}</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="w-full rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white hover:bg-indigo-500">
-                    {{ __('Save User') }}
-                </button>
-            </form>
+@section('content')
+    <div class="container-fluid p-0">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
+            <div>
+                <h1 class="h3 mb-1">{{ __('Create User') }}</h1>
+                <p class="text-secondary mb-0">{{ __('Add a user account and choose its role.') }}</p>
+            </div>
+            <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">{{ __('Back to Users') }}</a>
         </div>
-    </body>
-</html>
+
+        @if (session('status'))
+            <div class="alert alert-success" role="alert">{{ session('status') }}</div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger" role="alert">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form method="POST" action="{{ route('users.store') }}">
+                    @csrf
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label for="name" class="form-label">{{ __('Name') }}</label>
+                            <input id="name" name="name" type="text" value="{{ old('name') }}"
+                                   class="form-control @error('name') is-invalid @enderror"
+                                   placeholder="{{ __('Enter full name') }}" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="email" class="form-label">{{ __('Email (optional)') }}</label>
+                            <input id="email" name="email" type="email" value="{{ old('email') }}"
+                                   class="form-control @error('email') is-invalid @enderror"
+                                   placeholder="{{ __('Optional email') }}">
+                            @error('email')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="password" class="form-label">{{ __('Password (optional)') }}</label>
+                            <input id="password" name="password" type="password"
+                                   class="form-control @error('password') is-invalid @enderror"
+                                   placeholder="{{ __('Optional password') }}">
+                            @error('password')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label for="role" class="form-label">{{ __('Role') }}</label>
+                            @if ($canAssignRoles)
+                            <select id="role" name="role" class="form-select @error('role') is-invalid @enderror">
+                                <option value="superadmin" @selected(old('role', 'user') === 'superadmin')>{{ __('Superadmin') }}</option>
+                                <option value="admin" @selected(old('role', 'user') === 'admin')>{{ __('Admin') }}</option>
+                                <option value="user" @selected(old('role', 'user') === 'user')>{{ __('Normal User') }}</option>
+                            </select>
+                            @error('role')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            @else
+                                <input type="text" class="form-control" value="{{ __('Normal User') }}" disabled>
+                                <div class="form-text">{{ __('Admins can create normal user accounts only.') }}</div>
+                            @endif
+                        </div>
+
+                        @if ($canAssignRoles)
+                            <div class="col-12 col-md-6">
+                                <label for="school_id" class="form-label">{{ __('School') }}</label>
+                                <select id="school_id" name="school_id" class="form-select @error('school_id') is-invalid @enderror" required>
+                                    <option value="">{{ __('Select school') }}</option>
+                                    @foreach ($schools as $school)
+                                        <option value="{{ $school->id }}" @selected(old('school_id') == $school->id)>
+                                            {{ $school->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('school_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        @else
+                        <div class="col-12">
+                            <fieldset class="border rounded p-3 @error('teacher_ids') border-danger @enderror">
+                                <legend class="float-none w-auto px-2 fs-6 mb-1">
+                                    {{ __('Teachers') }} @if ($requiresTeacher)<span class="text-danger">*</span>@endif
+                                </legend>
+                                <p class="form-text mt-0">{{ __('Select one or more teachers assigned to a census.') }}</p>
+                                @php($selectedTeacherIds = collect(old('teacher_ids', old('teacher_id') ? [old('teacher_id')] : []))->map(fn ($id) => (int) $id)->all())
+                                <div class="row g-2">
+                                    @forelse ($teachers as $teacher)
+                                        @php($censusGroupNames = $teacher->censuses->pluck('groupSchool.name')->filter()->unique())
+                                        @php($censusVillageNames = $teacher->censuses->pluck('village.name')->filter()->unique())
+                                        <div class="col-12 col-md-6 col-xl-4">
+                                            <label class="d-flex align-items-start gap-2 border rounded p-2 h-100">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input mt-1 teacher-checkbox"
+                                                    name="teacher_ids[]"
+                                                    value="{{ $teacher->id }}"
+                                                    @checked(in_array($teacher->id, $selectedTeacherIds, true))
+                                                >
+                                                <span>
+                                                    <span class="d-block fw-semibold">{{ $teacher->name }}</span>
+                                                    @if ($censusVillageNames->isNotEmpty())
+                                                        <span class="d-block small text-secondary">{{ $censusVillageNames->implode(', ') }}</span>
+                                                    @endif
+                                                    <span class="d-block small text-secondary">
+                                                        {{ $censusGroupNames->isNotEmpty() ? $censusGroupNames->implode(', ') : ($teacher->school?->groupSchool?->name ?? '—') }}
+                                                        @if ($teacher->school) · {{ $teacher->school->name }} @endif
+                                                    </span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    @empty
+                                        <div class="col-12 text-secondary">{{ __('No teachers assigned to a census are available.') }}</div>
+                                    @endforelse
+                                </div>
+                                <div id="teacher-selection-count" class="form-text mt-2" aria-live="polite"></div>
+                                @error('teacher_ids') <div class="text-danger small">{{ $message }}</div> @enderror
+                                @error('teacher_ids.*') <div class="text-danger small">{{ $message }}</div> @enderror
+                            </fieldset>
+                        </div>
+                        @endif
+                    </div>
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary">{{ __('Save User') }}</button>
+                        <a href="{{ route('users.index') }}" class="btn btn-outline-secondary">{{ __('Cancel') }}</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    @unless ($canAssignRoles)
+    <script>
+        const teacherCheckboxes = document.querySelectorAll('.teacher-checkbox');
+        const teacherSelectionCount = document.getElementById('teacher-selection-count');
+
+        function updateTeacherSelectionCount() {
+            const count = document.querySelectorAll('.teacher-checkbox:checked').length;
+            teacherSelectionCount.textContent = count
+                ? @js(__('Selected teachers: :count', ['count' => '__COUNT__'])).replace('__COUNT__', count)
+                : @js(__('No teachers selected.'));
+        }
+
+        teacherCheckboxes.forEach((checkbox) => checkbox.addEventListener('change', updateTeacherSelectionCount));
+        updateTeacherSelectionCount();
+    </script>
+    @endunless
+@endsection

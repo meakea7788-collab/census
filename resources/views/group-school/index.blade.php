@@ -9,7 +9,9 @@
                 <h1 class="h3 mb-1">{{ __('Group Schools') }}</h1>
                 <p class="text-secondary mb-0">{{ __('View and manage registered group schools.') }}</p>
             </div>
-            <a href="{{ route('group-school.create') }}" class="btn btn-primary">{{ __('Add Group School') }}</a>
+            @if (auth()->user()?->role !== \App\Models\User::ROLE_ADMIN)
+                <a href="{{ route('group-school.create') }}" class="btn btn-primary">{{ __('Add Group School') }}</a>
+            @endif
         </div>
 
         <div class="card border-0 shadow-sm">
@@ -39,12 +41,14 @@
                                         <td>{{ $school->address }}</td>
                                         <td class="text-end text-nowrap">
                                             <a href="{{ route('group-school.show', $school) }}" class="btn btn-sm btn-outline-secondary">{{ __('View') }}</a>
-                                            <a href="{{ route('group-school.edit', $school) }}" class="btn btn-sm btn-outline-primary">{{ __('Edit') }}</a>
-                                            <form action="{{ route('group-school.destroy', $school) }}" method="POST" class="d-inline" onsubmit="return confirm(@js(__('Are you sure you want to delete this group school?')));">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
-                                            </form>
+                                            @if (auth()->user()?->role !== \App\Models\User::ROLE_ADMIN)
+                                                <a href="{{ route('group-school.edit', $school) }}" class="btn btn-sm btn-outline-primary">{{ __('Edit') }}</a>
+                                                <form action="{{ route('group-school.destroy', $school) }}" method="POST" class="d-inline" onsubmit="return confirm(@js(__('Are you sure you want to delete this group school?')));">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">{{ __('Delete') }}</button>
+                                                </form>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GroupSchoolController;
 use App\Models\User;
+use App\Support\SchoolAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +43,10 @@ Route::post('/login', function (Request $request) {
         'password' => ['required', 'string'],
     ]);
 
-    if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
+    $credentials = $request->only('email', 'password');
+    $credentials['is_active'] = true;
+
+    if (Auth::attempt($credentials, $request->boolean('remember'))) {
         $request->session()->regenerate();
 
         return redirect()->intended(route('home'))->with('status', __('Login successful!'));
@@ -53,25 +57,190 @@ Route::post('/login', function (Request $request) {
     ])->onlyInput('email');
 })->name('login.submit');
 
+Route::get('/profile', function () {
+    $user = User::with(['school', 'teacher.school.groupSchool', 'teachers.school.groupSchool'])->findOrFail(Auth::id());
+
+    return view('users.profile', compact('user'));
+})->name('profile');
+
+Route::get('/users', function () {
+    $schoolId = SchoolAccess::schoolId();
+    $users = User::with(['school', 'teacher.school.groupSchool', 'teachers.school.groupSchool'])
+        ->when($schoolId !== null, fn ($query) => $query->where(function ($query) use ($schoolId) {
+            $query->where('users.school_id', $schoolId)
+                ->orWhereHas('teacher', fn ($teacher) => $teacher->where('school_id', $schoolId))
+                ->orWhereHas('teachers', fn ($teacher) => $teacher->where('teacher.school_id', $schoolId));
+        }))
+        ->orderBy('name')->get();
+
+    return view('users.index', compact('users'));
+})->name('users.index');
+
+Route::get('/users/{user}/edit', function (User $user) {
+    $currentUser = Auth::user();
+    abort_unless(in_array($currentUser?->role, [User::ROLE_SUPERADMIN, User::ROLE_ADMIN], true), 403);
+    abort_if($currentUser->role === User::ROLE_ADMIN && $user->role !== User::ROLE_USER, 403);
+    $schoolId = SchoolAccess::schoolId();
+
+    if ($schoolId !== null) {
+        abort_unless(
+            (int) $user->school_id === $schoolId
+                || $user->teacher?->school_id === $schoolId
+                || $user->teachers()->where('teacher.school_id', $schoolId)->exists(),
+            404
+        );
+    }
+
+    $canAssignRoles = $currentUser->role === User::ROLE_SUPERADMIN;
+    $schools = $canAssignRoles ? \App\Models\School::orderBy('name')->get() : collect();
+    $teachers = $canAssignRoles ? collect() : SchoolAccess::userAssignmentTeacherQuery()->orderBy('name')->get();
+    $requiresTeacher = $currentUser->role === User::ROLE_ADMIN;
+    $selectedTeacherIds = $user->teachers()->pluck('teacher.id')->all();
+    if ($selectedTeacherIds === [] && $user->teacher_id) {
+        $selectedTeacherIds = [(int) $user->teacher_id];
+    }
+
+    return view('users.edit', compact('user', 'teachers', 'schools', 'canAssignRoles', 'requiresTeacher', 'selectedTeacherIds'));
+})->name('users.edit');
+
+Route::put('/users/{user}', function (Request $request, User $user) {
+    $currentUser = Auth::user();
+    abort_unless(in_array($currentUser?->role, [User::ROLE_SUPERADMIN, User::ROLE_ADMIN], true), 403);
+    abort_if($currentUser->role === User::ROLE_ADMIN && $user->role !== User::ROLE_USER, 403);
+    $schoolId = SchoolAccess::schoolId();
+
+    if ($schoolId !== null) {
+        abort_unless(
+            (int) $user->school_id === $schoolId
+                || $user->teacher?->school_id === $schoolId
+                || $user->teachers()->where('teacher.school_id', $schoolId)->exists(),
+            404
+        );
+    }
+
+    $teacherRequired = $currentUser->role === User::ROLE_ADMIN;
+    if (! $request->exists('teacher_ids') && $request->filled('teacher_id')) {
+        $request->merge(['teacher_ids' => [$request->input('teacher_id')]]);
+    }
+    $data = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'max:255', \Illuminate\Validation\Rule::unique('users')->ignore($user->id)],
+        'password' => ['nullable', 'string', 'min:6', 'max:255'],
+        'role' => $currentUser->role === User::ROLE_SUPERADMIN
+            ? ['required', 'string', 'in:' . implode(',', User::roles())]
+            : ['prohibited'],
+        'school_id' => $currentUser->role === User::ROLE_SUPERADMIN
+            ? ['required', 'integer', 'exists:schools,id']
+            : ['prohibited'],
+        'teacher_ids' => $teacherRequired ? ['required', 'array', 'min:1'] : ['nullable', 'array'],
+        'teacher_ids.*' => ['required', 'integer', 'distinct', 'exists:teacher,id'],
+    ]);
+
+    if ($currentUser->role === User::ROLE_ADMIN) {
+        $data['role'] = $user->role;
+        $data['school_id'] = $schoolId;
+    }
+    $teacherIds = $currentUser->role === User::ROLE_SUPERADMIN ? [] : ($data['teacher_ids'] ?? []);
+    unset($data['teacher_ids']);
+    $targetIsAdmin = $data['role'] === User::ROLE_ADMIN;
+    if ($teacherIds !== [] && $currentUser->role !== User::ROLE_SUPERADMIN) {
+        SchoolAccess::validateTeacherAssignments($teacherIds, $targetIsAdmin);
+    }
+    if ($currentUser->role === User::ROLE_SUPERADMIN) {
+        $data['teacher_id'] = null;
+    } else {
+        $data['teacher_id'] = $teacherIds[0] ?? null;
+    }
+    if (empty($data['password'])) {
+        unset($data['password']);
+    }
+
+    $user->update($data);
+    $user->teachers()->sync($teacherIds);
+
+    return redirect()->route('users.index')->with('status', __('User updated successfully.'));
+})->name('users.update');
+
+Route::patch('/users/{user}/active', function (User $user) {
+    $currentUser = Auth::user();
+    abort_unless(in_array($currentUser?->role, [User::ROLE_SUPERADMIN, User::ROLE_ADMIN], true), 403);
+    abort_if($currentUser->is($user), 403, __('You cannot deactivate your own account.'));
+    abort_if($currentUser->role === User::ROLE_ADMIN && $user->role !== User::ROLE_USER, 403);
+
+    $schoolId = SchoolAccess::schoolId();
+    if ($schoolId !== null) {
+        abort_unless(
+            (int) $user->school_id === $schoolId
+                || $user->teacher?->school_id === $schoolId
+                || $user->teachers()->where('teacher.school_id', $schoolId)->exists(),
+            404
+        );
+    }
+
+    $user->update(['is_active' => ! $user->is_active]);
+
+    return redirect()->route('users.index')->with('status', $user->is_active
+        ? __('User activated successfully.')
+        : __('User deactivated successfully.'));
+})->name('users.active');
+
 Route::get('/users/create', function () {
-    return view('users.create');
+    $currentUser = Auth::user();
+    abort_unless(in_array($currentUser?->role, [User::ROLE_SUPERADMIN, User::ROLE_ADMIN], true), 403);
+
+    $canAssignRoles = $currentUser->role === User::ROLE_SUPERADMIN;
+    $schools = $canAssignRoles ? \App\Models\School::orderBy('name')->get() : collect();
+    $teachers = $canAssignRoles ? collect() : SchoolAccess::userAssignmentTeacherQuery()->orderBy('name')->get();
+    $requiresTeacher = $currentUser->role === User::ROLE_ADMIN;
+
+    return view('users.create', compact('teachers', 'schools', 'canAssignRoles', 'requiresTeacher'));
 })->name('users.create');
 
 Route::post('/users/store', function (Request $request) {
-    $allowedRoles = implode(',', User::roles());
+    $currentUser = Auth::user();
+    abort_unless(in_array($currentUser?->role, [User::ROLE_SUPERADMIN, User::ROLE_ADMIN], true), 403);
+    $teacherRequired = $currentUser->role === User::ROLE_ADMIN;
+    if (! $request->exists('teacher_ids') && $request->filled('teacher_id')) {
+        $request->merge(['teacher_ids' => [$request->input('teacher_id')]]);
+    }
 
     $data = $request->validate([
         'name' => ['required', 'string', 'max:255'],
         'email' => ['nullable', 'email', 'max:255'],
         'password' => ['nullable', 'string', 'min:6', 'max:255'],
-        'role' => ['nullable', 'string', 'in:' . $allowedRoles],
+        'role' => $currentUser->role === User::ROLE_SUPERADMIN
+            ? ['nullable', 'string', 'in:' . implode(',', User::roles())]
+            : ['prohibited'],
+        'school_id' => $currentUser->role === User::ROLE_SUPERADMIN
+            ? ['required', 'integer', 'exists:schools,id']
+            : ['prohibited'],
+        'teacher_ids' => $teacherRequired ? ['required', 'array', 'min:1'] : ['nullable', 'array'],
+        'teacher_ids.*' => ['required', 'integer', 'distinct', 'exists:teacher,id'],
     ]);
 
+    $teacherIds = $data['teacher_ids'] ?? [];
+    unset($data['teacher_ids']);
+    $targetRole = $currentUser->role === User::ROLE_SUPERADMIN
+        ? ($data['role'] ?? User::ROLE_USER)
+        : User::ROLE_USER;
+    if ($teacherIds !== [] && $currentUser->role !== User::ROLE_SUPERADMIN) {
+        SchoolAccess::validateTeacherAssignments($teacherIds, $targetRole === User::ROLE_ADMIN);
+    }
+
+    if ($currentUser->role === User::ROLE_SUPERADMIN) {
+        $data['teacher_id'] = null;
+    } else {
+        $data['school_id'] = SchoolAccess::schoolId();
+        $data['teacher_id'] = $teacherIds[0] ?? null;
+    }
     $data['email'] = $data['email'] ?? strtolower(Str::slug($data['name'], '') ?: 'user') . uniqid() . '@example.com';
     $data['password'] = $data['password'] ?? 'password123';
-    $data['role'] = $data['role'] ?? User::ROLE_USER;
+    $data['role'] = $targetRole;
 
-    User::create($data);
+    $user = User::create($data);
+    if ($currentUser->role !== User::ROLE_SUPERADMIN) {
+        $user->teachers()->sync($teacherIds);
+    }
 
     return redirect()->route('users.create')->with('status', __('User created successfully.'));
 })->name('users.store');

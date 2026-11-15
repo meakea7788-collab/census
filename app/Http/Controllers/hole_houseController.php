@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\hole_house;
+use App\Models\Census;
+use App\Support\SchoolAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -16,7 +18,9 @@ class hole_houseController extends Controller
     {
         $search = trim($request->query('search', ''));
 
+        $schoolId = SchoolAccess::schoolId();
         $holeHouses = hole_house::with('village')
+            ->whereHas('census', fn ($query) => $query->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId)))
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     $query->where('leader_family_name', 'like', '%' . $search . '%')
@@ -50,6 +54,7 @@ class hole_houseController extends Controller
         $validatedCensus = $request->validate([
             'census_id' => ['required', 'exists:census,id'],
         ]);
+        SchoolAccess::restrict(Census::query())->findOrFail($validatedCensus['census_id']);
         $communeId = DB::table('census')->where('id', $validatedCensus['census_id'])->value('commune_id');
 
         $data = $request->validate([
@@ -72,7 +77,10 @@ class hole_houseController extends Controller
      */
     public function show(string $id)
     {
-        $holeHouse = hole_house::with(['families', 'village'])->findOrFail($id);
+        $schoolId = SchoolAccess::schoolId();
+        $holeHouse = hole_house::with(['families', 'village'])
+            ->whereHas('census', fn ($query) => $query->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId)))
+            ->findOrFail($id);
 
         return view('hole_houses.show', compact('holeHouse'));
     }
@@ -82,7 +90,9 @@ class hole_houseController extends Controller
      */
     public function edit(string $id)
     {
-        $holeHouse = hole_house::findOrFail($id);
+        $schoolId = SchoolAccess::schoolId();
+        $holeHouse = hole_house::whereHas('census', fn ($query) => $query->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId)))
+            ->findOrFail($id);
         [$censuses, $villages] = $this->getLocationOptions();
 
         return view('hole_houses.edit', compact('holeHouse', 'censuses', 'villages'));
@@ -96,6 +106,7 @@ class hole_houseController extends Controller
         $validatedCensus = $request->validate([
             'census_id' => ['required', 'exists:census,id'],
         ]);
+        SchoolAccess::restrict(Census::query())->findOrFail($validatedCensus['census_id']);
         $communeId = DB::table('census')->where('id', $validatedCensus['census_id'])->value('commune_id');
 
         $data = $request->validate([
@@ -108,7 +119,9 @@ class hole_houseController extends Controller
         ]);
         $data['census_id'] = $validatedCensus['census_id'];
 
-        $holeHouse = hole_house::findOrFail($id);
+        $schoolId = SchoolAccess::schoolId();
+        $holeHouse = hole_house::whereHas('census', fn ($query) => $query->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId)))
+            ->findOrFail($id);
         $holeHouse->update($data);
 
         return redirect()->route('hole_houses.index')->with('success', __('Hole House updated successfully.'));
@@ -119,7 +132,9 @@ class hole_houseController extends Controller
      */
     public function destroy(string $id)
     {
-        $holeHouse = hole_house::findOrFail($id);
+        $schoolId = SchoolAccess::schoolId();
+        $holeHouse = hole_house::whereHas('census', fn ($query) => $query->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId)))
+            ->findOrFail($id);
         $holeHouse->delete();
 
         return redirect()->route('hole_houses.index')->with('success', __('Hole House deleted successfully.'));
@@ -127,17 +142,21 @@ class hole_houseController extends Controller
 
     private function getLocationOptions(): array
     {
+        $schoolId = SchoolAccess::schoolId();
         $censuses = DB::table('census')
             ->leftJoin('year', 'census.year_id', '=', 'year.id')
             ->leftJoin('commune', 'census.commune_id', '=', 'commune.id')
-            ->select('census.id', 'census.name', 'census.commune_id', 'year.year', 'commune.name as commune_name')
+            ->select('census.id', 'census.commune_id', 'year.year', 'year.description as year_description', 'commune.name as commune_name')
+            ->when($schoolId !== null, fn ($query) => $query->where('census.school_id', $schoolId))
             ->orderByDesc('year.year')
-            ->orderBy('census.name')
+            ->orderBy('commune.name')
             ->get();
 
+        $communeIds = SchoolAccess::restrict(Census::query())->pluck('commune_id');
         $villages = DB::table('village')
             ->join('commune', 'village.commune_id', '=', 'commune.id')
             ->select('village.id', 'village.name', 'village.commune_id')
+            ->when(SchoolAccess::schoolId() !== null, fn ($query) => $query->whereIn('village.commune_id', $communeIds))
             ->orderBy('village.name')
             ->get();
 
