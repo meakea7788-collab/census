@@ -12,6 +12,7 @@ use App\Models\village;
 use App\Models\Year;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class CensusController extends Controller
 {
@@ -21,12 +22,14 @@ class CensusController extends Controller
     public function index()
     {
         $censusRecords = DB::table('census')
-            ->join('year', 'census.year_id', '=', 'year.id')
-            ->join('schools', 'census.school_id', '=', 'schools.id')
-            ->join('village', 'census.village_id', '=', 'village.id')
+            ->leftJoin('year', 'census.year_id', '=', 'year.id')
+            ->leftJoin('group_schools', 'census.group_school_id', '=', 'group_schools.id')
+            ->leftJoin('schools', 'census.school_id', '=', 'schools.id')
+            ->leftJoin('village', 'census.village_id', '=', 'village.id')
             ->select(
                 'census.*',
                 'year.year',
+                'group_schools.name as group_school_name',
                 'schools.name as school_name',
                 'village.name as village_name'
             )
@@ -44,6 +47,7 @@ class CensusController extends Controller
             $record->teacher_name = ($teacherNames->get($record->id) ?? collect())
                 ->pluck('name')
                 ->implode(', ');
+            $record->name = $record->name ?? ($record->group_school_name ? $record->group_school_name . ' — ' . $record->village_name : ($record->village_name ?? $record->school_name ?? __('Census')));
         });
 
         return view('census.index', compact('censusRecords'));
