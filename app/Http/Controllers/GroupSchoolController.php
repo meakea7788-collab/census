@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\GroupSchool;
 use App\Models\Province;
+use App\Support\SchoolAccess;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -11,6 +12,7 @@ class GroupSchoolController extends Controller
 {
     public function create()
     {
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $provinces = Province::with('districts.communes.villages')
             ->orderBy('name')
             ->get();
@@ -36,6 +38,7 @@ class GroupSchoolController extends Controller
 
     public function store(Request $request)
     {
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'director_name' => ['required', 'string', 'max:255'],
@@ -73,18 +76,28 @@ class GroupSchoolController extends Controller
     }
     public function index()
     {
-        $groupSchools = GroupSchool::all();
+        $schoolId = SchoolAccess::schoolId();
+        $groupSchools = GroupSchool::query()
+            ->when($schoolId !== null, fn ($query) => $query->whereHas('schools', fn ($schools) => $schools->where('schools.id', $schoolId)))
+            ->get();
         return view('group-school.index', compact('groupSchools'));
     }
     public function show(GroupSchool $groupSchool)
     {
-        $groupSchool->load('schools');
+        $schoolId = SchoolAccess::schoolId();
+        if ($schoolId !== null) {
+            abort_unless($groupSchool->schools()->whereKey($schoolId)->exists(), 404);
+            $groupSchool->setRelation('schools', $groupSchool->schools()->whereKey($schoolId)->get());
+        } else {
+            $groupSchool->load('schools');
+        }
 
         return view('group-school.show', compact('groupSchool'));
     }
 
     public function destroy(GroupSchool $groupSchool)
     {
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $groupSchool->delete();
 
         return redirect()
@@ -93,6 +106,7 @@ class GroupSchoolController extends Controller
     }
     public function edit(GroupSchool $groupSchool)
     {
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $locations = $this->getLocations();
 
         $selectedLocation = $this->findLocationFromAddress($groupSchool->address);
@@ -102,6 +116,7 @@ class GroupSchoolController extends Controller
 
     public function update(Request $request, GroupSchool $groupSchool)
     {
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'director_name' => ['required', 'string', 'max:255'],

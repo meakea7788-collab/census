@@ -20,7 +20,10 @@ class DatabaseSeeder extends Seeder
                 'role' => \App\Models\User::ROLE_SUPERADMIN,
             ]
         );
-        \App\Models\Year::firstOrCreate(['year' => 2026]);
+        \App\Models\Year::updateOrCreate(
+            ['year' => 2026],
+            ['is_active' => true]
+        );
 
         $provinceId = DB::table('province')->where('name', 'សៀមរាប')->value('id');
 
@@ -274,6 +277,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             BanteayMeancheySeeder::class,
             SiemReapSeeder::class,
+            HoleHouseSeeder::class,
+            FamilySeeder::class,
         ]);
     }
 }

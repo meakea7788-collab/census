@@ -2,9 +2,26 @@
 
 @section('content')
 <div class="container py-4">
-	<div class="d-flex justify-content-between align-items-center mb-4">
+	<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
 		<h1 class="h3 mb-0">{{ __('Family Members') }}</h1>
-		<a href="{{ route('family.create') }}" class="btn btn-primary">{{ __('Add') }}</a>
+		<div class="d-flex flex-wrap gap-2">
+			<form method="GET" action="{{ route('family.index') }}" class="d-flex gap-2">
+				<label for="family-search" class="visually-hidden">{{ __('Search by name or village') }}</label>
+				<input
+					id="family-search"
+					type="search"
+					name="search"
+					value="{{ $search ?? '' }}"
+					class="form-control"
+					placeholder="{{ __('Name or village') }}"
+				>
+				<button type="submit" class="btn btn-outline-primary">{{ __('Search') }}</button>
+				@if (!empty($search))
+					<a href="{{ route('family.index') }}" class="btn btn-outline-secondary">{{ __('Clear') }}</a>
+				@endif
+			</form>
+			<a href="{{ route('family.create') }}" class="btn btn-primary">{{ __('Add') }}</a>
+		</div>
 	</div>
 
 	@if (session('success'))
@@ -22,6 +39,7 @@
 						<tr>
 							<th scope="col">#</th>
 							<th scope="col">{{ __('House') }}</th>
+							<th scope="col">{{ __('Village') }}</th>
 							<th scope="col">{{ __('Family name') }}</th>
 							<th scope="col">{{ __('Gender') }}</th>
 							<th scope="col">{{ __('Date of birth') }}</th>
@@ -37,6 +55,7 @@
 							<tr>
 								<td>{{ $family->id }}</td>
 								<td>{{ $family->holehouse?->hole_number ?? '—' }}</td>
+								<td>{{ $family->holehouse?->village?->name ?? ($family->holehouse?->census?->village?->name ?? '—') }}</td>
 								<td>{{ $family->family_name }}</td>
 								<td>{{ $family->gender }}</td>
 								<td>{{ $family->date_of_birth }}</td>
@@ -64,7 +83,7 @@
 										<form method="POST" action="{{ route('family.mark-deceased', $family->id) }}" class="d-inline" onsubmit="return confirm(@js(__('Mark this family member as deceased?')));">
 											@csrf
 											<button type="submit" class="btn btn-sm btn-outline-secondary" title="{{ __('Mark deceased') }}" aria-label="{{ __('Mark deceased') }}">
-												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1a5 5 0 0 0-3.536 8.536c.31.31.536.73.536 1.214V12h6v-1.25c0-.484.226-.904.536-1.214A5 5 0 0 0 8 1Zm0 1a4 4 0 0 1 2.828 6.828A3.1 3.1 0 0 0 10.02 11H5.98a3.1 3.1 0 0 0-.808-2.172A4 4 0 0 1 8 2Zm-2.5 11h5a1.5 1.5 0 0 1-1.5 1.5h-2A1.5 1.5 0 0 1 5.5 13Z"/></svg>
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2a4 4 0 0 1 8 0v8H4V2zm-2 10a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1H2v-1zm6-8a.5.5 0 0 0-.5.5V6H6a.5.5 0 0 0 0 1h1.5v2a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5V4.5A.5.5 0 0 0 8 4z"/></svg>
 											</button>
 										</form>
 									@endif
@@ -79,7 +98,13 @@
 							</tr>
 						@empty
 							<tr>
-								<td colspan="10" class="text-center py-4">{{ __('No family members found.') }}</td>
+								<td colspan="11" class="text-center py-4 text-muted">
+									@if (!empty($search))
+										{{ __('No family members match your search.') }}
+									@else
+										{{ __('No family members found.') }}
+									@endif
+								</td>
 							</tr>
 						@endforelse
 					</tbody>

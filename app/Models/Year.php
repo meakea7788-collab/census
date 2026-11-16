@@ -11,9 +11,10 @@ class Year extends Model
 
     protected $table = 'year';
 
-    protected $fillable = ['year'];
+    protected $fillable = ['year', 'description', 'is_active'];
 
     protected $casts = [
         'year' => 'integer',
+        'is_active' => 'boolean',
     ];
 }

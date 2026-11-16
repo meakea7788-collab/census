@@ -38,7 +38,7 @@
 						</div>
 
 						<div class="d-flex justify-content-end gap-2">
-							<a href="{{ route('family.index') }}" class="btn btn-outline-secondary">{{ __('Cancel') }}</a>
+							<a href="{{ $family->holehouse_id ? route('hole_houses.show', $family->holehouse_id) : route('family.index') }}" class="btn btn-outline-secondary">{{ __('Cancel') }}</a>
 							<button type="submit" class="btn btn-primary">{{ __('Save new address') }}</button>
 						</div>
 					</form>

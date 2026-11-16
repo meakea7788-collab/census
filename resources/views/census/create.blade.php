@@ -18,18 +18,12 @@
         @csrf
 
         <div class="mb-3">
-            <label for="name" class="form-label">{{ __('Name') }}</label>
-            <input type="text" id="name" name="name" value="{{ old('name') }}"
-                   class="form-control" required>
-        </div>
-
-        <div class="mb-3">
             <label for="year_id" class="form-label">{{ __('Year') }}</label>
             <select id="year_id" name="year_id" class="form-control" required>
                 <option value="">{{ __('Select year') }}</option>
                 @foreach ($years as $year)
                     <option value="{{ $year->id }}" @selected(old('year_id') == $year->id)>
-                        {{ $year->name ?? $year->year }}
+                        {{ $year->year }}{{ $year->description ? ' - ' . $year->description : '' }}
                     </option>
                 @endforeach
             </select>
@@ -39,7 +33,7 @@
             <select id="province_id" name="province_id" class="form-control" required>
                 <option value="">{{ __('Select province') }}</option>
                 @foreach ($provinces as $province)
-                    <option value="{{ $province->id }}" @selected(old('province_id') == $province->id)>
+                    <option value="{{ $province->id }}" @selected(old('province_id', $defaultLocation['province_id'] ?? '') == $province->id)>
                         {{ $province->name }}
                     </option>
                 @endforeach
@@ -80,26 +74,36 @@
         </div>
         <div class="mb-3">
             <label for="group_school_id" class="form-label">{{ __('School Group') }}</label>
-            <select id="group_school_id" name="group_school_id" class="form-control" required>
+            <select id="group_school_id" @unless ($adminSchool) name="group_school_id" @endunless class="form-control" required @if ($adminSchool) disabled @endif>
                 <option value="">{{ __('Select school group') }}</option>
                 {{-- Options are filtered with JavaScript from the selected commune. --}}
             </select>
+            @if ($adminSchool)
+                <input type="hidden" name="group_school_id" value="{{ $adminSchool->group_school_id }}">
+            @endif
         </div>
 
         <div class="mb-3">
             <label for="school_id" class="form-label">{{ __('School') }}</label>
-            <select id="school_id" name="school_id" class="form-control" required>
+            <select id="school_id" @unless ($adminSchool) name="school_id" @endunless class="form-control" required @if ($adminSchool) disabled @endif>
                 <option value="">{{ __('Select school') }}</option>
                 {{-- Options are filtered with JavaScript from the selected group school. --}}
             </select>
+            @if ($adminSchool)
+                <input type="hidden" name="school_id" value="{{ $adminSchool->id }}">
+            @endif
         </div>
 
         <fieldset class="mb-3">
             <legend class="form-label">{{ __('Teachers') }}</legend>
-            <div id="teacher_list" class="border rounded p-3" style="max-height: 240px; overflow-y: auto;">
-                <span class="text-muted">{{ __('Select a school to show its teachers.') }}</span>
-            </div>
+            <details class="teacher-dropdown" id="teacher_dropdown">
+                <summary class="form-select" id="teacher_dropdown_label">{{ __('Select a school to show its teachers.') }}</summary>
+                <div id="teacher_list" class="teacher-dropdown-menu"></div>
+            </details>
             @error('teacher_id')
+                <div class="text-danger small mt-1">{{ $message }}</div>
+            @enderror
+            @error('teacher_id.*')
                 <div class="text-danger small mt-1">{{ $message }}</div>
             @enderror
         </fieldset>
@@ -120,6 +124,9 @@
         const groupSchoolOptions = @json($groupSchoolOptions);
         const schoolOptions = @json($schoolOptions);
         const teacherOptions = @json($teacherOptions);
+        const isAdmin = @json($adminSchool !== null);
+        const adminSchoolId = @json($adminSchool?->id);
+        const adminGroupSchoolId = @json($adminSchool?->group_school_id);
 
         const provinceSelect = document.getElementById('province_id');
         const districtSelect = document.getElementById('district_id');
@@ -128,13 +135,14 @@
         const groupSchoolSelect = document.getElementById('group_school_id');
         const schoolSelect = document.getElementById('school_id');
         const teacherList = document.getElementById('teacher_list');
+        const teacherDropdownLabel = document.getElementById('teacher_dropdown_label');
         const oldSelection = {
-            province: @json(old('province_id')),
-            district: @json(old('district_id')),
-            commune: @json(old('commune_id')),
-            village: @json(old('village_id')),
-            groupSchool: @json(old('group_school_id')),
-            school: @json(old('school_id')),
+            province: @json(old('province_id', $defaultLocation['province_id'] ?? '')),
+            district: @json(old('district_id', $defaultLocation['district_id'] ?? '')),
+            commune: @json(old('commune_id', $defaultLocation['commune_id'] ?? '')),
+            village: @json(old('village_id', $defaultLocation['village_id'] ?? '')),
+            groupSchool: @json(old('group_school_id', $adminSchool?->group_school_id ?? '')),
+            school: @json(old('school_id', $adminSchool?->id ?? '')),
             teachers: @json(old('teacher_id', [])),
         };
 
@@ -144,13 +152,15 @@
             teacherList.replaceChildren();
 
             if (!schoolId) {
-                teacherList.innerHTML = '<span class="text-muted">{{ __("Select a school to show its teachers.") }}</span>';
+                teacherDropdownLabel.textContent = @json(__('Select a school to show its teachers.'));
+                teacherDropdownLabel.removeAttribute('title');
                 return;
             }
 
             const teachers = teacherOptions.filter(teacher => String(teacher.school_id) === String(schoolId));
             if (teachers.length === 0) {
-                teacherList.innerHTML = '<span class="text-muted">{{ __("No teachers in this school.") }}</span>';
+                teacherDropdownLabel.textContent = @json(__('No teachers in this school.'));
+                teacherDropdownLabel.removeAttribute('title');
                 return;
             }
 
@@ -165,6 +175,11 @@
                 input.id = `teacher_${teacher.id}`;
                 input.value = teacher.id;
                 input.checked = selectedTeachers.includes(String(teacher.id));
+                input.addEventListener('change', () => {
+                    oldSelection.teachers = Array.from(teacherList.querySelectorAll('input:checked'))
+                        .map(selected => selected.value);
+                    updateTeacherDropdownLabel(teachers);
+                });
 
                 const label = document.createElement('label');
                 label.className = 'form-check-label';
@@ -174,6 +189,26 @@
                 wrapper.append(input, label);
                 teacherList.appendChild(wrapper);
             });
+
+            const selectedForSchool = teachers
+                .filter(teacher => selectedTeachers.includes(String(teacher.id)))
+                .map(teacher => String(teacher.id));
+            oldSelection.teachers = selectedForSchool;
+            updateTeacherDropdownLabel(teachers);
+        }
+
+        function updateTeacherDropdownLabel(teachers) {
+            const names = Array.from(teacherList.querySelectorAll('input:checked'))
+                .map(input => teachers.find(teacher => String(teacher.id) === input.value)?.name)
+                .filter(Boolean);
+            const selectedNames = names.join(', ');
+
+            teacherDropdownLabel.textContent = selectedNames || @json(__('Select teachers'));
+            if (selectedNames) {
+                teacherDropdownLabel.title = selectedNames;
+            } else {
+                teacherDropdownLabel.removeAttribute('title');
+            }
         }
 
         function setOptions(select, items, placeholder, selectedId = '') {
@@ -198,20 +233,34 @@
         function filterGroupSchools() {
             const commune = selectedCommune();
             const communeName = (commune?.name ?? '').toLowerCase();
-            const groups = communeName
-                ? groupSchoolOptions.filter(group => (group.address || '').toLowerCase().includes(communeName))
-                : [];
+            const selectedSchool = schoolOptions.find(school => String(school.id) === String(schoolSelect.value));
+            const groups = isAdmin
+                ? groupSchoolOptions.filter(group => String(group.id) === String(adminGroupSchoolId))
+                : communeName
+                ? groupSchoolOptions.filter(group =>
+                    String(group.id) === String(selectedSchool?.group_school_id) ||
+                    (group.address || '').toLowerCase().includes(communeName)
+                )
+                : groupSchoolOptions;
 
-            setOptions(groupSchoolSelect, groups, commune ? @json(__('Select school group')) : @json(__('Select commune first')), oldSelection.groupSchool);
+            setOptions(groupSchoolSelect, groups, @json(__('Select school group')), oldSelection.groupSchool);
+            if (isAdmin) {
+                groupSchoolSelect.disabled = true;
+            }
             filterSchools();
         }
 
         function filterSchools() {
             const groupId = groupSchoolSelect.value;
-            const schools = groupId
+            const schools = isAdmin
+                ? schoolOptions.filter(school => String(school.id) === String(adminSchoolId))
+                : groupId
                 ? schoolOptions.filter(school => String(school.group_school_id) === String(groupId))
                 : [];
             setOptions(schoolSelect, schools, groupId ? @json(__('Select school')) : @json(__('Select school group first')), oldSelection.school);
+            if (isAdmin) {
+                schoolSelect.disabled = true;
+            }
             filterTeachers();
         }
 
@@ -219,15 +268,19 @@
             setOptions(districtSelect, selectedProvince()?.districts ?? [], @json(__('Select district')));
             setOptions(communeSelect, [], @json(__('Select commune')));
             setOptions(villageSelect, [], @json(__('Select village')));
-            setOptions(groupSchoolSelect, [], @json(__('Select commune first')));
+            setOptions(groupSchoolSelect, [], @json(__('Select school group')));
             setOptions(schoolSelect, [], @json(__('Select school group first')));
+            oldSelection.teachers = [];
+            filterTeachers();
         });
 
         districtSelect.addEventListener('change', () => {
             setOptions(communeSelect, selectedDistrict()?.communes ?? [], @json(__('Select commune')));
             setOptions(villageSelect, [], @json(__('Select village')));
-            setOptions(groupSchoolSelect, [], @json(__('Select commune first')));
+            setOptions(groupSchoolSelect, [], @json(__('Select school group')));
             setOptions(schoolSelect, [], @json(__('Select school group first')));
+            oldSelection.teachers = [];
+            filterTeachers();
         });
 
         communeSelect.addEventListener('change', () => {
@@ -237,10 +290,32 @@
 
         groupSchoolSelect.addEventListener('change', filterSchools);
         schoolSelect.addEventListener('change', filterTeachers);
+        schoolSelect.addEventListener('change', () => {
+            const school = schoolOptions.find(item => String(item.id) === String(schoolSelect.value));
+            if (!school) return;
+
+            oldSelection.school = String(school.id);
+            oldSelection.groupSchool = String(school.group_school_id);
+            if (fillCensusLocationFromSchool(
+                school,
+                locationTree,
+                provinceSelect,
+                districtSelect,
+                communeSelect,
+                villageSelect
+            )) {
+                oldSelection.province = String(school.location?.province_id ?? provinceSelect.value);
+                oldSelection.district = String(school.location?.district_id ?? districtSelect.value);
+                oldSelection.commune = String(school.location?.commune_id ?? communeSelect.value);
+                oldSelection.village = String(school.location?.village_id ?? villageSelect.value);
+                filterGroupSchools();
+            }
+        });
 
         setOptions(districtSelect, selectedProvince()?.districts ?? [], @json(__('Select district')), oldSelection.district);
         setOptions(communeSelect, selectedDistrict()?.communes ?? [], @json(__('Select commune')), oldSelection.commune);
         setOptions(villageSelect, selectedCommune()?.villages ?? [], @json(__('Select village')), oldSelection.village);
         filterGroupSchools();
 </script>
+@include('census.partials.school-address-autofill')
 @endsection

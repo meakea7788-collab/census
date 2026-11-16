@@ -13,7 +13,9 @@
 <body>
     <div class="app-shell d-flex">
         <aside class="app-sidebar d-flex flex-column flex-shrink-0 p-3" aria-label="Main navigation">
-            <a href="{{ route('home') }}" class="app-brand mb-4">{{ __('Census Admin') }}</a>
+            <a href="{{ route('home') }}" class="app-brand mb-4">
+                {{ auth()->user()?->name ?? __('Census Admin') }}
+            </a>
 
             <nav class="nav nav-pills flex-column gap-1">
                 <a
@@ -21,6 +23,11 @@
                     class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
                     @if (request()->routeIs('home')) aria-current="page" @endif
                 >{{ __('Dashboard') }}</a>
+                <a
+                    href="{{ route('hole_houses.index') }}"
+                    class="nav-link {{ request()->routeIs('hole_houses.*') ? 'active' : '' }}"
+                    @if (request()->routeIs('hole_houses.*')) aria-current="page" @endif
+                >{{ __('Hole House') }}</a>
                 @if (\Illuminate\Support\Facades\Route::has('family.index'))
                     <a
                         href="{{ route('family.index') }}"
@@ -28,52 +35,63 @@
                         @if (request()->routeIs('family.*')) aria-current="page" @endif
                     >{{ __('Families') }}</a>
                 @endif
+
+                @if (in_array(auth()->user()?->role, [\App\Models\User::ROLE_SUPERADMIN, \App\Models\User::ROLE_ADMIN], true))
+                    <a
+                        href="{{ route('census.index') }}"
+                        class="nav-link {{ request()->routeIs('census.index', 'census.create') ? 'active' : '' }}"
+                        @if (request()->routeIs('census.index', 'census.create')) aria-current="page" @endif
+                    >{{ __('Census') }}</a>
+                    <a
+                        href="{{ route('group-school.index') }}"
+                        class="nav-link {{ request()->routeIs('group-school.index', 'group-school.edit') ? 'active' : '' }}"
+                        @if (request()->routeIs('group-school.index', 'group-school.edit')) aria-current="page" @endif
+                    >{{ __('Group Schools') }}</a>
+                    <a
+                        href="{{ route('years.index') }}"
+                        class="nav-link {{ request()->routeIs('years.index', 'years.edit') ? 'active' : '' }}"
+                        @if (request()->routeIs('years.index', 'years.edit')) aria-current="page" @endif
+                    >{{ __('Years') }}</a>
+                    <a
+                        href="{{ route('schools.index') }}"
+                        class="nav-link {{ request()->routeIs('schools.index', 'schools.edit') ? 'active' : '' }}"
+                        @if (request()->routeIs('schools.index', 'schools.edit')) aria-current="page" @endif
+                    >{{ __('Schools') }}</a>
+                    <a
+                        href="{{ route('teachers.index') }}"
+                        class="nav-link {{ request()->routeIs('teachers.index', 'teachers.edit') ? 'active' : '' }}"
+                        @if (request()->routeIs('teachers.index', 'teachers.edit')) aria-current="page" @endif  
+                    >{{ __('Teachers') }}</a>
+                    @if (auth()->user()?->role === \App\Models\User::ROLE_SUPERADMIN)
+                        <a
+                            href="{{ route('group-school.create') }}"
+                            class="nav-link {{ request()->routeIs('group-school.create') ? 'active' : '' }}"
+                            @if (request()->routeIs('group-school.create')) aria-current="page" @endif
+                        >{{ __('Create Group School') }}</a>
+                    @endif
+                    <a
+                        href="{{ route('provinces.index') }}"
+                        class="nav-link {{ request()->routeIs('provinces.index', 'provinces.show') ? 'active' : '' }}"
+                        @if (request()->routeIs('provinces.index', 'provinces.show')) aria-current="page" @endif
+                    >{{ __('Address') }}</a>
+                    
+                    <a
+                        href="{{ route('users.index') }}"
+                        class="nav-link {{ request()->routeIs('users.index') ? 'active' : '' }}"
+                        @if (request()->routeIs('users.index')) aria-current="page" @endif
+                    >{{ __('Users') }}</a>
+                    <a
+                        href="{{ route('users.create') }}"
+                        class="nav-link {{ request()->routeIs('users.create') ? 'active' : '' }}"
+                        @if (request()->routeIs('users.create')) aria-current="page" @endif
+                    >{{ __('Create User') }}</a>
+                @endif
+
                 <a
-                    href="{{ route('hole_houses.index') }}"
-                    class="nav-link {{ request()->routeIs('hole_houses.*') ? 'active' : '' }}"
-                    @if (request()->routeIs('hole_houses.*')) aria-current="page" @endif
-                >{{ __('Hole House') }}</a>
-                <a
-                    href="{{ route('census.index') }}"
-                    class="nav-link {{ request()->routeIs('census.index', 'census.create') ? 'active' : '' }}"
-                    @if (request()->routeIs('census.index', 'census.create')) aria-current="page" @endif
-                >{{ __('Census') }}</a>
-                <a
-                    href="{{ route('group-school.index') }}"
-                    class="nav-link {{ request()->routeIs('group-school.index', 'group-school.edit') ? 'active' : '' }}"
-                    @if (request()->routeIs('group-school.index', 'group-school.edit')) aria-current="page" @endif
-                >{{ __('Group Schools') }}</a>
-                <a
-                    href="{{ route('years.index') }}"
-                    class="nav-link {{ request()->routeIs('years.index', 'years.edit') ? 'active' : '' }}"
-                    @if (request()->routeIs('years.index', 'years.edit')) aria-current="page" @endif
-                >{{ __('Years') }}</a>
-                <a
-                    href="{{ route('schools.index') }}"
-                    class="nav-link {{ request()->routeIs('schools.index', 'schools.edit') ? 'active' : '' }}"
-                    @if (request()->routeIs('schools.index', 'schools.edit')) aria-current="page" @endif
-                >{{ __('Schools') }}</a>
-                <a
-                    href="{{ route('teachers.index') }}"
-                    class="nav-link {{ request()->routeIs('teachers.index', 'teachers.edit') ? 'active' : '' }}"
-                    @if (request()->routeIs('teachers.index', 'teachers.edit')) aria-current="page" @endif  
-                >{{ __('Teachers') }}</a>
-                <a
-                    href="{{ route('group-school.create') }}"
-                    class="nav-link {{ request()->routeIs('group-school.create') ? 'active' : '' }}"
-                    @if (request()->routeIs('group-school.create')) aria-current="page" @endif
-                >{{ __('Group Schools') }}</a>
-                <a
-                    href="{{ route('provinces.index') }}"
-                    class="nav-link {{ request()->routeIs('provinces.index', 'provinces.show') ? 'active' : '' }}"
-                    @if (request()->routeIs('provinces.index', 'provinces.show')) aria-current="page" @endif
-                >{{ __('Address') }}</a>
-                
-                <a
-                    href="{{ route('users.create') }}"
-                    class="nav-link {{ request()->routeIs('users.create') ? 'active' : '' }}"
-                    @if (request()->routeIs('users.create')) aria-current="page" @endif
-                >{{ __('Create User') }}</a>
+                    href="{{ route('profile') }}"
+                    class="nav-link {{ request()->routeIs('profile') ? 'active' : '' }}"
+                    @if (request()->routeIs('profile')) aria-current="page" @endif
+                >{{ __('My Profile') }}</a>
             </nav>
 
             <form method="POST" action="{{ route('language.switch') }}" class="mt-3">

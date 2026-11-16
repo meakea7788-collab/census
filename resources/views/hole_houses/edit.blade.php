@@ -29,7 +29,7 @@
                 <option value="">{{ __('Select census') }}</option>
                 @foreach ($censuses as $census)
                     <option value="{{ $census->id }}" data-commune-id="{{ $census->commune_id }}" @selected(old('census_id', $holeHouse->census_id) == $census->id)>
-                        {{ $census->name }}{{ $census->year ? ' (' . $census->year . ')' : '' }}{{ $census->commune_name ? ' — ' . $census->commune_name : '' }}
+                        {{ $census->year }}{{ $census->year_description ? ' - ' . $census->year_description : '' }}{{ $census->commune_name ? ' — ' . $census->commune_name : '' }}
                     </option>
                 @endforeach
             </select>

@@ -25,17 +25,12 @@
 
         <div class="row g-3">
             <div class="col-md-6">
-                <label for="name" class="form-label">{{ __('Name') }}</label>
-                <input type="text" id="name" name="name" value="{{ old('name', $census->name) }}" class="form-control" required>
-            </div>
-
-            <div class="col-md-6">
                 <label for="year_id" class="form-label">{{ __('Year') }}</label>
                 <select id="year_id" name="year_id" class="form-select" required>
                     <option value="">{{ __('Select year') }}</option>
                     @foreach ($years as $year)
                         <option value="{{ $year->id }}" @selected(old('year_id', $census->year_id) == $year->id)>
-                            {{ $year->year }}
+                            {{ $year->year }}{{ $year->description ? ' - ' . $year->description : '' }}
                         </option>
                     @endforeach
                 </select>
@@ -115,14 +110,27 @@
 
             <div class="col-12">
                 <label class="form-label">{{ __('Teachers') }}</label>
-                <div class="border rounded p-3">
-                    @foreach ($teachers as $teacher)
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="teacher_id[]" value="{{ $teacher->id }}" id="teacher_{{ $teacher->id }}" @checked(in_array($teacher->id, old('teacher_id', $teacherIds ?? [])))>
-                            <label class="form-check-label" for="teacher_{{ $teacher->id }}">{{ $teacher->name }}</label>
-                        </div>
-                    @endforeach
-                </div>
+                @php($selectedTeacherIds = collect(old('teacher_id', $teacherIds ?? []))->map(fn ($id) => (string) $id)->all())
+                @php($selectedTeacherNames = $teachers->whereIn('id', $selectedTeacherIds)->pluck('name')->all())
+                <details class="teacher-dropdown">
+                    <summary class="form-select teacher-dropdown-label" title="{{ implode(', ', $selectedTeacherNames) }}">
+                        {{ $selectedTeacherNames ? implode(', ', $selectedTeacherNames) : __('Select teachers') }}
+                    </summary>
+                    <div class="teacher-dropdown-menu">
+                        @foreach ($teachers as $teacher)
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="teacher_id[]" value="{{ $teacher->id }}" id="teacher_{{ $teacher->id }}" @checked(in_array((string) $teacher->id, $selectedTeacherIds, true))>
+                                <label class="form-check-label" for="teacher_{{ $teacher->id }}">{{ $teacher->name }}</label>
+                            </div>
+                        @endforeach
+                    </div>
+                </details>
+                @error('teacher_id')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
+                @error('teacher_id.*')
+                    <div class="text-danger small mt-1">{{ $message }}</div>
+                @enderror
             </div>
 
             <div class="col-12">
@@ -137,4 +145,49 @@
         </div>
     </form>
 </div>
+<script>
+    const locationTree = @json($locationTree);
+    const schoolOptions = @json($schoolOptions);
+    const schoolSelect = document.getElementById('school_id');
+    const groupSchoolSelect = document.getElementById('group_school_id');
+    const provinceSelect = document.getElementById('province_id');
+    const districtSelect = document.getElementById('district_id');
+    const communeSelect = document.getElementById('commune_id');
+    const villageSelect = document.getElementById('village_id');
+
+    schoolSelect.addEventListener('change', () => {
+        const school = schoolOptions.find(item => String(item.id) === String(schoolSelect.value));
+        if (!school) return;
+
+        groupSchoolSelect.value = String(school.group_school_id);
+        fillCensusLocationFromSchool(
+            school,
+            locationTree,
+            provinceSelect,
+            districtSelect,
+            communeSelect,
+            villageSelect
+        );
+    });
+
+    document.querySelectorAll('.teacher-dropdown').forEach(dropdown => {
+        const label = dropdown.querySelector('.teacher-dropdown-label');
+        const checkboxes = dropdown.querySelectorAll('input[name="teacher_id[]"]');
+        const updateLabel = () => {
+            const names = Array.from(dropdown.querySelectorAll('input[name="teacher_id[]"]:checked'))
+                .map(checkbox => checkbox.parentElement.querySelector('label').textContent.trim());
+            const selectedNames = names.join(', ');
+
+            label.textContent = selectedNames || @json(__('Select teachers'));
+            if (selectedNames) {
+                label.title = selectedNames;
+            } else {
+                label.removeAttribute('title');
+            }
+        };
+
+        checkboxes.forEach(checkbox => checkbox.addEventListener('change', updateLabel));
+    });
+</script>
+@include('census.partials.school-address-autofill')
 @endsection

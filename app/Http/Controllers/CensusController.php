@@ -10,17 +10,24 @@ use App\Models\School;
 use App\Models\Teacher;
 use App\Models\village;
 use App\Models\Year;
+use App\Support\SchoolAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rule;
 
 class CensusController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $schoolId = SchoolAccess::schoolId();
+        $yearId = trim((string) $request->query('year_id', ''));
+        $years = Year::orderByDesc('year')->get();
+        $activeYears = $years->where('is_active', true)->values();
+
         $censusRecords = DB::table('census')
             ->leftJoin('year', 'census.year_id', '=', 'year.id')
             ->leftJoin('group_schools', 'census.group_school_id', '=', 'group_schools.id')
@@ -30,27 +37,58 @@ class CensusController extends Controller
                 'census.*',
                 'year.year',
                 'group_schools.name as group_school_name',
+                'year.description as year_description',
                 'schools.name as school_name',
                 'village.name as village_name'
             )
+            ->when($schoolId !== null, fn ($query) => $query->where('census.school_id', $schoolId))
+            ->when($yearId !== '', fn ($query) => $query->where('census.year_id', $yearId))
+            ->orderByDesc('year.year')
             ->orderByDesc('census.id')
             ->get();
 
         $teacherNames = DB::table('census_teacher')
             ->join('teacher', 'census_teacher.teacher_id', '=', 'teacher.id')
             ->select('census_teacher.census_id', 'teacher.name')
+            ->when($schoolId !== null, fn ($query) => $query->whereIn(
+                'census_teacher.census_id',
+                DB::table('census')->select('id')->where('school_id', $schoolId)
+            ))
+            ->when($schoolId !== null, fn ($query) => $query->where('teacher.school_id', $schoolId))
             ->orderBy('teacher.name')
             ->get()
             ->groupBy('census_id');
 
-        $censusRecords->each(function ($record) use ($teacherNames) {
+        $houseCountsByVillage = DB::table('holehouse')
+            ->join('census', 'holehouse.census_id', '=', 'census.id')
+            ->when($schoolId !== null, fn ($query) => $query->where('census.school_id', $schoolId))
+            ->select('census.school_id', 'holehouse.village_id', DB::raw('COUNT(holehouse.id) as houses_count'))
+            ->groupBy('census.school_id', 'holehouse.village_id')
+            ->get()
+            ->keyBy(fn ($row) => $row->school_id . ':' . $row->village_id);
+
+        $censusRecords->each(function ($record) use ($teacherNames, $houseCountsByVillage) {
             $record->teacher_name = ($teacherNames->get($record->id) ?? collect())
                 ->pluck('name')
                 ->implode(', ');
             $record->name = $record->name ?? ($record->group_school_name ? $record->group_school_name . ' — ' . $record->village_name : ($record->village_name ?? $record->school_name ?? __('Census')));
+            $record->houses_count = $houseCountsByVillage->get($record->school_id . ':' . $record->village_id)->houses_count ?? 0;
         });
 
-        return view('census.index', compact('censusRecords'));
+        return view('census.index', compact('censusRecords', 'years', 'activeYears', 'yearId'));
+    }
+
+    public function carryOver(Request $request)
+    {
+        $data = $request->validate([
+            'year_id' => ['required', Rule::exists('year', 'id')->where('is_active', true)],
+        ]);
+
+        SchoolAccess::carryOverCensusDataToYear((int) $data['year_id'], SchoolAccess::schoolId());
+
+        return redirect()
+            ->route('census.index', ['year_id' => $data['year_id']])
+            ->with('status', __('Census data carried over to the selected year successfully!'));
     }
 
     /**
@@ -58,14 +96,27 @@ class CensusController extends Controller
      */
     public function create()
     {
-        $years = Year::orderBy('year')->get();
-        $groupSchools = GroupSchool::orderBy('name')->get();
-        $schools = School::orderBy('name')->get();
+        $schoolId = SchoolAccess::schoolId();
+        $adminSchool = $schoolId === null
+            ? null
+            : School::with(['groupSchool', 'villages.commune.district.province'])
+                ->findOrFail($schoolId);
+        $defaultLocation = $adminSchool
+            ? $this->getSchoolDefaultLocation($adminSchool)
+            : [];
+        $years = Year::where('is_active', true)->orderBy('year')->get();
+        $groupSchools = GroupSchool::query()
+            ->when($schoolId !== null, fn ($query) => $query->whereHas('schools', fn ($schools) => $schools->where('schools.id', $schoolId)))
+            ->orderBy('name')->get();
+        $schools = SchoolAccess::schoolQuery()
+            ->with('villages.commune.district.province')
+            ->orderBy('name')
+            ->get();
         $provinces = Province::with('districts.communes.villages')->orderBy('name')->get();
         $districts = District::orderBy('name')->get();
         $communes = commune::orderBy('name')->get();
         $villages = village::orderBy('name')->get();
-        $teachers = Teacher::orderBy('name')->get();
+        $teachers = SchoolAccess::teacherQuery()->orderBy('name')->get();
 
         $locationTree = $provinces->map(fn ($province) => [
             'id' => $province->id,
@@ -84,12 +135,7 @@ class CensusController extends Controller
             ])->values(),
         ])->values();
 
-        $schoolOptions = $schools->map(fn ($school) => [
-            'id' => $school->id,
-            'name' => $school->name,
-            'address' => $school->address ?? '',
-            'group_school_id' => $school->group_school_id,
-        ])->values();
+        $schoolOptions = $this->buildSchoolOptions($schools);
 
         $groupSchoolOptions = $groupSchools->map(fn ($groupSchool) => [
             'id' => $groupSchool->id,
@@ -115,7 +161,9 @@ class CensusController extends Controller
             'locationTree',
             'schoolOptions',
             'groupSchoolOptions',
-            'teacherOptions'
+            'teacherOptions',
+            'adminSchool',
+            'defaultLocation'
         ));
     }
 
@@ -124,20 +172,48 @@ class CensusController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $schoolId = SchoolAccess::schoolId();
+        $adminSchool = $schoolId === null ? null : School::with('villages.commune.district.province')->findOrFail($schoolId);
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'year_id' => 'required|exists:year,id',
+            'year_id' => ['required', Rule::exists('year', 'id')->where('is_active', true)],
             'group_school_id' => 'required|exists:group_schools,id',
             'school_id' => 'required|exists:schools,id',
             'province_id' => 'required|exists:province,id',
             'district_id' => 'required|exists:district,id',
             'commune_id' => 'required|exists:commune,id',
-            'village_id' => 'required|exists:village,id',
+            'village_id' => [
+                'required',
+                $adminSchool && $adminSchool->villages->isNotEmpty()
+                    ? Rule::exists('school_village', 'village_id')->where('school_id', $schoolId)
+                    : Rule::exists('village', 'id'),
+            ],
             'teacher_id' => 'required|array|min:1',
             'teacher_id.*' => 'required|exists:teacher,id',
             'note' => 'nullable|string|max:255',
         ]);
+
+        if ($adminSchool) {
+            $data['school_id'] = $adminSchool->id;
+            $data['group_school_id'] = $adminSchool->group_school_id;
+
+            $location = village::with('commune.district.province')->findOrFail($data['village_id']);
+            $data['province_id'] = $location->commune->district->province_id;
+            $data['district_id'] = $location->commune->district_id;
+            $data['commune_id'] = $location->commune_id;
+        } else {
+            SchoolAccess::authorizeSchool($data['school_id']);
+            abort_unless(
+                School::whereKey($data['school_id'])->value('group_school_id') == $data['group_school_id'],
+                403
+            );
+        }
+        if ($schoolId !== null) {
+            abort_unless(
+                Teacher::where('school_id', $schoolId)->whereIn('id', $data['teacher_id'])->count()
+                    === count(array_unique($data['teacher_id'])),
+                403
+            );
+        }
 
         $teacherIds = $data['teacher_id'];
         unset($data['teacher_id']);
@@ -157,9 +233,75 @@ class CensusController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ], array_unique($teacherIds)));
+
+            // Keep existing hole houses and family members for this school + village in the new census
+            $schoolCensusIds = DB::table('census')
+                ->where('school_id', $data['school_id'])
+                ->where('id', '!=', $censusId)
+                ->pluck('id')
+                ->all();
+
+            if (! empty($schoolCensusIds)) {
+                DB::table('holehouse')
+                    ->whereIn('census_id', $schoolCensusIds)
+                    ->where('village_id', $data['village_id'])
+                    ->update([
+                        'census_id' => $censusId,
+                        'updated_at' => now(),
+                    ]);
+            }
         });
         return redirect()->route('census.index')->with('status', __('Census created successfully!'));
 
+    }
+
+    private function getSchoolDefaultLocation(School $school): array
+    {
+        $location = $school->villages->first();
+
+        if (! $location && $school->address) {
+            $parts = array_map('trim', explode(',', $school->address));
+            if (count($parts) === 4) {
+                [$villageName, $communeName, $districtName, $provinceName] = $parts;
+                $location = village::with('commune.district.province')->get()->first(fn ($village) =>
+                    $village->name === $villageName
+                    && $village->commune?->name === $communeName
+                    && $village->commune?->district?->name === $districtName
+                    && $village->commune?->district?->province?->name === $provinceName
+                );
+            }
+        }
+
+        if (! $location?->commune?->district?->province) {
+            return [];
+        }
+
+        return [
+            'province_id' => $location->commune->district->province_id,
+            'district_id' => $location->commune->district_id,
+            'commune_id' => $location->commune_id,
+            'village_id' => $location->id,
+        ];
+    }
+
+    private function buildSchoolOptions($schools)
+    {
+        return $schools->map(function ($school) {
+            $village = $school->villages->first();
+
+            return [
+                'id' => $school->id,
+                'name' => $school->name,
+                'address' => $school->address ?? '',
+                'group_school_id' => $school->group_school_id,
+                'location' => $village?->commune?->district?->province ? [
+                    'province_id' => $village->commune->district->province_id,
+                    'district_id' => $village->commune->district_id,
+                    'commune_id' => $village->commune_id,
+                    'village_id' => $village->id,
+                ] : null,
+            ];
+        })->values();
     }
 
     /**
@@ -168,12 +310,13 @@ class CensusController extends Controller
     public function show(string $id)
     {
         //
-        $census = DB::table('census')->where('id', $id)->first();
+        $census = SchoolAccess::restrict(\App\Models\Census::with('year'))->find($id);
         if (!$census) {
             return redirect()->route('census.index')->with('error', __('Census not found.'));
         }
+        SchoolAccess::authorizeCensus($census);
         $census->name = $census->name ?? null;
-        $year = Year::find($census->year_id);
+        $year = $census->year ?? Year::find($census->year_id);
         $groupSchool = GroupSchool::find($census->group_school_id);
         $school = School::find($census->school_id);
         $province = Province::find($census->province_id);
@@ -183,6 +326,7 @@ class CensusController extends Controller
         $teacher = DB::table('census_teacher')
             ->join('teacher', 'census_teacher.teacher_id', '=', 'teacher.id')
             ->where('census_teacher.census_id', $census->id)
+            ->when(SchoolAccess::schoolId() !== null, fn ($query) => $query->where('teacher.school_id', SchoolAccess::schoolId()))
             ->orderBy('teacher.name')
             ->pluck('teacher.name');
         return view('census.show', compact(
@@ -204,22 +348,35 @@ class CensusController extends Controller
      */
     public function edit(string $id)
     {
-        $census = DB::table('census')->where('id', $id)->first();
+        $schoolId = SchoolAccess::schoolId();
+        $census = DB::table('census')->where('id', $id)
+            ->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId))
+            ->first();
 
         if (! $census) {
             return redirect()->route('census.index')->with('error', __('Census not found.'));
         }
         $census->name = $census->name ?? '';
 
-        $years = Year::orderBy('year')->get();
-        $groupSchools = GroupSchool::orderBy('name')->get();
-        $schools = School::orderBy('name')->get();
+        $years = Year::where('is_active', true)->orderBy('year')->get();
+        $groupSchools = GroupSchool::query()
+            ->when($schoolId !== null, fn ($query) => $query->whereHas('schools', fn ($schools) => $schools->where('schools.id', $schoolId)))
+            ->orderBy('name')->get();
+        $schools = SchoolAccess::schoolQuery()
+            ->with('villages.commune.district.province')
+            ->orderBy('name')
+            ->get();
         $provinces = Province::with('districts.communes.villages')->orderBy('name')->get();
         $districts = District::orderBy('name')->get();
         $communes = commune::orderBy('name')->get();
         $villages = village::orderBy('name')->get();
-        $teachers = Teacher::orderBy('name')->get();
-        $teacherIds = DB::table('census_teacher')->where('census_id', $id)->pluck('teacher_id')->all();
+        $teachers = SchoolAccess::teacherQuery()->orderBy('name')->get();
+        $teacherIds = DB::table('census_teacher')
+            ->join('teacher', 'census_teacher.teacher_id', '=', 'teacher.id')
+            ->where('census_teacher.census_id', $id)
+            ->when($schoolId !== null, fn ($query) => $query->where('teacher.school_id', $schoolId))
+            ->pluck('census_teacher.teacher_id')
+            ->all();
 
         $locationTree = $provinces->map(fn ($province) => [
             'id' => $province->id,
@@ -238,12 +395,7 @@ class CensusController extends Controller
             ])->values(),
         ])->values();
 
-        $schoolOptions = $schools->map(fn ($school) => [
-            'id' => $school->id,
-            'name' => $school->name,
-            'address' => $school->address ?? '',
-            'group_school_id' => $school->group_school_id,
-        ])->values();
+        $schoolOptions = $this->buildSchoolOptions($schools);
 
         $groupSchoolOptions = $groupSchools->map(fn ($groupSchool) => [
             'id' => $groupSchool->id,
@@ -280,9 +432,13 @@ class CensusController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $schoolId = SchoolAccess::schoolId();
+        $existing = DB::table('census')->where('id', $id)
+            ->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId))
+            ->first();
+        abort_if(! $existing, 404);
         $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'year_id' => 'required|exists:year,id',
+            'year_id' => ['required', Rule::exists('year', 'id')->where('is_active', true)],
             'group_school_id' => 'required|exists:group_schools,id',
             'school_id' => 'required|exists:schools,id',
             'province_id' => 'required|exists:province,id',
@@ -294,18 +450,34 @@ class CensusController extends Controller
             'note' => 'nullable|string|max:255',
         ]);
 
+        SchoolAccess::authorizeSchool($data['school_id']);
+        abort_unless(
+            SchoolAccess::schoolId() === null
+                || School::whereKey($data['school_id'])->value('group_school_id') == $data['group_school_id'],
+            403
+        );
+        if ($schoolId !== null) {
+            abort_unless(
+                Teacher::where('school_id', $schoolId)->whereIn('id', $data['teacher_id'])->count()
+                    === count(array_unique($data['teacher_id'])),
+                403
+            );
+        }
+
         $teacherIds = $data['teacher_id'];
         unset($data['teacher_id']);
         if (! Schema::hasColumn('census', 'name')) {
             unset($data['name']);
         }
 
-        DB::transaction(function () use ($id, $data, $teacherIds) {
-            DB::table('census')
+        DB::transaction(function () use ($id, $data, $teacherIds, $schoolId) {
+            $updated = DB::table('census')
                 ->where('id', $id)
+                ->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId))
                 ->update(array_merge($data, [
                     'updated_at' => now(),
                 ]));
+            abort_unless($updated === 1, 404);
 
             DB::table('census_teacher')->where('census_id', $id)->delete();
 
@@ -325,9 +497,35 @@ class CensusController extends Controller
      */
     public function destroy(string $id)
     {
-        DB::transaction(function () use ($id) {
+        $schoolId = SchoolAccess::schoolId();
+        $targetCensus = DB::table('census')->where('id', $id)
+            ->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId))
+            ->first();
+        abort_unless($targetCensus !== null, 404);
+
+        DB::transaction(function () use ($id, $schoolId, $targetCensus) {
+            $fallbackCensusId = DB::table('census')
+                ->where('school_id', $targetCensus->school_id)
+                ->where('id', '!=', $id)
+                ->orderByRaw('CASE WHEN village_id = ? THEN 0 ELSE 1 END', [$targetCensus->village_id])
+                ->orderByDesc('year_id')
+                ->orderByDesc('id')
+                ->value('id');
+
+            if ($fallbackCensusId) {
+                DB::table('holehouse')
+                    ->where('census_id', $id)
+                    ->update([
+                        'census_id' => $fallbackCensusId,
+                        'updated_at' => now(),
+                    ]);
+            }
+
+            $deleted = DB::table('census')->where('id', $id)
+                ->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId))
+                ->delete();
+            abort_unless($deleted === 1, 404);
             DB::table('census_teacher')->where('census_id', $id)->delete();
-            DB::table('census')->where('id', $id)->delete();
         });
 
         return redirect()->route('census.index')->with('status', __('Census deleted successfully!'));

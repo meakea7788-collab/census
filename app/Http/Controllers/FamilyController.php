@@ -5,17 +5,38 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\family as Family;
 use App\Models\hole_house;
+use App\Support\SchoolAccess;
 
 class FamilyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $families = Family::with('holehouse')->latest()->get();
+        $search = trim((string) $request->query('search', ''));
 
-        return view('family.index', compact('families'));
+        $families = $this->familiesQuery()
+            ->with(['holehouse.village', 'holehouse.census.village'])
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($query) use ($search) {
+                    $query->where('family_name', 'like', '%' . $search . '%')
+                        ->orWhereHas('holehouse', function ($houseQuery) use ($search) {
+                            $houseQuery->where('hole_number', 'like', '%' . $search . '%')
+                                ->orWhere('leader_family_name', 'like', '%' . $search . '%')
+                                ->orWhereHas('village', function ($villageQuery) use ($search) {
+                                    $villageQuery->where('name', 'like', '%' . $search . '%');
+                                })
+                                ->orWhereHas('census.village', function ($censusVillageQuery) use ($search) {
+                                    $censusVillageQuery->where('name', 'like', '%' . $search . '%');
+                                });
+                        });
+                });
+            })
+            ->latest()
+            ->get();
+
+        return view('family.index', compact('families', 'search'));
     }
 
     /**
@@ -23,9 +44,9 @@ class FamilyController extends Controller
      */
     public function create(Request $request)
     {
-        $holeHouses = hole_house::orderBy('hole_number')->get();
+        $holeHouses = $this->holeHousesQuery()->orderBy('hole_number')->get();
         $selectedHoleHouse = $request->filled('holehouse_id')
-            ? hole_house::findOrFail($request->query('holehouse_id'))
+            ? $this->holeHousesQuery()->findOrFail($request->query('holehouse_id'))
             : null;
 
         return view('family.create', compact('holeHouses', 'selectedHoleHouse'));
@@ -44,6 +65,7 @@ class FamilyController extends Controller
             'relationship' => ['required', 'string', 'max:255'],
             'job' => ['required', 'string', 'max:255'],
         ]);
+        $this->holeHousesQuery()->findOrFail($data['holehouse_id']);
 
         Family::create($data);
 
@@ -55,7 +77,7 @@ class FamilyController extends Controller
      */
     public function show(string $id)
     {
-        $family = Family::with('holehouse.families')->findOrFail($id);
+        $family = $this->familiesQuery()->with('holehouse.families')->findOrFail($id);
 
         return view('family.show', compact('family'));
     }
@@ -65,8 +87,8 @@ class FamilyController extends Controller
      */
     public function edit(string $id)
     {
-        $family = Family::findOrFail($id);
-        $holeHouses = hole_house::orderBy('hole_number')->get();
+        $family = $this->familiesQuery()->findOrFail($id);
+        $holeHouses = $this->holeHousesQuery()->orderBy('hole_number')->get();
 
         return view('family.edit', compact('family', 'holeHouses'));
     }
@@ -86,7 +108,8 @@ class FamilyController extends Controller
             'job' => ['required', 'string', 'max:255'],
         ]);
 
-        $family = Family::findOrFail($id);
+        $family = $this->familiesQuery()->findOrFail($id);
+        $this->holeHousesQuery()->findOrFail($data['holehouse_id']);
         $family->update($data);
 
         return redirect()->route('family.index')->with('success', 'Family updated successfully.');
@@ -97,18 +120,18 @@ class FamilyController extends Controller
      */
     public function destroy(string $id)
     {
-        $family = Family::findOrFail($id);
+        $family = $this->familiesQuery()->findOrFail($id);
         $family->delete();
 
-        return redirect()->route('family.index')->with('success', __('Family member deleted successfully.'));
+        return redirect()->back()->with('success', __('Family member deleted successfully.'));
     }
 
     public function editMoveAddress(string $id)
     {
-        $family = Family::with('holehouse')->findOrFail($id);
+        $family = $this->familiesQuery()->with('holehouse')->findOrFail($id);
 
         if ($family->is_deceased) {
-            return redirect()->route('family.index')->with('error', __('A deceased family member cannot be marked as moved.'));
+            return redirect()->back()->with('error', __('A deceased family member cannot be marked as moved.'));
         }
 
         return view('family.move', compact('family'));
@@ -116,10 +139,10 @@ class FamilyController extends Controller
 
     public function updateMoveAddress(Request $request, string $id)
     {
-        $family = Family::findOrFail($id);
+        $family = $this->familiesQuery()->findOrFail($id);
 
         if ($family->is_deceased) {
-            return redirect()->route('family.index')->with('error', __('A deceased family member cannot be marked as moved.'));
+            return redirect()->back()->with('error', __('A deceased family member cannot be marked as moved.'));
         }
 
         $data = $request->validate([
@@ -128,17 +151,31 @@ class FamilyController extends Controller
 
         $family->update($data);
 
+        if ($family->holehouse_id) {
+            return redirect()->route('hole_houses.show', $family->holehouse_id)->with('success', __('Family member move address saved.'));
+        }
+
         return redirect()->route('family.index')->with('success', __('Family member move address saved.'));
     }
 
     public function markDeceased(string $id)
     {
-        $family = Family::findOrFail($id);
+        $family = $this->familiesQuery()->findOrFail($id);
 
         if (! $family->is_deceased) {
             $family->update(['is_deceased' => true]);
         }
 
-        return redirect()->route('family.index')->with('success', __('Family member marked as deceased.'));
+        return redirect()->back()->with('success', __('Family member marked as deceased.'));
+    }
+
+    private function familiesQuery()
+    {
+        return SchoolAccess::familiesQuery();
+    }
+
+    private function holeHousesQuery()
+    {
+        return SchoolAccess::holeHousesQuery();
     }
 }

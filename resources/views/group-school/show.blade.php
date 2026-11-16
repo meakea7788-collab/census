@@ -9,7 +9,9 @@
             <h1 class="h3 mb-1">{{ $groupSchool->name }}</h1>
             <p class="text-secondary mb-0">{{ __('Group school details and schools in this group.') }}</p>
         </div>
-        <a href="{{ route('group-school.edit', $groupSchool) }}" class="btn btn-primary">{{ __('Edit Group School') }}</a>
+        @if (auth()->user()?->role !== \App\Models\User::ROLE_ADMIN)
+            <a href="{{ route('group-school.edit', $groupSchool) }}" class="btn btn-primary">{{ __('Edit Group School') }}</a>
+        @endif
     </div>
 
     <div class="card border-0 shadow-sm mb-4">
@@ -28,9 +30,11 @@
     <div class="card border-0 shadow-sm">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
             <strong>{{ __('Schools in this group') }}</strong>
-            <a href="{{ route('schools.create', ['group_school_id' => $groupSchool->id]) }}" class="btn btn-primary btn-sm">
-                {{ __('Create School') }}
-            </a>
+            @if (auth()->user()?->role !== \App\Models\User::ROLE_ADMIN)
+                <a href="{{ route('schools.create', ['group_school_id' => $groupSchool->id]) }}" class="btn btn-primary btn-sm">
+                    {{ __('Create School') }}
+                </a>
+            @endif
         </div>
         <div class="card-body p-0">
             @if ($groupSchool->schools->isEmpty())

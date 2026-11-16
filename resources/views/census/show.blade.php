@@ -5,7 +5,7 @@
 @section('content')
 <div class="container py-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="mb-0">{{ $census->name }}</h1>
+        <h1 class="mb-0">{{ $year?->year ?? __('Census Details') }}</h1>
         <div class="d-flex gap-2">
             <a href="{{ route('census.edit', $census->id) }}" class="btn btn-warning">{{ __('Edit') }}</a>
             <a href="{{ route('census.index') }}" class="btn btn-secondary">{{ __('Back') }}</a>
@@ -16,7 +16,9 @@
         <div class="card-body">
             <dl class="row mb-0">
                 <dt class="col-sm-3">{{ __('Year') }}</dt>
-                <dd class="col-sm-9">{{ $year?->year ?? $year?->name ?? '-' }}</dd>
+                <dd class="col-sm-9">
+                    {{ $year?->year ?? '-' }}{{ $year?->description ? ' - ' . $year->description : '' }}
+                </dd>
 
                 <dt class="col-sm-3">{{ __('Group School') }}</dt>
                 <dd class="col-sm-9">{{ $groupSchool?->name ?? '-' }}</dd>

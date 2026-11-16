@@ -6,6 +6,7 @@ use App\Models\GroupSchool;
 use App\Models\Province;
 use App\Models\commune;
 use App\Models\village;
+use App\Support\SchoolAccess;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -37,7 +38,7 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        $schools = \App\Models\School::with(['groupSchool', 'villages'])->get();
+        $schools = SchoolAccess::schoolQuery()->with(['groupSchool', 'villages'])->get();
         return view('schools.index', compact('schools'));
         //
     }
@@ -47,6 +48,7 @@ class SchoolController extends Controller
      */
     public function create(Request $request)
     {
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $locations = Province::with('districts.communes.villages')->orderBy('name')->get();
         $groupSchools = GroupSchool::orderBy('name')->get();
         $selectedGroupSchool = $request->filled('group_school_id')
@@ -73,6 +75,7 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
@@ -134,8 +137,7 @@ class SchoolController extends Controller
      */
     public function show(string $id)
     {
-        //
-        $school = \App\Models\School::with(['groupSchool', 'teachers', 'villages'])->findOrFail($id);
+        $school = SchoolAccess::schoolQuery()->with(['groupSchool', 'teachers', 'villages'])->findOrFail($id);
         return view('schools.show', compact('school'));
     }
 
@@ -144,8 +146,10 @@ class SchoolController extends Controller
      */
     public function edit(string $id)
     {
-        $school = \App\Models\School::with('villages')->findOrFail($id);
-        $groupSchools = \App\Models\GroupSchool::orderBy('name')->get();
+        $school = SchoolAccess::schoolQuery()->with('villages')->findOrFail($id);
+        $groupSchools = \App\Models\GroupSchool::query()
+            ->when(SchoolAccess::schoolId() !== null, fn ($query) => $query->whereKey($school->group_school_id))
+            ->orderBy('name')->get();
         $locations = Province::with('districts.communes.villages')->orderBy('name')->get();
         $selectedLocation = $this->findLocationFromAddress($school->address);
         $selectedVillageIds = $school->villages->isNotEmpty()
@@ -166,7 +170,10 @@ class SchoolController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $school = \App\Models\School::findOrFail($id);
+        $school = SchoolAccess::schoolQuery()->findOrFail($id);
+        if (SchoolAccess::schoolId() !== null) {
+            abort_unless((int) $request->input('group_school_id') === (int) $school->group_school_id, 403);
+        }
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
@@ -251,7 +258,7 @@ class SchoolController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $school = \App\Models\School::findOrFail($id);
         $school->delete();
         return redirect()->route('schools.index');
