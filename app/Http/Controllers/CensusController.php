@@ -141,6 +141,9 @@ class CensusController extends Controller
 
         $teacherIds = $data['teacher_id'];
         unset($data['teacher_id']);
+        if (! Schema::hasColumn('census', 'name')) {
+            unset($data['name']);
+        }
 
         DB::transaction(function () use ($data, $teacherIds) {
             $censusId = DB::table('census')->insertGetId(array_merge($data, [
@@ -169,6 +172,7 @@ class CensusController extends Controller
         if (!$census) {
             return redirect()->route('census.index')->with('error', __('Census not found.'));
         }
+        $census->name = $census->name ?? null;
         $year = Year::find($census->year_id);
         $groupSchool = GroupSchool::find($census->group_school_id);
         $school = School::find($census->school_id);
@@ -205,6 +209,7 @@ class CensusController extends Controller
         if (! $census) {
             return redirect()->route('census.index')->with('error', __('Census not found.'));
         }
+        $census->name = $census->name ?? '';
 
         $years = Year::orderBy('year')->get();
         $groupSchools = GroupSchool::orderBy('name')->get();
@@ -291,6 +296,9 @@ class CensusController extends Controller
 
         $teacherIds = $data['teacher_id'];
         unset($data['teacher_id']);
+        if (! Schema::hasColumn('census', 'name')) {
+            unset($data['name']);
+        }
 
         DB::transaction(function () use ($id, $data, $teacherIds) {
             DB::table('census')

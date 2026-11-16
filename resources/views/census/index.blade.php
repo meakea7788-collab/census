@@ -16,7 +16,9 @@
         <div class="alert alert-success">{{ session('status') }}</div>
     @endif
 
-    @php($hasRecords = ($censusRecords ?? collect())->isNotEmpty())
+    @php
+        $hasRecords = ($censusRecords ?? collect())->isNotEmpty();
+    @endphp
 
     @if (! $hasRecords)
         <div class="card border-0 shadow-sm">
@@ -36,7 +38,7 @@
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-body d-flex flex-column">
                             <div class="d-flex justify-content-between gap-2 mb-3">
-                                <strong class="fs-5">{{ $record->name }}</strong>
+                                <strong class="fs-5">{{ $record->name ?? $record->village_name ?? $record->school_name ?? __('Census') }}</strong>
                                 <span class="badge text-bg-primary align-self-start">{{ $record->year }}</span>
                             </div>
                             <dl class="row mb-3 small">
@@ -81,7 +83,7 @@
                             @foreach ($censusRecords as $record)
                                 <tr>
                                     <td>{{ $record->year }}</td>
-                                    <td><strong>{{ $record->name }}</strong></td>
+                                    <td><strong>{{ $record->name ?? $record->village_name ?? $record->school_name ?? __('Census') }}</strong></td>
                                     <td>{{ $record->school_name }}</td>
                                     <td>{{ $record->teacher_name }}</td>
                                     <td>{{ $record->village_name }}</td>
