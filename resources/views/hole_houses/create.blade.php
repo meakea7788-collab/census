@@ -38,7 +38,7 @@
 						<select class="form-select @error('census_id') is-invalid @enderror" id="census_id" name="census_id" required>
 							<option value="">{{ __('Select census') }}</option>
 							@foreach ($censuses as $census)
-								<option value="{{ $census->id }}" data-commune-id="{{ $census->commune_id }}" @selected(old('census_id') == $census->id)>
+								<option value="{{ $census->id }}" data-commune-id="{{ $census->commune_id }}" @selected(old('census_id', $censuses->count() === 1 ? $census->id : '') == $census->id)>
 									{{ $census->year }}{{ $census->year_description ? ' - ' . $census->year_description : '' }}{{ $census->commune_name ? ' — ' . $census->commune_name : '' }}
 								</option>
 							@endforeach
@@ -73,6 +73,25 @@
 						<label for="phone_number" class="form-label">{{ __('Phone number') }} <span class="text-danger">*</span></label>
 						<input type="tel" class="form-control @error('phone_number') is-invalid @enderror" id="phone_number" name="phone_number" value="{{ old('phone_number') }}" required>
 						@error('phone_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
+					</div>
+					<div class="col-md-4 mb-3">
+						<label for="leader_gender" class="form-label">{{ __('Gender') }} <span class="text-danger">*</span></label>
+						<select class="form-select @error('leader_gender') is-invalid @enderror" id="leader_gender" name="leader_gender" required>
+							<option value="">{{ __('Select Sex') }}</option>
+							<option value="ប្រុស" @selected(old('leader_gender') === 'ប្រុស')>{{ __('Male') }}</option>
+							<option value="ស្រី" @selected(old('leader_gender') === 'ស្រី')>{{ __('Female') }}</option>
+						</select>
+						@error('leader_gender')<div class="invalid-feedback">{{ $message }}</div>@enderror
+					</div>
+					<div class="col-md-4 mb-3">
+						<label for="leader_dob" class="form-label">{{ __('Date of birth') }} <span class="text-danger">*</span></label>
+						<input type="date" class="form-control @error('leader_dob') is-invalid @enderror" id="leader_dob" name="leader_dob" value="{{ old('leader_dob') }}" required>
+						@error('leader_dob')<div class="invalid-feedback">{{ $message }}</div>@enderror
+					</div>
+					<div class="col-md-4 mb-3">
+						<label for="leader_job" class="form-label">{{ __('Job') }} <span class="text-danger">*</span></label>
+						<input type="text" class="form-control @error('leader_job') is-invalid @enderror" id="leader_job" name="leader_job" value="{{ old('leader_job') }}" required>
+						@error('leader_job')<div class="invalid-feedback">{{ $message }}</div>@enderror
 					</div>
 					<div class="col-12 mb-3">
 						<label for="village_id" class="form-label">{{ __('Village') }} <span class="text-danger">*</span></label>

@@ -20,9 +20,13 @@ class CensusController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $schoolId = SchoolAccess::schoolId();
+        $yearId = trim((string) $request->query('year_id', ''));
+        $years = Year::orderByDesc('year')->get();
+        $activeYears = $years->where('is_active', true)->values();
+
         $censusRecords = DB::table('census')
             ->join('year', 'census.year_id', '=', 'year.id')
             ->join('schools', 'census.school_id', '=', 'schools.id')
@@ -35,6 +39,8 @@ class CensusController extends Controller
                 'village.name as village_name'
             )
             ->when($schoolId !== null, fn ($query) => $query->where('census.school_id', $schoolId))
+            ->when($yearId !== '', fn ($query) => $query->where('census.year_id', $yearId))
+            ->orderByDesc('year.year')
             ->orderByDesc('census.id')
             ->get();
 
@@ -50,13 +56,35 @@ class CensusController extends Controller
             ->get()
             ->groupBy('census_id');
 
-        $censusRecords->each(function ($record) use ($teacherNames) {
+        $houseCountsByVillage = DB::table('holehouse')
+            ->join('census', 'holehouse.census_id', '=', 'census.id')
+            ->when($schoolId !== null, fn ($query) => $query->where('census.school_id', $schoolId))
+            ->select('census.school_id', 'holehouse.village_id', DB::raw('COUNT(holehouse.id) as houses_count'))
+            ->groupBy('census.school_id', 'holehouse.village_id')
+            ->get()
+            ->keyBy(fn ($row) => $row->school_id . ':' . $row->village_id);
+
+        $censusRecords->each(function ($record) use ($teacherNames, $houseCountsByVillage) {
             $record->teacher_name = ($teacherNames->get($record->id) ?? collect())
                 ->pluck('name')
                 ->implode(', ');
+            $record->houses_count = $houseCountsByVillage->get($record->school_id . ':' . $record->village_id)->houses_count ?? 0;
         });
 
-        return view('census.index', compact('censusRecords'));
+        return view('census.index', compact('censusRecords', 'years', 'activeYears', 'yearId'));
+    }
+
+    public function carryOver(Request $request)
+    {
+        $data = $request->validate([
+            'year_id' => ['required', Rule::exists('year', 'id')->where('is_active', true)],
+        ]);
+
+        SchoolAccess::carryOverCensusDataToYear((int) $data['year_id'], SchoolAccess::schoolId());
+
+        return redirect()
+            ->route('census.index', ['year_id' => $data['year_id']])
+            ->with('status', __('Census data carried over to the selected year successfully!'));
     }
 
     /**
@@ -198,6 +226,23 @@ class CensusController extends Controller
                 'created_at' => now(),
                 'updated_at' => now(),
             ], array_unique($teacherIds)));
+
+            // Keep existing hole houses and family members for this school + village in the new census
+            $schoolCensusIds = DB::table('census')
+                ->where('school_id', $data['school_id'])
+                ->where('id', '!=', $censusId)
+                ->pluck('id')
+                ->all();
+
+            if (! empty($schoolCensusIds)) {
+                DB::table('holehouse')
+                    ->whereIn('census_id', $schoolCensusIds)
+                    ->where('village_id', $data['village_id'])
+                    ->update([
+                        'census_id' => $censusId,
+                        'updated_at' => now(),
+                    ]);
+            }
         });
         return redirect()->route('census.index')->with('status', __('Census created successfully!'));
 
@@ -441,13 +486,29 @@ class CensusController extends Controller
     public function destroy(string $id)
     {
         $schoolId = SchoolAccess::schoolId();
-        abort_unless(
-            DB::table('census')->where('id', $id)
-                ->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId))
-                ->exists(),
-            404
-        );
-        DB::transaction(function () use ($id, $schoolId) {
+        $targetCensus = DB::table('census')->where('id', $id)
+            ->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId))
+            ->first();
+        abort_unless($targetCensus !== null, 404);
+
+        DB::transaction(function () use ($id, $schoolId, $targetCensus) {
+            $fallbackCensusId = DB::table('census')
+                ->where('school_id', $targetCensus->school_id)
+                ->where('id', '!=', $id)
+                ->orderByRaw('CASE WHEN village_id = ? THEN 0 ELSE 1 END', [$targetCensus->village_id])
+                ->orderByDesc('year_id')
+                ->orderByDesc('id')
+                ->value('id');
+
+            if ($fallbackCensusId) {
+                DB::table('holehouse')
+                    ->where('census_id', $id)
+                    ->update([
+                        'census_id' => $fallbackCensusId,
+                        'updated_at' => now(),
+                    ]);
+            }
+
             $deleted = DB::table('census')->where('id', $id)
                 ->when($schoolId !== null, fn ($query) => $query->where('school_id', $schoolId))
                 ->delete();

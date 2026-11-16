@@ -1,26 +1,152 @@
 @extends('layouts.app')
 
 @section('content')
+<style>
+	.hole-house-card {
+		border: 1.5px solid #2b2b2b;
+		border-radius: 18px;
+		background: #fff;
+		transition: transform 0.15s ease, box-shadow 0.15s ease;
+	}
+	.hole-house-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+	}
+	.hole-house-card-header {
+		border-bottom: 1.5px solid #555;
+		padding: 0.6rem 1rem;
+		text-align: center;
+		font-weight: 700;
+		font-size: 1.25rem;
+		color: #000;
+	}
+	.hole-house-card-body {
+		padding: 0.85rem 1rem 0.5rem;
+		min-height: 155px;
+		font-size: 0.95rem;
+	}
+	.hole-house-member-row {
+		display: flex;
+		align-items: baseline;
+		gap: 0.4rem;
+		margin-bottom: 0.35rem;
+		line-height: 1.4;
+	}
+	.hole-house-member-index {
+		min-width: 1.25rem;
+		color: #111;
+	}
+	.hole-house-member-name {
+		color: #111;
+	}
+	.hole-house-member-relation {
+		color: #e02424;
+		margin-left: 0.35rem;
+	}
+	.hole-house-card-footer {
+		padding: 0.4rem 1rem 0.75rem;
+		text-align: center;
+	}
+	.hole-house-card-footer a {
+		color: #3b5998;
+		font-style: italic;
+		text-decoration: none;
+		font-size: 0.92rem;
+	}
+	.hole-house-card-footer a:hover {
+		text-decoration: underline;
+	}
+</style>
+
 <div class="container py-4">
-	<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
-		<h1 class="h3 mb-0">{{ __('Hole Houses') }}</h1>
-		<div class="d-flex flex-wrap gap-2">
-			<form method="GET" action="{{ route('hole_houses.index') }}" class="d-flex gap-2">
-				<label for="house-search" class="visually-hidden">{{ __('Search by name, house number, or village') }}</label>
-				<input
-					id="house-search"
-					type="search"
-					name="search"
-					value="{{ $search }}"
-					class="form-control"
-					placeholder="{{ __('Name, house number, or village') }}"
-				>
-				<button type="submit" class="btn btn-outline-primary">{{ __('Search') }}</button>
-				@if ($search !== '')
-					<a href="{{ route('hole_houses.index') }}" class="btn btn-outline-secondary">{{ __('Clear') }}</a>
-				@endif
-			</form>
-			<a href="{{ route('hole_houses.create') }}" class="btn btn-primary">{{ __('Create Hole House') }}</a>
+	<div class="mb-3">
+		@if (isset($years) && $years->isNotEmpty())
+			<div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+				<form method="GET" action="{{ route('hole_houses.index') }}" class="m-0 d-flex align-items-center gap-2">
+					@if (($villageId ?? '') !== '')
+						<input type="hidden" name="village_id" value="{{ $villageId }}">
+					@endif
+					@if ($search !== '')
+						<input type="hidden" name="search" value="{{ $search }}">
+					@endif
+					<label for="census-filter" class="fw-semibold text-secondary mb-0 small">{{ __('Census') }}:</label>
+					<select
+						id="census-filter"
+						name="year_id"
+						class="form-select form-select-sm"
+						style="min-width: 150px;"
+						onchange="this.form.submit()"
+					>
+						<option value="">{{ __('Select census') }}</option>
+						@foreach ($years as $yearOption)
+							<option value="{{ $yearOption->id }}" @selected((string) ($yearId ?? '') === (string) $yearOption->id)>
+								{{ $yearOption->year }}
+							</option>
+						@endforeach
+					</select>
+				</form>
+			</div>
+		@endif
+
+		<div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<h1 class="h3 mb-0">{{ __('Hole Houses') }}</h1>
+				<form method="GET" action="{{ route('hole_houses.index') }}" class="m-0">
+					@if ($search !== '')
+						<input type="hidden" name="search" value="{{ $search }}">
+					@endif
+					@if (($yearId ?? '') !== '')
+						<input type="hidden" name="year_id" value="{{ $yearId }}">
+					@endif
+					<label for="village-filter" class="visually-hidden">{{ __('Select village') }}</label>
+					<select
+						id="village-filter"
+						name="village_id"
+						class="form-select"
+						style="min-width: 180px;"
+						onchange="this.form.submit()"
+					>
+						<option value="">{{ __('Select village') }}</option>
+						@foreach ($villages ?? [] as $village)
+							<option value="{{ $village->id }}" @selected((string) ($villageId ?? '') === (string) $village->id)>
+								{{ $village->name }}
+							</option>
+						@endforeach
+					</select>
+				</form>
+				<div class="badge bg-light text-dark border px-3 py-2 fs-6 fw-normal d-flex align-items-center gap-1" style="height: 38px;">
+					<span class="text-secondary">{{ __('Amount of Hole Houses') }}:</span>
+					<strong class="text-primary fs-6">{{ method_exists($holeHouses, 'total') ? $holeHouses->total() : ($holeHouses?->count() ?? 0) }}</strong>
+				</div>
+			</div>
+			<div class="d-flex flex-wrap align-items-center gap-2">
+				<form method="GET" action="{{ route('hole_houses.index') }}" class="d-flex gap-2">
+					@if (($yearId ?? '') !== '')
+						<input type="hidden" name="year_id" value="{{ $yearId }}">
+					@endif
+					@if (($villageId ?? '') !== '')
+						<input type="hidden" name="village_id" value="{{ $villageId }}">
+					@endif
+					<label for="house-search" class="visually-hidden">{{ __('Search by name, house number, or village') }}</label>
+					<input
+						id="house-search"
+						type="search"
+						name="search"
+						value="{{ $search }}"
+						class="form-control"
+						placeholder="{{ __('Name, house number, or village') }}"
+					>
+					<button type="submit" class="btn btn-outline-primary">{{ __('Search') }}</button>
+					@if ($search !== '' || ($villageId ?? '') !== '' || ($yearId ?? '') !== '')
+						<a href="{{ route('hole_houses.index') }}" class="btn btn-outline-secondary">{{ __('Clear') }}</a>
+					@endif
+				</form>
+				<div class="btn-group" role="group" aria-label="{{ __('Choose record view') }}">
+					<button class="btn btn-outline-primary active" type="button" data-view="cards">{{ __('Cards') }}</button>
+					<button class="btn btn-outline-primary" type="button" data-view="list">{{ __('List') }}</button>
+				</div>
+				<a href="{{ route('hole_houses.create') }}" class="btn btn-primary">{{ __('Create Hole House') }}</a>
+			</div>
 		</div>
 	</div>
 
@@ -29,7 +155,47 @@
 	@endif
 
 	@if (isset($holeHouses) && $holeHouses->count())
-		<div class="card">
+		<div id="cardsView" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3">
+			@foreach ($holeHouses->sortBy('hole_number')->values() as $holeHouse)
+				<div class="col">
+					<div class="hole-house-card h-100 d-flex flex-column">
+						<div class="hole-house-card-header">
+							{{ str_pad((string) $holeHouse->hole_number, 3, '0', STR_PAD_LEFT) }}
+						</div>
+						<div class="hole-house-card-body flex-grow-1">
+							@forelse ($holeHouse->families->take(5) as $index => $member)
+								<div class="hole-house-member-row">
+									<span class="hole-house-member-index">{{ $index + 1 }}.</span>
+									<div>
+										<span class="hole-house-member-name">{{ $member->family_name }}</span>
+										@if ($member->relationship)
+											<span class="hole-house-member-relation">{{ $member->relationship }}</span>
+										@endif
+									</div>
+								</div>
+							@empty
+								@if ($holeHouse->leader_family_name)
+									<div class="hole-house-member-row">
+										<span class="hole-house-member-index">1.</span>
+										<div>
+											<span class="hole-house-member-name">{{ $holeHouse->leader_family_name }}</span>
+											<span class="hole-house-member-relation">{{ __('Household leader') }}</span>
+										</div>
+									</div>
+								@endif
+							@endforelse
+						</div>
+						<div class="hole-house-card-footer mt-auto">
+							<a href="{{ route('hole_houses.show', $holeHouse->id) }}">
+								{{ __('View all members') }}
+							</a>
+						</div>
+					</div>
+				</div>
+			@endforeach
+		</div>
+
+		<div id="listView" class="card d-none">
 			<div class="table-responsive">
 				@php
 					$columnLabels = [
@@ -93,8 +259,37 @@
 		@endif
 	@else
 		<div class="alert alert-info">
-			{{ $search !== '' ? __('No hole houses match your search.') : __('No hole houses found.') }}
+			{{ ($search !== '' || ($villageId ?? '') !== '' || ($yearId ?? '') !== '' || ($censusId ?? '') !== '') ? __('No hole houses match your search.') : __('No hole houses found.') }}
 		</div>
 	@endif
 </div>
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const buttons = document.querySelectorAll('[data-view]');
+		const cardsView = document.getElementById('cardsView');
+		const listView = document.getElementById('listView');
+		const storageKey = 'hole_houses_view';
+
+		function setView(view) {
+			const showCards = view !== 'list';
+			buttons.forEach(item => item.classList.toggle('active', item.dataset.view === (showCards ? 'cards' : 'list')));
+			cardsView?.classList.toggle('d-none', !showCards);
+			listView?.classList.toggle('d-none', showCards);
+			try {
+				localStorage.setItem(storageKey, showCards ? 'cards' : 'list');
+			} catch (e) {}
+		}
+
+		let savedView = 'cards';
+		try {
+			savedView = localStorage.getItem(storageKey) || 'cards';
+		} catch (e) {}
+		setView(savedView);
+
+		buttons.forEach(button => {
+			button.addEventListener('click', () => setView(button.dataset.view));
+		});
+	});
+</script>
 @endsection

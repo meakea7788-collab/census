@@ -7,10 +7,24 @@
 	<div class="d-flex justify-content-between align-items-center mb-3">
 		<h1 class="h3 mb-0">{{ __('Family Member Details') }}</h1>
 		<div class="d-flex gap-2">
-			<a href="{{ route('family.edit', $family->id) }}" class="btn btn-primary">{{ __('Edit') }}</a>
-			<a href="{{ route('family.index') }}" class="btn btn-outline-secondary">{{ __('Back') }}</a>
+			<a href="{{ route('family.edit', $family->id) }}" class="btn btn-outline-warning">{{ __('Edit') }}</a>
+			@if (! $family->is_deceased)
+				<a href="{{ route('family.move.edit', $family->id) }}" class="btn btn-outline-info" title="{{ __('Record move address') }}">{{ __('Move') }}</a>
+				<form method="POST" action="{{ route('family.mark-deceased', $family->id) }}" class="d-inline" onsubmit="return confirm(@js(__('Mark this family member as deceased?')));">
+					@csrf
+					<button type="submit" class="btn btn-outline-secondary" title="{{ __('Mark deceased') }}">{{ __('Mark deceased') }}</button>
+				</form>
+			@endif
+			<a href="{{ $family->holehouse_id ? route('hole_houses.show', $family->holehouse_id) : route('family.index') }}" class="btn btn-outline-secondary">{{ __('Back') }}</a>
 		</div>
 	</div>
+
+	@if (session('success'))
+		<div class="alert alert-success" role="alert">{{ session('success') }}</div>
+	@endif
+	@if (session('error'))
+		<div class="alert alert-danger" role="alert">{{ session('error') }}</div>
+	@endif
 
 	<div class="card border-0 shadow-sm">
 		<div class="card-body">

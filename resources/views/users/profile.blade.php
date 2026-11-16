@@ -65,6 +65,20 @@
                                 {{ $user->teacher?->school?->groupSchool?->name ?? '—' }}
                             @endforelse
                         </dd>
+
+                        @php
+                            $assignedVillages = $user->teachers->flatMap->censuses->pluck('village.name')
+                                ->concat($user->teacher?->censuses->pluck('village.name') ?? collect())
+                                ->filter()->unique();
+                        @endphp
+                        @if ($assignedVillages->isNotEmpty())
+                            <dt class="col-sm-3">{{ __('Assigned Villages') }}</dt>
+                            <dd class="col-sm-9">
+                                @foreach ($assignedVillages as $villageName)
+                                    <span class="badge text-bg-light border me-1">{{ $villageName }}</span>
+                                @endforeach
+                            </dd>
+                        @endif
                     @endif
 
                     <dt class="col-sm-3">{{ __('Account created') }}</dt>

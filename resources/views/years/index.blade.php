@@ -49,11 +49,17 @@
                             <div class="form-check mb-2">
                                 <input id="is_active" name="is_active" type="checkbox" value="1"
                                        class="form-check-input @error('is_active') is-invalid @enderror"
-                                       @checked(old('is_active'))>
+                                       @checked(old('is_active', true))>
                                 <label for="is_active" class="form-check-label">{{ __('Active') }}</label>
                                 @error('is_active')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                            </div>
+                            <div class="form-check mb-2">
+                                <input id="carry_over_data" name="carry_over_data" type="checkbox" value="1"
+                                       class="form-check-input"
+                                       @checked(old('carry_over_data', true))>
+                                <label for="carry_over_data" class="form-check-label">{{ __('Keep census data from previous year') }}</label>
                             </div>
                         </div>
 
@@ -80,6 +86,7 @@
                                 <th scope="col">{{ __('Year') }}</th>
                                 <th scope="col">{{ __('Description') }}</th>
                                 <th scope="col">{{ __('Status') }}</th>
+                                <th scope="col">{{ __('Active') }}</th>
                                 <th scope="col" class="text-end">{{ __('Actions') }}</th>
                             </tr>
                         </thead>
@@ -95,6 +102,27 @@
                                             <span class="badge text-bg-secondary">{{ __('Inactive') }}</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        <form method="POST" action="{{ route('years.toggle-active', $year->id) }}" class="m-0">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="is_active" value="0">
+                                            <div class="form-check form-switch m-0">
+                                                <input
+                                                    id="year-active-{{ $year->id }}"
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    role="switch"
+                                                    name="is_active"
+                                                    value="1"
+                                                    style="cursor: pointer;"
+                                                    @checked($year->is_active)
+                                                    onchange="this.form.submit()"
+                                                >
+                                                <label class="visually-hidden" for="year-active-{{ $year->id }}">{{ __('Active') }}</label>
+                                            </div>
+                                        </form>
+                                    </td>
                                     <td class="text-end">
                                         <a href="{{ route('years.edit', $year->id) }}"
                                            class="btn btn-sm btn-outline-primary">{{ __('Edit') }}</a>
@@ -102,7 +130,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center text-secondary py-4">
+                                    <td colspan="5" class="text-center text-secondary py-4">
                                         {{ __('No years found.') }}
                                     </td>
                                 </tr>
