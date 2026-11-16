@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('census', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('year_id')->constrained('table_tbl_year')->onDelete('cascade');
+            $table->foreignId('year_id')->constrained('year')->onDelete('cascade');
             $table->foreignId('group_school_id')->constrained('group_schools')->onDelete('cascade');
             $table->foreignId('school_id')->constrained('schools')->onDelete('cascade');
             $table->foreignId('province_id')->constrained('province')->onDelete('cascade');

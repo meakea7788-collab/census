@@ -40,7 +40,7 @@ class ComController extends Controller
 
         return redirect()
             ->route('districts.communes.show', $district)
-            ->with('success', 'Commune saved. An existing commune with this name was reused if present.');
+            ->with('success', __('Commune saved. An existing commune with this name was reused if present.'));
     }
 
     public function showCommune(commune $commune)
@@ -65,7 +65,7 @@ class ComController extends Controller
 
         return redirect()
             ->route('districts.communes.show', $commune->district_id)
-            ->with('success', 'Commune updated successfully.');
+            ->with('success', __('Commune updated successfully.'));
     }
 
     public function destroyCommune(commune $commune)
@@ -77,7 +77,7 @@ class ComController extends Controller
 
         return redirect()
             ->route('districts.communes.show', $districtId)
-            ->with('success', 'Commune and its villages deleted successfully.');
+            ->with('success', __('Commune and its villages deleted successfully.'));
     }
 
     function store(Request $request)
@@ -94,7 +94,7 @@ class ComController extends Controller
 
         return redirect()
             ->route('districts.communes.show', $data['district_id'])
-            ->with('success', 'Commune saved.');
+            ->with('success', __('Commune saved.'));
     }
       function edit($id)
     {
@@ -113,13 +113,13 @@ class ComController extends Controller
         // Update the commune in the database
         $commune->update($data);
 
-        return redirect()->route('address.commune.index')->with('success', 'Commune updated successfully.');
+        return redirect()->route('address.commune.index')->with('success', __('Commune updated successfully.'));
     }       
     function destroy($id)
     {
         $commune = commune::findOrFail($id);
         $commune->delete();
-        return redirect()->route('address.commune.index')->with('success', 'Commune deleted successfully.');
+        return redirect()->route('address.commune.index')->with('success', __('Commune deleted successfully.'));
     }   
 
 }

@@ -1,0 +1,43 @@
+<?php
+
+return [
+    'email' => ':attribute ត្រូវតែជាអាសយដ្ឋានអ៊ីមែលត្រឹមត្រូវ។',
+    'exists' => ':attribute ដែលបានជ្រើសរើសមិនត្រឹមត្រូវទេ។',
+    'integer' => ':attribute ត្រូវតែជាចំនួនគត់។',
+    'in' => ':attribute ដែលបានជ្រើសរើសមិនត្រឹមត្រូវទេ។',
+    'max' => [
+        'numeric' => ':attribute មិនអាចធំជាង :max បានទេ។',
+        'string' => ':attribute មិនអាចមានច្រើនជាង :max តួអក្សរបានទេ។',
+        'file' => ':attribute មិនអាចធំជាង :max គីឡូបៃបានទេ។',
+        'array' => ':attribute មិនអាចមានច្រើនជាង :max ធាតុបានទេ។',
+    ],
+    'min' => [
+        'numeric' => ':attribute ត្រូវតែមានយ៉ាងតិច :min។',
+        'string' => ':attribute ត្រូវតែមានយ៉ាងតិច :min តួអក្សរ។',
+        'file' => ':attribute ត្រូវតែមានទំហំយ៉ាងតិច :min គីឡូបៃ។',
+        'array' => ':attribute ត្រូវតែមានយ៉ាងតិច :min ធាតុ។',
+    ],
+    'required' => 'ត្រូវបញ្ចូល :attribute។',
+    'string' => ':attribute ត្រូវតែជាអក្សរ។',
+    'unique' => ':attribute នេះមានរួចហើយ។',
+    'attributes' => [
+        'census_id' => 'ជំរឿន',
+        'commune_id' => 'ឃុំ',
+        'commune_name' => 'ឈ្មោះឃុំ',
+        'district_id' => 'ស្រុក',
+        'district_name' => 'ឈ្មោះស្រុក',
+        'email' => 'អ៊ីមែល',
+        'group_school_id' => 'ក្រុមសាលារៀន',
+        'hole_number' => 'លេខផ្ទះ',
+        'leader_family_name' => 'ឈ្មោះមេគ្រួសារ',
+        'name' => 'ឈ្មោះ',
+        'phone' => 'ទូរស័ព្ទ',
+        'phone_number' => 'លេខទូរស័ព្ទ',
+        'province_id' => 'ខេត្ត',
+        'province_name' => 'ឈ្មោះខេត្ត',
+        'school_id' => 'សាលារៀន',
+        'teacher_id' => 'គ្រូបង្រៀន',
+        'year' => 'ឆ្នាំ',
+        'year_id' => 'ឆ្នាំ',
+    ],
+];

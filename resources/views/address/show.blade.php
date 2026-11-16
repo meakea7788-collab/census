@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', $province->name . ' Districts')
+@section('title', __(':name Districts', ['name' => $province->name]))
 
 @section('content')
     <div class="container-fluid p-0">
         <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4">
             <div>
                 <h1 class="h3 mb-1">{{ $province->name }}</h1>
-                <p class="text-secondary mb-0">Districts in this province.</p>
+                <p class="text-secondary mb-0">{{ __('Districts in this province.') }}</p>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('provinces.index') }}" class="btn btn-outline-secondary">Back to Provinces</a>
-                <a href="{{ route('provinces.districts.create', $province) }}" class="btn btn-primary">Add District</a>
+                <a href="{{ route('provinces.index') }}" class="btn btn-outline-secondary">{{ __('Back to Provinces') }}</a>
+                <a href="{{ route('provinces.districts.create', $province) }}" class="btn btn-primary">{{ __('Add District') }}</a>
             </div>
         </div>
 
@@ -22,7 +22,7 @@
         <div class="card border-0 shadow-sm">
             @if ($province->districts->isEmpty())
                 <div class="card-body p-4 text-center text-secondary">
-                    No districts found for this province.
+                    {{ __('No districts found for this province.') }}
                 </div>
             @else
                 <div class="list-group list-group-flush">
@@ -30,8 +30,8 @@
                         <div class="list-group-item px-4 py-3 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
                             <span>{{ $district->name }}</span>
                             <div class="d-flex gap-2">
-                                <a href="{{ route('districts.communes.show', $district) }}" class="btn btn-sm btn-outline-primary">Details</a>
-                                <a href="{{ route('districts.communes.create', $district) }}" class="btn btn-sm btn-primary">Add Commune</a>
+                                <a href="{{ route('districts.communes.show', $district) }}" class="btn btn-sm btn-outline-primary">{{ __('Details') }}</a>
+                                <a href="{{ route('districts.communes.create', $district) }}" class="btn btn-sm btn-primary">{{ __('Add Commune') }}</a>
                             </div>
                         </div>
                     @endforeach

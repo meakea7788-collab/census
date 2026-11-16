@@ -26,7 +26,7 @@ class DisController extends Controller
         // Store the district in the database
         District::create($data);
 
-        return redirect()->route('district.index')->with('success', 'District created successfully.');
+        return redirect()->route('district.index')->with('success', __('District created successfully.'));
     }
     public function edit($id)
     {
@@ -45,12 +45,12 @@ class DisController extends Controller
         // Update the district in the database
         $district->update($data);
 
-        return redirect()->route('address.district.index')->with('success', 'District updated successfully.');
+        return redirect()->route('address.district.index')->with('success', __('District updated successfully.'));
     }
     public function destroy($id)
     {
         $district = District::findOrFail($id);
         $district->delete();
-        return redirect()->route('address.district.index')->with('success', 'District deleted successfully.');
+        return redirect()->route('address.district.index')->with('success', __('District deleted successfully.'));
     }
 }

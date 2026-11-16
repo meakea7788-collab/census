@@ -20,6 +20,11 @@ class DatabaseSeeder extends Seeder
                 'role' => \App\Models\User::ROLE_SUPERADMIN,
             ]
         );
+        \App\Models\Year::updateOrCreate(
+            ['year' => 2026],
+            ['is_active' => true]
+        );
+
         $provinceId = DB::table('province')->where('name', 'សៀមរាប')->value('id');
 
         if (! $provinceId) {
@@ -86,6 +91,46 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+         $provinceId = DB::table('province')
+            ->where('name', 'បន្ទាយមានជ័យ')
+            ->value('id');
+
+        if (!$provinceId) {
+            $provinceId = DB::table('province')->insertGetId([
+                'name' => 'បន្ទាយមានជ័យ',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        $districts = [
+            'មង្គលបុរី',
+            'ភ្នំស្រុក',
+            'ព្រះនេត្រព្រះ',
+            'អូរជ្រៅ',
+            'ថ្មពួក',
+            'ម៉ាឡៃ',
+            'ស្វាយចេក',
+            'សិរីសោភ័ណ',
+            'ប៉ោយប៉ែត',
+        ];
+
+        foreach ($districts as $district) {
+
+            $exists = DB::table('district')
+                ->where('name', $district)
+                ->where('province_id', $provinceId)
+                ->exists();
+
+            if (!$exists) {
+                DB::table('district')->insert([
+                    'name' => $district,
+                    'province_id' => $provinceId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
 
         $groupSchoolId = 4;
 
@@ -124,6 +169,58 @@ class DatabaseSeeder extends Seeder
                     'updated_at' => now(),
                 ]);
             }
+        }
+
+        $additionalGroupSchoolName = 'កម្រងទៀបាញ់ គំរូ';
+        $additionalGroupSchool = DB::table('group_schools')
+            ->where('name', $additionalGroupSchoolName)
+            ->first();
+
+        $additionalGroupSchoolData = [
+            'director_name' => 'ហ៊ីង ផល្លា',
+            'phone' => '0968689680',
+            'address' => 'ប្រយុទ្ធ, ពួក, ពួក, សៀមរាប',
+            'updated_at' => now(),
+        ];
+
+        if ($additionalGroupSchool) {
+            DB::table('group_schools')
+                ->where('id', $additionalGroupSchool->id)
+                ->update($additionalGroupSchoolData);
+            $additionalGroupSchoolId = $additionalGroupSchool->id;
+        } else {
+            $additionalGroupSchoolId = DB::table('group_schools')->insertGetId([
+                'name' => $additionalGroupSchoolName,
+                ...$additionalGroupSchoolData,
+                'created_at' => now(),
+            ]);
+        }
+
+        $additionalSchoolName = 'បឋមសិក្សាពួក';
+        $additionalSchool = DB::table('schools')
+            ->where('name', $additionalSchoolName)
+            ->where('group_school_id', $additionalGroupSchoolId)
+            ->first();
+        $additionalSchoolData = [
+            'address' => 'ឃុំពួក ស្រុកពួក ខេត្ដសៀមរាប',
+            'village' => null,
+            'phone' => '059686767',
+            'email' => 'sokeameak@gmail.com',
+            'director_name' => 'ឆេង ភាត់',
+            'updated_at' => now(),
+        ];
+
+        if ($additionalSchool) {
+            DB::table('schools')
+                ->where('id', $additionalSchool->id)
+                ->update($additionalSchoolData);
+        } else {
+            DB::table('schools')->insert([
+                'name' => $additionalSchoolName,
+                'group_school_id' => $additionalGroupSchoolId,
+                ...$additionalSchoolData,
+                'created_at' => now(),
+            ]);
         }
 
         $defaultSchoolId = DB::table('schools')
@@ -176,5 +273,12 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        $this->call([
+            BanteayMeancheySeeder::class,
+            SiemReapSeeder::class,
+            HoleHouseSeeder::class,
+            FamilySeeder::class,
+        ]);
     }
 }

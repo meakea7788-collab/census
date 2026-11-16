@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('year', function (Blueprint $table) {
             $table->id();
             $table->year('year')->unique();
+            $table->string('description')->nullable();
+            $table->boolean('is_active')->default(false);
             $table->timestamps();
         });
     }

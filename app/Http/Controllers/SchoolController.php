@@ -6,7 +6,10 @@ use App\Models\GroupSchool;
 use App\Models\Province;
 use App\Models\commune;
 use App\Models\village;
+use App\Support\SchoolAccess;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class SchoolController extends Controller
 {
@@ -35,7 +38,7 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        $schools = \App\Models\School::with('groupSchool')->get();
+        $schools = SchoolAccess::schoolQuery()->with(['groupSchool', 'villages'])->get();
         return view('schools.index', compact('schools'));
         //
     }
@@ -43,17 +46,28 @@ class SchoolController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $locations = Province::with('districts.communes.villages')->orderBy('name')->get();
         $groupSchools = GroupSchool::orderBy('name')->get();
+        $selectedGroupSchool = $request->filled('group_school_id')
+            ? GroupSchool::findOrFail($request->input('group_school_id'))
+            : null;
+        $selectedLocation = $this->findLocationFromAddress($selectedGroupSchool?->address);
         $groupSchoolOptions = $groupSchools->map(fn (GroupSchool $groupSchool) => [
             'id' => $groupSchool->id,
             'name' => $groupSchool->name,
             'address' => $groupSchool->address ?? '',
         ])->values();
 
-        return view('schools.create', compact('groupSchools', 'groupSchoolOptions', 'locations'));
+        return view('schools.create', compact(
+            'groupSchools',
+            'groupSchoolOptions',
+            'locations',
+            'selectedGroupSchool',
+            'selectedLocation'
+        ));
     }
 
     /**
@@ -61,16 +75,30 @@ class SchoolController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:255'],
+            'village' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
             'email' => ['nullable', 'email', 'max:255'],
             'director_name' => ['nullable', 'string', 'max:255'],
-            'province_id' => ['nullable', 'exists:province,id'],
-            'district_id' => ['nullable', 'exists:district,id'],
-            'commune_id' => ['nullable', 'exists:commune,id'],
-            'village_id' => ['nullable', 'exists:village,id'],
+            'province_id' => ['required', 'exists:province,id'],
+            'district_id' => [
+                'required',
+                Rule::exists('district', 'id')->where('province_id', $request->input('province_id')),
+            ],
+            'commune_id' => [
+                'required',
+                Rule::exists('commune', 'id')->where('district_id', $request->input('district_id')),
+            ],
+            'village_ids' => ['required', 'array', 'min:1'],
+            'village_ids.*' => [
+                'required',
+                'integer',
+                'distinct',
+                Rule::exists('village', 'id')->where('commune_id', $request->input('commune_id')),
+            ],
             'group_school_id' => ['required', 'exists:group_schools,id'],
         ]);
 
@@ -88,11 +116,19 @@ class SchoolController extends Controller
             }
         }
 
-        if ($request->filled('village_id')) {
-            $data['address'] = $this->buildLocationAddress($request->village_id) ?? $data['address'];
-        }
+        $selectedVillages = village::with('commune.district.province')
+            ->whereIn('id', $data['village_ids'])
+            ->get();
+        $primaryVillage = $selectedVillages->first();
+        $data['address'] = $this->buildLocationAddress((string) $primaryVillage->id) ?? $data['address'];
+        $data['village'] = $primaryVillage->name;
+        $villageIds = $selectedVillages->modelKeys();
+        unset($data['province_id'], $data['district_id'], $data['commune_id'], $data['village_ids']);
 
-        \App\Models\School::create($data);
+        DB::transaction(function () use ($data, $villageIds) {
+            $school = \App\Models\School::create($data);
+            $school->villages()->sync($villageIds);
+        });
         return redirect()->route('schools.index');
     }
 
@@ -101,8 +137,7 @@ class SchoolController extends Controller
      */
     public function show(string $id)
     {
-        //
-        $school = \App\Models\School::with(['groupSchool', 'teachers'])->findOrFail($id);
+        $school = SchoolAccess::schoolQuery()->with(['groupSchool', 'teachers', 'villages'])->findOrFail($id);
         return view('schools.show', compact('school'));
     }
 
@@ -111,12 +146,23 @@ class SchoolController extends Controller
      */
     public function edit(string $id)
     {
-        $school = \App\Models\School::findOrFail($id);
-        $groupSchools = \App\Models\GroupSchool::orderBy('name')->get();
+        $school = SchoolAccess::schoolQuery()->with('villages')->findOrFail($id);
+        $groupSchools = \App\Models\GroupSchool::query()
+            ->when(SchoolAccess::schoolId() !== null, fn ($query) => $query->whereKey($school->group_school_id))
+            ->orderBy('name')->get();
         $locations = Province::with('districts.communes.villages')->orderBy('name')->get();
         $selectedLocation = $this->findLocationFromAddress($school->address);
+        $selectedVillageIds = $school->villages->isNotEmpty()
+            ? $school->villages->modelKeys()
+            : (isset($selectedLocation['village']) ? [$selectedLocation['village']] : []);
 
-        return view('schools.update', compact('school', 'groupSchools', 'locations', 'selectedLocation'));
+        return view('schools.update', compact(
+            'school',
+            'groupSchools',
+            'locations',
+            'selectedLocation',
+            'selectedVillageIds'
+        ));
     }
 
     /**
@@ -124,23 +170,58 @@ class SchoolController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $school = \App\Models\School::findOrFail($id);
+        $school = SchoolAccess::schoolQuery()->findOrFail($id);
+        if (SchoolAccess::schoolId() !== null) {
+            abort_unless((int) $request->input('group_school_id') === (int) $school->group_school_id, 403);
+        }
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
             'email' => ['nullable', 'email', 'max:255'],
             'director_name' => ['nullable', 'string', 'max:255'],
             'province_id' => ['required', 'exists:province,id'],
-            'district_id' => ['required', 'exists:district,id'],
-            'commune_id' => ['required', 'exists:commune,id'],
-            'village_id' => ['required', 'exists:village,id'],
+            'district_id' => [
+                'required',
+                Rule::exists('district', 'id')->where('province_id', $request->input('province_id')),
+            ],
+            'commune_id' => [
+                'required',
+                Rule::exists('commune', 'id')->where('district_id', $request->input('district_id')),
+            ],
+            'village_ids' => ['required', 'array', 'min:1'],
+            'village_ids.*' => [
+                'required',
+                'integer',
+                'distinct',
+                Rule::exists('village', 'id')->where('commune_id', $request->input('commune_id')),
+            ],
             'group_school_id' => ['required', 'exists:group_schools,id'],
         ]);
 
-        $data['address'] = $this->buildLocationAddress($request->village_id);
-        unset($data['province_id'], $data['district_id'], $data['commune_id'], $data['village_id']);
+        $selectedCommune = commune::findOrFail($data['commune_id']);
+        $selectedGroupSchool = GroupSchool::findOrFail($data['group_school_id']);
+        if (! str_contains(
+            strtolower((string) $selectedGroupSchool->address),
+            strtolower($selectedCommune->name)
+        )) {
+            return back()
+                ->withErrors(['group_school_id' => 'This group school is not in the selected commune.'])
+                ->withInput();
+        }
 
-        $school->update($data);
+        $selectedVillages = village::with('commune.district.province')
+            ->whereIn('id', $data['village_ids'])
+            ->get();
+        $primaryVillage = $selectedVillages->first();
+        $data['address'] = $this->buildLocationAddress((string) $primaryVillage->id);
+        $data['village'] = $primaryVillage->name;
+        $villageIds = $selectedVillages->modelKeys();
+        unset($data['province_id'], $data['district_id'], $data['commune_id'], $data['village_ids']);
+
+        DB::transaction(function () use ($school, $data, $villageIds) {
+            $school->update($data);
+            $school->villages()->sync($villageIds);
+        });
         return redirect()->route('schools.index');
     }
 
@@ -177,7 +258,7 @@ class SchoolController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        abort_if(SchoolAccess::schoolId() !== null, 403);
         $school = \App\Models\School::findOrFail($id);
         $school->delete();
         return redirect()->route('schools.index');

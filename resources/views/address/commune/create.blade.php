@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Add Commune')
+@section('title', __('Add Commune'))
 
 @section('content')
     <div class="container-fluid p-0">
         <div class="row justify-content-center">
             <div class="col-12 col-lg-8 col-xl-7">
                 <div class="mb-4">
-                    <h1 class="h3 mb-2">Add Commune</h1>
-                    <p class="text-secondary mb-0">Add a commune to {{ $district->name }} district.</p>
+                    <h1 class="h3 mb-2">{{ __('Add Commune') }}</h1>
+                    <p class="text-secondary mb-0">{{ __('Add a commune to this district.') }}</p>
                 </div>
 
                 <div class="card border-0 shadow-sm">
@@ -16,7 +16,7 @@
                         <form method="POST" action="{{ route('districts.communes.store', $district) }}">
                             @csrf
                             <div class="mb-4">
-                                <label for="name" class="form-label">Commune name</label>
+                                <label for="name" class="form-label">{{ __('Commune name') }}</label>
                                 <input
                                     type="text"
                                     id="name"
@@ -33,8 +33,8 @@
                             </div>
 
                             <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">Save Commune</button>
-                                <a href="{{ route('provinces.show', $district->province_id) }}" class="btn btn-outline-secondary">Back</a>
+                                <button type="submit" class="btn btn-primary">{{ __('Save Commune') }}</button>
+                                <a href="{{ route('provinces.show', $district->province_id) }}" class="btn btn-outline-secondary">{{ __('Back') }}</a>
                             </div>
                         </form>
                     </div>

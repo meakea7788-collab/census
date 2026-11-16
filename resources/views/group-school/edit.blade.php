@@ -7,8 +7,8 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4 p-md-5">
                     <div class="mb-4">
-                        <h1 class="h3 mb-2">Edit Group School</h1>
-                        <p class="text-secondary mb-0">Update the selected group school details.</p>
+                        <h1 class="h3 mb-2">{{ __('Edit Group School') }}</h1>
+                        <p class="text-secondary mb-0">{{ __('Update the selected group school details.') }}</p>
                     </div>
 
                     <form action="{{ route('group-school.update', $groupSchool) }}" method="POST">
@@ -16,7 +16,7 @@
                         @method('PUT')
 
                         <div class="mb-3">
-                            <label for="name" class="form-label">Group School Name</label>
+                            <label for="name" class="form-label">{{ __('Group School Name') }}</label>
                             <input type="text" id="name" name="name"
                                    class="form-control @error('name') is-invalid @enderror"
                                    value="{{ old('name', $groupSchool->name) }}" required>
@@ -26,7 +26,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="director_name" class="form-label">Director Name</label>
+                            <label for="director_name" class="form-label">{{ __('Director Name') }}</label>
                             <input type="text" id="director_name" name="director_name"
                                    class="form-control @error('director_name') is-invalid @enderror"
                                    value="{{ old('director_name', $groupSchool->director_name) }}" required>
@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="phone" class="form-label">Phone</label>
+                            <label for="phone" class="form-label">{{ __('Phone') }}</label>
                             <input type="text" id="phone" name="phone"
                                    class="form-control @error('phone') is-invalid @enderror"
                                    value="{{ old('phone', $groupSchool->phone) }}" required>
@@ -46,33 +46,33 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="province_id" class="form-label">Province</label>
+                            <label for="province_id" class="form-label">{{ __('Province') }}</label>
                             <select id="province_id" name="province_id" class="form-select @error('province_id') is-invalid @enderror" required>
-                                <option value="">Select a province</option>
+                                <option value="">{{ __('Select a province') }}</option>
                             </select>
                             @error('province_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
 
-                            <label for="district_id" class="form-label mt-3">District</label>
+                            <label for="district_id" class="form-label mt-3">{{ __('District') }}</label>
                             <select id="district_id" name="district_id" class="form-select @error('district_id') is-invalid @enderror" required disabled>
-                                <option value="">Select a district</option>
+                                <option value="">{{ __('Select a district') }}</option>
                             </select>
                             @error('district_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
 
-                            <label for="commune_id" class="form-label mt-3">Commune</label>
+                            <label for="commune_id" class="form-label mt-3">{{ __('Commune') }}</label>
                             <select id="commune_id" name="commune_id" class="form-select @error('commune_id') is-invalid @enderror" required disabled>
-                                <option value="">Select a commune</option>
+                                <option value="">{{ __('Select a commune') }}</option>
                             </select>
                             @error('commune_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
 
-                            <label for="village_id" class="form-label mt-3">Village</label>
+                            <label for="village_id" class="form-label mt-3">{{ __('Village') }}</label>
                             <select id="village_id" name="village_id" class="form-select @error('village_id') is-invalid @enderror" required disabled>
-                                <option value="">Select a village</option>
+                                <option value="">{{ __('Select a village') }}</option>
                             </select>
                             @error('village_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -80,8 +80,8 @@
                         </div>
 
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">Save changes</button>
-                            <a href="{{ route('group-school.index') }}" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">{{ __('Save changes') }}</button>
+                            <a href="{{ route('group-school.index') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
                         </div>
                     </form>
                 </div>
@@ -123,24 +123,24 @@
         return getCommunes().find((commune) => String(commune.id) === communeSelect.value)?.villages ?? [];
     }
 
-    populate(provinceSelect, locations, 'Select a province', oldSelection.province);
-    populate(districtSelect, getDistricts(), 'Select a district', oldSelection.district);
-    populate(communeSelect, getCommunes(), 'Select a commune', oldSelection.commune);
-    populate(villageSelect, getVillages(), 'Select a village', oldSelection.village);
+    populate(provinceSelect, locations, @json(__('Select a province')), oldSelection.province);
+    populate(districtSelect, getDistricts(), @json(__('Select a district')), oldSelection.district);
+    populate(communeSelect, getCommunes(), @json(__('Select a commune')), oldSelection.commune);
+    populate(villageSelect, getVillages(), @json(__('Select a village')), oldSelection.village);
 
     provinceSelect.addEventListener('change', () => {
-        populate(districtSelect, getDistricts(), 'Select a district');
-        populate(communeSelect, [], 'Select a commune');
-        populate(villageSelect, [], 'Select a village');
+        populate(districtSelect, getDistricts(), @json(__('Select a district')));
+        populate(communeSelect, [], @json(__('Select a commune')));
+        populate(villageSelect, [], @json(__('Select a village')));
     });
 
     districtSelect.addEventListener('change', () => {
-        populate(communeSelect, getCommunes(), 'Select a commune');
-        populate(villageSelect, [], 'Select a village');
+        populate(communeSelect, getCommunes(), @json(__('Select a commune')));
+        populate(villageSelect, [], @json(__('Select a village')));
     });
 
     communeSelect.addEventListener('change', () => {
-        populate(villageSelect, getVillages(), 'Select a village');
+        populate(villageSelect, getVillages(), @json(__('Select a village')));
     });
 </script>
 @endsection

@@ -2,16 +2,16 @@
 
 @section('content')
 <div class="container">
-	<h1>Delete Teacher</h1>
+	<h1>{{ __('Delete Teacher') }}</h1>
 
-	<p>Are you sure you want to delete {{ $teacher->name ?? 'this teacher' }}?</p>
+	<p>{{ __('Are you sure you want to delete :name?', ['name' => $teacher->name ?? __('this teacher')]) }}</p>
 
 	<form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST">
 		@csrf
 		@method('DELETE')
 
-		<button type="submit">Delete Teacher</button>
-		<a href="{{ route('teachers.index') }}">Cancel</a>
+		<button type="submit">{{ __('Delete Teacher') }}</button>
+		<a href="{{ route('teachers.index') }}">{{ __('Cancel') }}</a>
 	</form>
 </div>
 @endsection
